@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platfrom/src/feature/initialization/widget/dependencies_scope.dart';
 
 /// {@template home_screen}
 /// HomeScreen is a simple screen that displays a grid of items.

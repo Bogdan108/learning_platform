@@ -1,14 +1,14 @@
 import 'package:clock/clock.dart';
+import 'package:learning_platfrom/src/core/constant/application_config.dart';
+import 'package:learning_platfrom/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:learning_platfrom/src/core/utils/error_reporter/sentry_error_reporter.dart';
+import 'package:learning_platfrom/src/core/utils/logger/logger.dart';
+import 'package:learning_platfrom/src/feature/initialization/model/dependencies_container.dart';
+import 'package:learning_platfrom/src/feature/settings/bloc/app_settings_bloc.dart';
+import 'package:learning_platfrom/src/feature/settings/data/app_settings_datasource.dart';
+import 'package:learning_platfrom/src/feature/settings/data/app_settings_repository.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizzle_starter/src/core/constant/application_config.dart';
-import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/error_reporter/sentry_error_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
-import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
 
 /// {@template composition_root}
 /// A place where top-level dependencies are initialized.

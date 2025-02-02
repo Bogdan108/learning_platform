@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/feature/settings/model/app_theme.dart';
+import 'package:learning_platfrom/src/feature/settings/model/app_theme.dart';
 
 void main() {
   group(

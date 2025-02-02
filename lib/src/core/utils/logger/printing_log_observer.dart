@@ -1,6 +1,6 @@
 import 'dart:developer' as dev;
 
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:learning_platfrom/src/core/utils/logger/logger.dart';
 
 /// {@template printing_log_observer}
 /// [LogObserver] that prints logs using `dart:developer`.
