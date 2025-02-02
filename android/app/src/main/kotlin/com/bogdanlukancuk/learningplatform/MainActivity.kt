@@ -1,4 +1,4 @@
-package blukancuk.com.learning_platfrom
+package com.bogdanlukancuk.learningplatform
 
 import io.flutter.embedding.android.FlutterActivity
 
