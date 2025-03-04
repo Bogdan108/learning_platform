@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_platfrom/drawing_board.dart';
 import 'package:learning_platfrom/src/feature/initialization/widget/dependencies_scope.dart';
 
 /// {@template home_screen}
@@ -18,23 +19,33 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _logger.info('Welcome To Sizzle Starter!');
+    _logger.info('Welcome To Learning Platform!');
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Welcome to Sizzle Starter!',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              const SizedBox(height: 16),
-            ],
+        body: SafeArea(
+          child: Scaffold(
+            backgroundColor: const Color.fromARGB(137, 218, 218, 218),
+            appBar: AppBar(
+              title: const Text(' Learner'),
+              backgroundColor: Colors.lightGreen,
+              shadowColor: Colors.grey,
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome to Learning Platform!',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: DrawingBoard(),
+                ),
+              ],
+            ),
           ),
         ),
       );

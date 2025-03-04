@@ -24,7 +24,6 @@ sealed class AppRunner {
   static Future<void> startup() async {
     const config = ApplicationConfig();
     final errorReporter = await const ErrorReporterFactory(config).create();
-
     final logger = AppLoggerFactory(
       observers: [
         ErrorReporterLogObserver(errorReporter),
