@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:learning_platfrom/src/feature/initialization/model/dependencies_container.dart';
-import 'package:learning_platfrom/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/initialization/model/dependencies_container.dart';
+import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 
 /// A controller for testing widgets.
 class TestWidgetController {

@@ -1,4 +1,4 @@
-name: learning_platfrom
+name: learning_platform
 description: Production-ready template for Flutter applications.
 # Prevent accidental publishing to pub.dev.
 publish_to: "none"

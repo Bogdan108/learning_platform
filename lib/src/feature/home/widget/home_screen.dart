@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learning_platfrom/drawing_board.dart';
-import 'package:learning_platfrom/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/drawing_board.dart';
+import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 
 /// {@template home_screen}
 /// HomeScreen is a simple screen that displays a grid of items.

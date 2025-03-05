@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platfrom/src/core/constant/application_config.dart';
-import 'package:learning_platfrom/src/core/utils/app_bloc_observer.dart';
-import 'package:learning_platfrom/src/core/utils/bloc_transformer.dart';
-import 'package:learning_platfrom/src/core/utils/error_reporter/error_reporter.dart';
-import 'package:learning_platfrom/src/core/utils/logger/logger.dart';
-import 'package:learning_platfrom/src/core/utils/logger/printing_log_observer.dart';
-import 'package:learning_platfrom/src/feature/initialization/logic/composition_root.dart';
-import 'package:learning_platfrom/src/feature/initialization/widget/initialization_failed_app.dart';
-import 'package:learning_platfrom/src/feature/initialization/widget/root_context.dart';
+import 'package:learning_platform/src/core/constant/application_config.dart';
+import 'package:learning_platform/src/core/utils/app_bloc_observer.dart';
+import 'package:learning_platform/src/core/utils/bloc_transformer.dart';
+import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:learning_platform/src/core/utils/logger/logger.dart';
+import 'package:learning_platform/src/core/utils/logger/printing_log_observer.dart';
+import 'package:learning_platform/src/feature/initialization/logic/composition_root.dart';
+import 'package:learning_platform/src/feature/initialization/widget/initialization_failed_app.dart';
+import 'package:learning_platform/src/feature/initialization/widget/root_context.dart';
 
 /// {@template app_runner}
 /// A class that is responsible for running the application.

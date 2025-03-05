@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:learning_platfrom/src/core/utils/extensions/context_extension.dart';
+import 'package:learning_platform/src/core/utils/extensions/context_extension.dart';
 
 /// {@template window_size}
 /// Breakpoints for responsive design.

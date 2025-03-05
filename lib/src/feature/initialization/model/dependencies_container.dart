@@ -1,7 +1,7 @@
-import 'package:learning_platfrom/src/core/constant/application_config.dart';
-import 'package:learning_platfrom/src/core/utils/error_reporter/error_reporter.dart';
-import 'package:learning_platfrom/src/core/utils/logger/logger.dart';
-import 'package:learning_platfrom/src/feature/settings/bloc/app_settings_bloc.dart';
+import 'package:learning_platform/src/core/constant/application_config.dart';
+import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:learning_platform/src/core/utils/logger/logger.dart';
+import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// {@template dependencies_container}

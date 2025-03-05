@@ -1,5 +1,5 @@
-import 'package:learning_platfrom/src/core/utils/analytics/analytics_reporter.dart';
-import 'package:learning_platfrom/src/core/utils/logger/logger.dart';
+import 'package:learning_platform/src/core/utils/analytics/analytics_reporter.dart';
+import 'package:learning_platform/src/core/utils/logger/logger.dart';
 
 /// {@template firebase_analytics_reporter}
 /// An implementation of [AnalyticsReporter] that reports events to Firebase

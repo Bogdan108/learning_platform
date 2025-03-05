@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:learning_platfrom/src/core/utils/logger/logger.dart';
+import 'package:learning_platform/src/core/utils/logger/logger.dart';
 
 /// {@template error_reporter}
 /// An interface for reporting errors.
