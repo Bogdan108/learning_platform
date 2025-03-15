@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "learning_platfrom",
+      "name": "learning_platform",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "learning_platfrom (profile mode)",
+      "name": "learning_platform (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "learning_platfrom (release mode)",
+      "name": "learning_platform (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

@@ -1,6 +1,6 @@
 {
-    "name": "learning_platfrom",
-    "short_name": "learning_platfrom",
+    "name": "learning_platform",
+    "short_name": "learning_platform",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

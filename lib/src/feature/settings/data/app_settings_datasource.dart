@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:learning_platfrom/src/core/utils/color_codec.dart';
-import 'package:learning_platfrom/src/core/utils/persisted_entry.dart';
-import 'package:learning_platfrom/src/feature/settings/data/theme_mode_codec.dart';
-import 'package:learning_platfrom/src/feature/settings/model/app_settings.dart';
-import 'package:learning_platfrom/src/feature/settings/model/app_theme.dart';
+import 'package:learning_platform/src/core/utils/color_codec.dart';
+import 'package:learning_platform/src/core/utils/persisted_entry.dart';
+import 'package:learning_platform/src/feature/settings/data/theme_mode_codec.dart';
+import 'package:learning_platform/src/feature/settings/model/app_settings.dart';
+import 'package:learning_platform/src/feature/settings/model/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template app_settings_datasource}

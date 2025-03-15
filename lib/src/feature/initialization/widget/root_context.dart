@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learning_platfrom/src/core/utils/layout/window_size.dart';
-import 'package:learning_platfrom/src/feature/initialization/logic/composition_root.dart';
-import 'package:learning_platfrom/src/feature/initialization/widget/dependencies_scope.dart';
-import 'package:learning_platfrom/src/feature/initialization/widget/material_context.dart';
-import 'package:learning_platfrom/src/feature/settings/widget/settings_scope.dart';
+import 'package:learning_platform/src/core/utils/layout/window_size.dart';
+import 'package:learning_platform/src/feature/initialization/logic/composition_root.dart';
+import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/initialization/widget/material_context.dart';
+import 'package:learning_platform/src/feature/settings/widget/settings_scope.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 /// {@template app}

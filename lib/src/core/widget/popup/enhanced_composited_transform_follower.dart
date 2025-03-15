@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:learning_platfrom/src/core/widget/popup/enhanced_composited_transform_target.dart';
+import 'package:learning_platform/src/core/widget/popup/enhanced_composited_transform_target.dart';
 
 /// A widget that follows a [CompositedTransformTarget].
 ///

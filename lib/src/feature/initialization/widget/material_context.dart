@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:learning_platfrom/src/core/constant/localization/localization.dart';
-import 'package:learning_platfrom/src/feature/home/widget/home_screen.dart';
-import 'package:learning_platfrom/src/feature/settings/model/app_theme.dart';
-import 'package:learning_platfrom/src/feature/settings/widget/settings_scope.dart';
+import 'package:learning_platform/src/core/constant/localization/localization.dart';
+import 'package:learning_platform/src/feature/settings/model/app_theme.dart';
+import 'package:learning_platform/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template material_context}
 /// [MaterialContext] is an entry point to the material context.
@@ -35,7 +34,7 @@ class MaterialContext extends StatelessWidget {
       locale: settings.locale,
       localizationsDelegates: Localization.localizationDelegates,
       supportedLocales: Localization.supportedLocales,
-      home: const HomeScreen(),
+      // home: const HomeScreen(),
       builder: (context, child) => MediaQuery(
         key: _globalKey,
         data: mediaQueryData.copyWith(
