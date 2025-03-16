@@ -1,7 +1,11 @@
 {
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.dart": "${basename}.g.dart, ${basename}.freezed.dart"
+  },
   "dart.additionalAnalyzerFileExtensions": [
     "drift"
   ],
-  "dart.lineLength": 100,
+  "dart.lineLength": 80,
   "dart.flutterSdkPath": ".fvm/versions/3.27.1"
 }
