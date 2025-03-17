@@ -1,6 +1,7 @@
 import 'package:learning_platform/src/core/constant/application_config.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -15,6 +16,7 @@ class DependenciesContainer {
     required this.logger,
     required this.config,
     required this.appSettingsBloc,
+    required this.authBloc,
     required this.errorReporter,
     required this.packageInfo,
   });
@@ -27,6 +29,9 @@ class DependenciesContainer {
 
   /// [AppSettingsBloc] instance, used to manage theme and locale.
   final AppSettingsBloc appSettingsBloc;
+
+  ///[AuthBloc] instance, used to manage authorization.
+  final AuthBloc authBloc;
 
   /// [ErrorReporter] instance, used to report errors.
   final ErrorReporter errorReporter;

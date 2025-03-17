@@ -1,8 +1,15 @@
 import 'package:clock/clock.dart';
+import 'package:dio/dio.dart';
 import 'package:learning_platform/src/core/constant/application_config.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/sentry_error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
+import 'package:learning_platform/src/feature/authorization/data/data_source/auth_data_source.dart';
+import 'package:learning_platform/src/feature/authorization/data/repository/auth_repository.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
+import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/initialization/model/dependencies_container.dart';
 import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:learning_platform/src/feature/settings/data/app_settings_datasource.dart';
@@ -46,8 +53,10 @@ final class CompositionRoot {
       logger: logger,
       errorReporter: errorReporter,
     ).create();
+
     stopwatch.stop();
-    logger.info('Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
+    logger.info(
+        'Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
     final result = CompositionResult(
       dependencies: dependencies,
       millisecondsSpent: stopwatch.elapsedMilliseconds,
@@ -129,17 +138,40 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
 
   @override
   Future<DependenciesContainer> create() async {
-    final sharedPreferences = SharedPreferencesAsync();
+    final sharedPreferencesAsync = SharedPreferencesAsync();
+    final sharedPreferences = await SharedPreferences.getInstance();
 
     final packageInfo = await PackageInfo.fromPlatform();
-    final settingsBloc = await AppSettingsBlocFactory(sharedPreferences).create();
+    final settingsBloc =
+        await AppSettingsBlocFactory(sharedPreferencesAsync).create();
+    final dio = Dio();
+    final authDataSource = AuthDataSource(dio: dio);
+    final tokenStorage = TokenStorage(sharedPreferences: sharedPreferences);
 
+    final authRepository = AuthRepository(
+      dataSource: authDataSource,
+      storage: tokenStorage,
+    );
+    final token = tokenStorage.load();
+
+    final authBloc = AuthBloc(
+      AuthBlocState.idle(
+        token: token ?? '',
+        status: token != null
+            ? AuthenticationStatus.authenticated
+            : AuthenticationStatus.unauthenticated,
+      ),
+      authRepository: authRepository,
+    );
+
+    /// TODO: implement a auth factory  and profile facrtory
     return DependenciesContainer(
       logger: logger,
       config: config,
       errorReporter: errorReporter,
       packageInfo: packageInfo,
       appSettingsBloc: settingsBloc,
+      authBloc: authBloc,
     );
   }
 }
@@ -200,7 +232,8 @@ class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
   @override
   Future<AppSettingsBloc> create() async {
     final appSettingsRepository = AppSettingsRepositoryImpl(
-      datasource: AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
+      datasource:
+          AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
     );
 
     final appSettings = await appSettingsRepository.getAppSettings();
