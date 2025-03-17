@@ -7,14 +7,17 @@ part 'auth_bloc_state.freezed.dart';
 @freezed
 sealed class AuthBlocState with _$AuthBlocState {
   const factory AuthBlocState.idle({
+    required String token,
     required AuthenticationStatus status,
   }) = Idle;
 
   const factory AuthBlocState.loading({
+    required String token,
     required AuthenticationStatus status,
   }) = Loading;
 
   const factory AuthBlocState.error({
+    required String token,
     required AuthenticationStatus status,
     required String error,
   }) = Error;

@@ -23,7 +23,12 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
   }) : _authRepository = authRepository {
     // emit new state when the authentication status changes
     authRepository.authStatus
-        .map(($status) => AuthBlocState.idle(status: $status))
+        .map(
+      ($status) => AuthBlocState.idle(
+        status: $status,
+        token: state.token,
+      ),
+    )
         .listen(
       ($state) {
         if ($state != state) {
@@ -47,21 +52,25 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     SignInEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status));
+    emit(AuthBlocState.loading(status: state.status, token: state.token));
 
     try {
-      await _authRepository.login(
+      final token = await _authRepository.login(
         event.organizationId,
         event.email,
         event.password,
       );
       emit(
-        const AuthBlocState.idle(status: AuthenticationStatus.authenticated),
+        AuthBlocState.idle(
+          status: AuthenticationStatus.authenticated,
+          token: token,
+        ),
       );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
           status: AuthenticationStatus.unauthenticated,
+          token: state.token,
           error: e.toString(),
         ),
       );
@@ -73,21 +82,31 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     RegisterEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status));
+    emit(
+      AuthBlocState.loading(
+        status: state.status,
+        token: state.token,
+      ),
+    );
 
     try {
-      await _authRepository.login(
+      final token = await _authRepository.register(
         event.organizationId,
         event.email,
         event.password,
+        event.userName,
       );
       emit(
-        const AuthBlocState.idle(status: AuthenticationStatus.authenticated),
+        AuthBlocState.idle(
+          status: AuthenticationStatus.authenticated,
+          token: token,
+        ),
       );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
           status: AuthenticationStatus.unauthenticated,
+          token: state.token,
           error: e.toString(),
         ),
       );
@@ -99,19 +118,21 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     SignOutEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status));
+    emit(AuthBlocState.loading(status: state.status, token: state.token));
 
     try {
       await _authRepository.logout();
       emit(
         const AuthBlocState.idle(
           status: AuthenticationStatus.unauthenticated,
+          token: '',
         ),
       );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
           status: AuthenticationStatus.unauthenticated,
+          token: state.token,
           error: e.toString(),
         ),
       );
@@ -123,15 +144,26 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     SendEmailCodeEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status));
+    emit(
+      AuthBlocState.loading(
+        status: state.status,
+        token: state.token,
+      ),
+    );
 
     try {
       await _authRepository.sendCodeToEmail();
-      emit(AuthBlocState.idle(status: state.status));
+      emit(
+        AuthBlocState.idle(
+          status: state.status,
+          token: state.token,
+        ),
+      );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
           status: state.status,
+          token: state.token,
           error: e.toString(),
         ),
       );
@@ -143,15 +175,24 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     VerifyEmailEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status));
+    emit(
+      AuthBlocState.loading(
+        status: state.status,
+        token: state.token,
+      ),
+    );
 
     try {
       await _authRepository.verifyEmail(event.code);
-      emit(AuthBlocState.idle(status: state.status));
+      emit(AuthBlocState.idle(
+        status: state.status,
+        token: state.token,
+      ));
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
           status: state.status,
+          token: state.token,
           error: e.toString(),
         ),
       );

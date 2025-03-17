@@ -22,13 +22,10 @@ sealed class AuthBlocEvent with _$AuthBlocEvent {
   }) = RegisterEvent;
 
   /// Event to send verify code to new user email
-  const factory AuthBlocEvent.sendEmailCode({
-    required String token,
-  }) = SendEmailCodeEvent;
+  const factory AuthBlocEvent.sendEmailCode() = SendEmailCodeEvent;
 
   /// Event to verify new user email
   const factory AuthBlocEvent.verifyEmail({
-    required String token,
     required String code,
   }) = VerifyEmailEvent;
 
