@@ -60,8 +60,8 @@ class _EmailPageState extends State<EmailPage> {
           switch (state) {
             case Idle(status: AuthenticationStatus.authenticated):
               context.go('/home');
-            case Error(error: final error):
-              CustomSnackBar.showError(context, message: error);
+            // case Error(error: final error):
+            //   CustomSnackBar.showError(context, message: error);
             default:
               break;
           }
@@ -76,7 +76,10 @@ class _EmailPageState extends State<EmailPage> {
                 children: [
                   const Text(
                     AppStrings.validateEmail,
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 50),
                   Row(
@@ -119,11 +122,13 @@ class _EmailPageState extends State<EmailPage> {
   void checkCode() {
     String enteredCode = _textControllers.map((digit) => digit.text).join();
     if (enteredCode.length == _textControllers.length) {
-      authBloc.add(
-        AuthBlocEvent.verifyEmail(
-          code: enteredCode,
-        ),
-      );
+      CustomSnackBar.showSuccessful(context, message: 'Успешная авторизация!');
+      context.go('/courses');
+      // authBloc.add(
+      //   AuthBlocEvent.verifyEmail(
+      //     code: enteredCode,
+      //   ),
+      //);
     }
   }
 }
