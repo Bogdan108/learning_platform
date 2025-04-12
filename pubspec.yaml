@@ -1,5 +1,5 @@
 name: learning_platform
-description: Production-ready template for Flutter applications.
+description: Platform for organization learning process.
 # Prevent accidental publishing to pub.dev.
 publish_to: "none"
 
@@ -8,10 +8,6 @@ version: 0.0.1+1
 environment:
   sdk: ">=3.5.4 <4.0.0"
   flutter: ">=3.24.5 <4.0.0"
-
-#workspace:
-#  - packages/rest_client
-#  - packages/app_database
 
 dependencies:
   # Flutter SDK
