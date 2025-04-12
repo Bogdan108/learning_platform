@@ -3,6 +3,7 @@ include: package:sizzle_lints/lints.yaml
 analyzer:
   errors:
     public_member_api_docs: ignore
+    invalid_annotation_target: ignore
   exclude:
     - "lib/src/core/localization/generated/**"
 

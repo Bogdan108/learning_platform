@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
+import 'package:learning_platform/src/feature/courses/model/course_model.dart';
 
 class AdminCourseManagementPage extends StatefulWidget {
   const AdminCourseManagementPage({Key? key}) : super(key: key);
