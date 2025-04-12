@@ -1,35 +1,18 @@
-/// Model for course
-class Course {
-  final String title;
-  final String description;
-  final int studentCount;
-  final String status;
-  final List<String> materials;
-  final List<String> students;
+// ignore_for_file: invalid_annotation_target
 
-  const Course({
-    required this.title,
-    required this.description,
-    required this.studentCount,
-    required this.status,
-    required this.materials,
-    required this.students,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Course copyWith({
-    String? title,
-    String? description,
-    int? studentCount,
-    String? status,
-    List<String>? materials,
-    List<String>? students,
-  }) =>
-      Course(
-        title: title ?? this.title,
-        description: description ?? this.description,
-        studentCount: studentCount ?? this.studentCount,
-        status: status ?? this.status,
-        materials: materials ?? this.materials,
-        students: students ?? this.students,
-      );
+part 'course.freezed.dart';
+part 'course.g.dart';
+
+@freezed
+abstract class Course with _$Course {
+  const factory Course({
+    required String id,
+    required String name,
+    required String description,
+    @JsonKey(name: 'is_active') required bool isActive,
+  }) = _Course;
+
+  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
 }
