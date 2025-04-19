@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/feature/profile/model/user.dart';
-import 'package:learning_platform/src/feature/profile/model/user_name.dart';
-import 'package:learning_platform/src/feature/profile/model/user_role.dart';
+import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
 
-/// Page for user profile
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
-
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  final _user = const User(
-    fullName: UserName(
-        firstName: 'Богдан', secondName: 'Лукьянчук', middleName: 'Сергеевич'),
-    role: UserRole.student,
-    email: 'ibogdan533@gmail.com',
-  );
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -28,39 +18,52 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${_user.fullName.secondName} ${_user.fullName.firstName}',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+          child: BlocBuilder<ProfileBloc, ProfileBlocState>(
+            bloc: DependenciesScope.of(context).profileBloc,
+            builder: (context, state) => switch (state) {
+              Loading() => const Center(child: CircularProgressIndicator()),
+              Idle(profileInfo: final info) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${info?.fullName.secondName} ${info?.fullName.firstName}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      info?.email ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    TextButton(
+                      onPressed: () {
+                        // здесь ваш логаут, например:
+                        // context.read<AuthBloc>().add(SignOutEvent());
+                        context.go('/login');
+                      },
+                      child: const Text(
+                        'Выйти из системы',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Администратор',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 32),
-              TextButton(
-                onPressed: () {
-                  // authBloc.add(SignOutEvent())
-                  context.go('/login');
-                },
-                child: const Text(
-                  'Выйти из системы',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
+              Error(error: final message) => Center(
+                  child: Text(
+                    'Ошибка: $message',
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
-              ),
-            ],
+            },
           ),
         ),
       );
