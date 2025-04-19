@@ -11,6 +11,9 @@ import 'package:learning_platform/src/feature/authorization/data/repository/auth
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/initialization/model/dependencies_container.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/data/data_source/profile_data_source.dart';
+import 'package:learning_platform/src/feature/profile/data/repository/profile_repository.dart';
 import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:learning_platform/src/feature/settings/data/app_settings_datasource.dart';
 import 'package:learning_platform/src/feature/settings/data/app_settings_repository.dart';
@@ -138,39 +141,32 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
 
   @override
   Future<DependenciesContainer> create() async {
+    final dio = Dio();
     final sharedPreferencesAsync = SharedPreferencesAsync();
     final sharedPreferences = await SharedPreferences.getInstance();
 
     final packageInfo = await PackageInfo.fromPlatform();
     final settingsBloc =
         await AppSettingsBlocFactory(sharedPreferencesAsync).create();
-    final dio = Dio();
-    final authDataSource = AuthDataSource(dio: dio);
+
     final tokenStorage = TokenStorage(sharedPreferences: sharedPreferences);
+    final authBloc =
+        await AuthBlocFactory(dio: dio, tokenStorage: tokenStorage).create();
 
-    final authRepository = AuthRepository(
-      dataSource: authDataSource,
-      storage: tokenStorage,
+    final profileDataSource = ProfileDataSource(dio: dio);
+    final profileRepository = ProfileRepository(
+      dataSource: profileDataSource,
+      tokenStorage: tokenStorage,
     );
-    final token = tokenStorage.load();
+    final profileBloc = ProfileBloc(profileRepository: profileRepository);
 
-    final authBloc = AuthBloc(
-      AuthBlocState.idle(
-        token: token ?? '',
-        status: token != null
-            ? AuthenticationStatus.authenticated
-            : AuthenticationStatus.unauthenticated,
-      ),
-      authRepository: authRepository,
-    );
-
-    /// TODO: implement a auth factory  and profile facrtory
     return DependenciesContainer(
       logger: logger,
       config: config,
       errorReporter: errorReporter,
       packageInfo: packageInfo,
       appSettingsBloc: settingsBloc,
+      profileBloc: profileBloc,
       authBloc: authBloc,
     );
   }
@@ -242,6 +238,45 @@ class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
     return AppSettingsBloc(
       appSettingsRepository: appSettingsRepository,
       initialState: initialState,
+    );
+  }
+}
+
+/// {@template auth_bloc_factory}
+/// Factory that creates an instance of [AuthBlocFactory].
+///
+/// The [AuthBlocFactory] should be initialized during the application startup
+/// in order to load the auth info from the server, so user can see
+/// roles, names and email.
+/// {@endtemplate}
+class AuthBlocFactory extends AsyncFactory<AuthBloc> {
+  /// {@macro auth_bloc_factory}
+  const AuthBlocFactory({required this.dio, required this.tokenStorage});
+
+  /// Dio instance
+  final Dio dio;
+
+  /// TokenStorage instance
+  final TokenStorage tokenStorage;
+
+  @override
+  Future<AuthBloc> create() async {
+    final authDataSource = AuthDataSource(dio: dio);
+
+    final authRepository = AuthRepository(
+      dataSource: authDataSource,
+      storage: tokenStorage,
+    );
+    final token = tokenStorage.load();
+
+    return AuthBloc(
+      AuthBlocState.idle(
+        token: token ?? '',
+        status: token != null
+            ? AuthenticationStatus.authenticated
+            : AuthenticationStatus.unauthenticated,
+      ),
+      authRepository: authRepository,
     );
   }
 }
