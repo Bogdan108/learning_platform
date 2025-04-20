@@ -1,12 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:learning_platform/src/common/utils/set_state_mixin.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/i_courses_repository.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
-
-mixin SetStateMixin<S> on Emittable<S> {
-  void setState(S state) => emit(state);
-}
 
 class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     with SetStateMixin {
