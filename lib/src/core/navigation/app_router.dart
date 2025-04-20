@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/feature/admin/widget/pages/admin_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
-import 'package:learning_platform/src/feature/courses/model/course_model.dart';
-import 'package:learning_platform/src/feature/courses/widget/course_page.dart';
+import 'package:learning_platform/src/feature/course/widget/course_detail_page.dart';
+import 'package:learning_platform/src/feature/courses/model/course.dart';
 import 'package:learning_platform/src/feature/courses/widget/courses_page.dart';
 import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
 
@@ -43,7 +42,6 @@ class AppRouter {
           GoRoute(
             path: 'validate_code',
             builder: (context, state) {
-              // Передаём данные из extra
               final data = state.extra as Map<String, String>;
               return EmailPage(
                 firstName: data['firstName']!,
@@ -55,17 +53,17 @@ class AppRouter {
           ),
         ],
       ),
-      GoRoute(
-        path: '/admin',
-        pageBuilder: (context, state) => CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const AdminHomePage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              FadeTransition(opacity: animation, child: child),
-          transitionDuration: _defaultFadeTransitionDuration,
-          reverseTransitionDuration: _defaultFadeTransitionDuration,
-        ),
-      ),
+      // GoRoute(
+      //   path: '/admin',
+      //   pageBuilder: (context, state) => CustomTransitionPage<void>(
+      //     key: state.pageKey,
+      //     child: const AdminHomePage(),
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+      //         FadeTransition(opacity: animation, child: child),
+      //     transitionDuration: _defaultFadeTransitionDuration,
+      //     reverseTransitionDuration: _defaultFadeTransitionDuration,
+      //   ),
+      // ),
       GoRoute(
         path: '/courses',
         pageBuilder: (context, state) => CustomTransitionPage<void>(
@@ -78,12 +76,12 @@ class AppRouter {
         ),
         routes: [
           GoRoute(
-            path: '/details',
+            path: '/course_details',
             builder: (context, state) {
               final course = state.extra! as Course;
-              return CourseDetailPage(course: course);
+              return CourseDetailPage(courseDetails: course);
             },
-          )
+          ),
         ],
       ),
       GoRoute(
