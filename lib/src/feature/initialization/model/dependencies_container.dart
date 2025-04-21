@@ -2,6 +2,8 @@ import 'package:learning_platform/src/core/constant/application_config.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -16,6 +18,8 @@ class DependenciesContainer {
   const DependenciesContainer({
     required this.logger,
     required this.config,
+    required this.tokenStorage,
+    required this.organizationIdStorage,
     required this.appSettingsBloc,
     required this.authBloc,
     required this.profileBloc,
@@ -28,6 +32,12 @@ class DependenciesContainer {
 
   /// [ApplicationConfig] instance, contains configuration of the application.
   final ApplicationConfig config;
+
+  ///[TokenStorage] instance, used to manage user token.
+  final TokenStorage tokenStorage;
+
+  ///[OrganizationIdStorage] instance, used to manage org id.
+  final OrganizationIdStorage organizationIdStorage;
 
   /// [AppSettingsBloc] instance, used to manage theme and locale.
   final AppSettingsBloc appSettingsBloc;

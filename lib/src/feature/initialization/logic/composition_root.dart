@@ -8,6 +8,7 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart'
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/data/data_source/auth_data_source.dart';
 import 'package:learning_platform/src/feature/authorization/data/repository/auth_repository.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/initialization/model/dependencies_container.dart';
@@ -150,13 +151,20 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
         await AppSettingsBlocFactory(sharedPreferencesAsync).create();
 
     final tokenStorage = TokenStorage(sharedPreferences: sharedPreferences);
-    final authBloc =
-        await AuthBlocFactory(dio: dio, tokenStorage: tokenStorage).create();
+    final orgIdStorage = OrganizationIdStorage(
+      sharedPreferences: sharedPreferences,
+    );
+    final authBloc = await AuthBlocFactory(
+      dio: dio,
+      tokenStorage: tokenStorage,
+      orgIdStorage: orgIdStorage,
+    ).create();
 
     final profileDataSource = ProfileDataSource(dio: dio);
     final profileRepository = ProfileRepository(
       dataSource: profileDataSource,
       tokenStorage: tokenStorage,
+      orgIdStorage: orgIdStorage,
     );
     final profileBloc = ProfileBloc(profileRepository: profileRepository);
 
@@ -165,6 +173,8 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
       config: config,
       errorReporter: errorReporter,
       packageInfo: packageInfo,
+      tokenStorage: tokenStorage,
+      organizationIdStorage: orgIdStorage,
       appSettingsBloc: settingsBloc,
       profileBloc: profileBloc,
       authBloc: authBloc,
@@ -251,13 +261,20 @@ class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
 /// {@endtemplate}
 class AuthBlocFactory extends AsyncFactory<AuthBloc> {
   /// {@macro auth_bloc_factory}
-  const AuthBlocFactory({required this.dio, required this.tokenStorage});
+  const AuthBlocFactory({
+    required this.dio,
+    required this.tokenStorage,
+    required this.orgIdStorage,
+  });
 
   /// Dio instance
   final Dio dio;
 
   /// TokenStorage instance
   final TokenStorage tokenStorage;
+
+  /// TokenStorage instance
+  final OrganizationIdStorage orgIdStorage;
 
   @override
   Future<AuthBloc> create() async {
@@ -266,6 +283,7 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
     final authRepository = AuthRepository(
       dataSource: authDataSource,
       storage: tokenStorage,
+      orgIdStorage: orgIdStorage,
     );
     final token = tokenStorage.load();
 
