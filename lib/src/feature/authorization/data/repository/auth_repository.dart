@@ -1,20 +1,26 @@
 import 'package:learning_platform/src/feature/authorization/data/data_source/auth_data_source.dart';
+import 'package:learning_platform/src/feature/authorization/data/data_source/i_auth_data_source.dart';
 import 'package:learning_platform/src/feature/authorization/data/repository/i_auth_repository.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 /// Implementation [IAuthRepository]  for authentication operations.
 class AuthRepository implements IAuthRepository {
-  final AuthDataSource _dataSource;
+  final IAuthDataSource _dataSource;
   final TokenStorage _storage;
+  final IStorage<String> _orgIdStorage;
 
   /// Create an [AuthRepository]
   const AuthRepository({
     required AuthDataSource dataSource,
     required TokenStorage storage,
+    required OrganizationIdStorage orgIdStorage,
   })  : _dataSource = dataSource,
-        _storage = storage;
+        _storage = storage,
+        _orgIdStorage = orgIdStorage;
 
   @override
   Stream<AuthenticationStatus> get authStatus => _storage.authStream().map(
@@ -30,7 +36,9 @@ class AuthRepository implements IAuthRepository {
     String password,
   ) async {
     final token = await _dataSource.login(organizationId, email, password);
+
     await _storage.save(token);
+    await _orgIdStorage.save(organizationId);
 
     return token;
   }
@@ -38,6 +46,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<void> logout() async {
     await _storage.clear();
+    await _orgIdStorage.clear();
   }
 
   @override
@@ -53,7 +62,9 @@ class AuthRepository implements IAuthRepository {
       password,
       userName,
     );
+
     await _storage.save(token);
+    await _orgIdStorage.save(organizationId);
 
     return token;
   }

@@ -1,14 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:learning_platform/src/common/utils/set_state_mixin.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/data/repository/i_auth_repository.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
-
-/// Set the state of the bloc
-mixin SetStateMixin<S> on Emittable<S> {
-  /// Change the state of the bloc
-  void setState(S state) => emit(state);
-}
 
 /// AuthBloc
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
@@ -52,7 +47,12 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     SignInEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status, token: state.token));
+    emit(
+      AuthBlocState.loading(
+        status: state.status,
+        token: state.token,
+      ),
+    );
 
     try {
       final token = await _authRepository.login(
@@ -118,7 +118,12 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     SignOutEvent event,
     Emitter<AuthBlocState> emit,
   ) async {
-    emit(AuthBlocState.loading(status: state.status, token: state.token));
+    emit(
+      AuthBlocState.loading(
+        status: state.status,
+        token: state.token,
+      ),
+    );
 
     try {
       await _authRepository.logout();
@@ -184,10 +189,12 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
 
     try {
       await _authRepository.verifyEmail(event.code);
-      emit(AuthBlocState.idle(
-        status: state.status,
-        token: state.token,
-      ));
+      emit(
+        AuthBlocState.idle(
+          status: state.status,
+          token: state.token,
+        ),
+      );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(

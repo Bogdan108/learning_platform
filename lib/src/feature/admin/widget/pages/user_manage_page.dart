@@ -117,6 +117,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
         return 'Учитель';
       case UserRole.student:
         return 'Ученик';
+      case UserRole.unauthorized:
+        return 'Неавторизован';
     }
   }
 
