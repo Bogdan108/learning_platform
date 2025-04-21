@@ -6,12 +6,15 @@ part 'profile_bloc_state.freezed.dart';
 @freezed
 sealed class ProfileBlocState with _$ProfileBlocState {
   const factory ProfileBlocState.idle({
-    User? profileInfo,
+    required User profileInfo,
   }) = Idle;
 
-  const factory ProfileBlocState.loading() = Loading;
+  const factory ProfileBlocState.loading({
+    required User profileInfo,
+  }) = Loading;
 
   const factory ProfileBlocState.error({
     required String error,
+    required User profileInfo,
   }) = Error;
 }
