@@ -26,23 +26,28 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
     Emitter<CourseBlocState> emit,
   ) async {
     emit(
-      CourseBlocState.loading(additions: state.additions),
+      CourseBlocState.loading(
+        additions: state.additions,
+        students: state.students,
+      ),
     );
 
     try {
       final additions = await _courseRepository.getCourseAdditions(
-        event.organizationId,
         event.courseId,
       );
+      final students = await _courseRepository.getCourseStudents(
+        event.courseId,
+      );
+
       emit(
-        CourseBlocState.idle(
-          additions: additions,
-        ),
+        CourseBlocState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
       emit(
         CourseBlocState.error(
           additions: state.additions,
+          students: state.students,
           error: e.toString(),
         ),
       );
@@ -57,29 +62,31 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
     emit(
       CourseBlocState.loading(
         additions: state.additions,
+        students: state.students,
       ),
     );
 
     try {
       await _courseRepository.deleteAddition(
-        event.organizationId,
         event.courseId,
         event.additionType,
         event.additionId,
       );
       final additions = await _courseRepository.getCourseAdditions(
-        event.organizationId,
         event.courseId,
       );
+      final students = await _courseRepository.getCourseStudents(
+        event.courseId,
+      );
+
       emit(
-        CourseBlocState.idle(
-          additions: additions,
-        ),
+        CourseBlocState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
       emit(
         CourseBlocState.error(
           additions: state.additions,
+          students: state.students,
           error: e.toString(),
         ),
       );
@@ -93,29 +100,29 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
   ) async {
     emit(
       CourseBlocState.loading(
-        additions: state.additions,
-      ),
+          additions: state.additions, students: state.students),
     );
 
     try {
       await _courseRepository.addLinkAddition(
-        event.organizationId,
         event.courseId,
         event.link,
       );
       final additions = await _courseRepository.getCourseAdditions(
-        event.organizationId,
         event.courseId,
       );
+      final students = await _courseRepository.getCourseStudents(
+        event.courseId,
+      );
+
       emit(
-        CourseBlocState.idle(
-          additions: additions,
-        ),
+        CourseBlocState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
       emit(
         CourseBlocState.error(
           additions: state.additions,
+          students: state.students,
           error: e.toString(),
         ),
       );
