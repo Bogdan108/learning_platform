@@ -36,11 +36,9 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
 
     try {
       await _courseRepository.createCourse(
-        event.organizationId,
         event.course,
       );
       final courses = await _courseRepository.getTeacherCourses(
-        event.organizationId,
         '',
       );
       emit(
@@ -71,12 +69,10 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
 
     try {
       await _courseRepository.editCourse(
-        event.organizationId,
         event.courseId,
         event.course,
       );
       final courses = await _courseRepository.getTeacherCourses(
-        event.organizationId,
         '',
       );
       emit(
@@ -107,11 +103,9 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
 
     try {
       await _courseRepository.deleteCourse(
-        event.organizationId,
         event.courseId,
       );
       final courses = await _courseRepository.getTeacherCourses(
-        event.organizationId,
         '',
       );
       emit(
@@ -143,11 +137,9 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     try {
       final courses = switch (event.role) {
         UserRole.student => await _courseRepository.getTeacherCourses(
-            event.organizationId,
             event.searchQuery,
           ),
         _ => await _courseRepository.getStudentCourses(
-            event.organizationId,
             event.searchQuery,
           ),
       };
@@ -179,11 +171,9 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
 
     try {
       await _courseRepository.enrollCourse(
-        event.organizationId,
         event.courseId,
       );
       final courses = await _courseRepository.getStudentCourses(
-        event.organizationId,
         '',
       );
       emit(
