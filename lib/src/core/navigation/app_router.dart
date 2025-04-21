@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
@@ -10,12 +11,8 @@ import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
 
 const _defaultFadeTransitionDuration = Duration(milliseconds: 200);
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
-
 class AppRouter {
-  static final router = GoRouter(
-    navigatorKey: _rootNavigatorKey,
-    initialLocation: '/admin',
+  static final router = RoutingConfig(
     routes: [
       GoRoute(
         path: '/login',
@@ -53,47 +50,52 @@ class AppRouter {
           ),
         ],
       ),
-      // GoRoute(
-      //   path: '/admin',
-      //   pageBuilder: (context, state) => CustomTransitionPage<void>(
-      //     key: state.pageKey,
-      //     child: const AdminHomePage(),
-      //     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-      //         FadeTransition(opacity: animation, child: child),
-      //     transitionDuration: _defaultFadeTransitionDuration,
-      //     reverseTransitionDuration: _defaultFadeTransitionDuration,
-      //   ),
-      // ),
-      GoRoute(
-        path: '/courses',
-        pageBuilder: (context, state) => CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const CoursesPage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              FadeTransition(opacity: animation, child: child),
-          transitionDuration: _defaultFadeTransitionDuration,
-          reverseTransitionDuration: _defaultFadeTransitionDuration,
-        ),
-        routes: [
-          GoRoute(
-            path: '/course_details',
-            builder: (context, state) {
-              final course = state.extra! as Course;
-              return CourseDetailPage(courseDetails: course);
-            },
+      StatefulShellRoute.indexedStack(
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/',
+                pageBuilder: (context, state) => CustomTransitionPage<void>(
+                  key: state.pageKey,
+                  child: const CoursesPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                  transitionDuration: _defaultFadeTransitionDuration,
+                  reverseTransitionDuration: _defaultFadeTransitionDuration,
+                ),
+                routes: [
+                  GoRoute(
+                    path: '/course_details',
+                    builder: (context, state) {
+                      final course = state.extra! as Course;
+                      return CourseDetailPage(courseDetails: course);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                pageBuilder: (context, state) => CustomTransitionPage<void>(
+                  key: state.pageKey,
+                  child: const ProfilePage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                  transitionDuration: _defaultFadeTransitionDuration,
+                  reverseTransitionDuration: _defaultFadeTransitionDuration,
+                ),
+              ),
+            ],
           ),
         ],
-      ),
-      GoRoute(
-        path: '/profile',
-        pageBuilder: (context, state) => CustomTransitionPage<void>(
-          key: state.pageKey,
-          child: const ProfilePage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              FadeTransition(opacity: animation, child: child),
-          transitionDuration: _defaultFadeTransitionDuration,
-          reverseTransitionDuration: _defaultFadeTransitionDuration,
-        ),
+        builder: (context, state, navigationShell) =>
+            UserRootScreen(navigationShell: navigationShell),
       ),
     ],
   );
