@@ -13,5 +13,8 @@ abstract class User with _$User {
     required String email,
   }) = _User;
 
+  factory User.unauthorized() =>
+      User(fullName: UserName.empty(), role: UserRole.unauthorized, email: '');
+
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
 }

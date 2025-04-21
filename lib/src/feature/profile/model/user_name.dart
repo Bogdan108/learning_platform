@@ -13,6 +13,9 @@ abstract class UserName with _$UserName {
     required String middleName,
   }) = _UserName;
 
+  factory UserName.empty() =>
+      const UserName(firstName: '', secondName: '', middleName: '');
+
   /// Creates a new [UserName] instance from a JSON
   factory UserName.fromJson(Map<String, Object?> json) =>
       _$UserNameFromJson(json);

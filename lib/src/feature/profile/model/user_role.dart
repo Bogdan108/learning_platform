@@ -8,4 +8,7 @@ enum UserRole {
 
   /// A role assigned to administrator users.
   admin,
+
+  /// A role assigned to unauthorized users.
+  unauthorized,
 }
