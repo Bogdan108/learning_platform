@@ -12,7 +12,11 @@ import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
 const _defaultFadeTransitionDuration = Duration(milliseconds: 200);
 
 class AppRouter {
-  static final router = RoutingConfig(
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
+  static final router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/login',
