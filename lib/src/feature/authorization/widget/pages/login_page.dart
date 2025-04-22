@@ -116,8 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                             // );
 
                             context.go('/courses');
-                            CustomSnackBar.showSuccessful(context,
-                                message: 'Успешная авторизация!');
+                            CustomSnackBar.showSuccessful(
+                              context,
+                              message: 'Успешная авторизация!',
+                            );
                           }
                         },
                       ),

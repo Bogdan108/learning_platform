@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:learning_platform/src/core/utils/analytics/firebase_analytics_reporter.dart';
 
 /// {@template analytics_reporter}
 /// Interface for reporting analytics events.
@@ -66,7 +67,8 @@ base class AnalyticsEvent {
   }
 
   @override
-  int get hashCode => name.hashCode ^ const DeepCollectionEquality().hash(parameters);
+  int get hashCode =>
+      name.hashCode ^ const DeepCollectionEquality().hash(parameters);
 }
 
 /// {@template analytics_parameter}
@@ -103,7 +105,9 @@ final class StringAnalyticsParameter extends AnalyticsParameter<String> {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is StringAnalyticsParameter && other.name == name && other.value == value;
+    return other is StringAnalyticsParameter &&
+        other.name == name &&
+        other.value == value;
   }
 
   @override
@@ -123,7 +127,9 @@ final class NumberAnalyticsParameter extends AnalyticsParameter<num> {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is NumberAnalyticsParameter && other.name == name && other.value == value;
+    return other is NumberAnalyticsParameter &&
+        other.name == name &&
+        other.value == value;
   }
 
   @override

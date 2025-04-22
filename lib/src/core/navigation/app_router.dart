@@ -43,7 +43,7 @@ class AppRouter {
           GoRoute(
             path: 'validate_code',
             builder: (context, state) {
-              final data = state.extra as Map<String, String>;
+              final data = state.extra! as Map<String, String>;
               return EmailPage(
                 firstName: data['firstName']!,
                 lastName: data['lastName']!,

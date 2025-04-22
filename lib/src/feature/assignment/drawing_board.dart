@@ -19,7 +19,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
         onPanUpdate: (details) {
           setState(() {
             // Переводим глобальные координаты в локальные относительно контейнера
-            RenderBox renderBox = context.findRenderObject() as RenderBox;
+            final renderBox = context.findRenderObject()! as RenderBox;
             points.add(renderBox.globalToLocal(details.globalPosition));
           });
         },
@@ -57,7 +57,7 @@ class DrawingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    final paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 4.0;

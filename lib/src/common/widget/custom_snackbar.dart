@@ -47,8 +47,8 @@ class CustomSnackBar {
   static void _show({
     required BuildContext context,
     required IconData icon,
-    Color? iconColor,
     required String title,
+    Color? iconColor,
     String? message,
   }) {
     late OverlayEntry entry;
@@ -80,11 +80,11 @@ class CustomSnackBar {
 class _CustomSnackBarWidget extends StatefulWidget {
   /// {@macro toast_notification}
   const _CustomSnackBarWidget({
-    required this.icon,
-    this.iconColor,
-    required this.title,
-    this.message,
     required this.removeOverlayEntry,
+    required this.icon,
+    required this.title,
+    this.iconColor,
+    this.message,
   });
 
   final IconData icon;
@@ -106,11 +106,12 @@ class __CustomSnackBarWidgetState extends State<_CustomSnackBarWidget>
   late final Animation<Offset> _offsetAnimation = Tween<Offset>(
     begin: const Offset(0.0, 1.5),
     end: Offset.zero,
-  ).animate(CurvedAnimation(
-    parent: _controller,
-    curve: Curves.fastEaseInToSlowEaseOut,
-  ))
-    ..addStatusListener(_statusListener);
+  ).animate(
+    CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastEaseInToSlowEaseOut,
+    ),
+  )..addStatusListener(_statusListener);
 
   void _statusListener(AnimationStatus status) {
     if (status == AnimationStatus.dismissed) {

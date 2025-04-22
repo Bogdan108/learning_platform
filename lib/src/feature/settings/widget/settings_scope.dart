@@ -45,7 +45,8 @@ class _SettingsScopeState extends State<SettingsScope> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<AppSettingsBloc, AppSettingsState>(
+  Widget build(BuildContext context) =>
+      BlocBuilder<AppSettingsBloc, AppSettingsState>(
         bloc: _appSettingsBloc,
         builder: (context, state) => _InheritedSettings(
           settings: state.appSettings,
@@ -64,7 +65,6 @@ class _InheritedSettings extends InheritedWidget {
     required super.child,
     required this.state,
     required this.settings,
-    super.key, // ignore: unused_element
   });
 
   /// _SettingsScopeState instance.
@@ -72,5 +72,6 @@ class _InheritedSettings extends InheritedWidget {
   final AppSettings? settings;
 
   @override
-  bool updateShouldNotify(covariant _InheritedSettings oldWidget) => settings != oldWidget.settings;
+  bool updateShouldNotify(covariant _InheritedSettings oldWidget) =>
+      settings != oldWidget.settings;
 }

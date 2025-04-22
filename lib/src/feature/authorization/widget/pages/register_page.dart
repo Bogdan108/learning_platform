@@ -42,8 +42,10 @@ class _RegisterPageState extends State<RegisterPage> {
           switch (state) {
             case Idle(status: AuthenticationStatus.authenticated):
               //  context.go('/home');
-              CustomSnackBar.showSuccessful(context,
-                  message: 'Успешная авторизация!');
+              CustomSnackBar.showSuccessful(
+                context,
+                message: 'Успешная авторизация!',
+              );
             // case Error(error: final error):
             //   CustomSnackBar.showError(context,
             //       message: 'Ошибка регистрации! \n попробуйте снова');

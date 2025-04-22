@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class AuthButton extends StatelessWidget {
   const AuthButton({
-    super.key,
     required this.title,
     required this.onTap,
+    super.key,
   });
 
   final String title;

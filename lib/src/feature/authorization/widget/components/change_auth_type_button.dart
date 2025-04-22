@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ChangeAuthTypeButton extends StatelessWidget {
   const ChangeAuthTypeButton({
-    super.key,
     required this.title,
     required this.subTitle,
     required this.onPressed,
+    super.key,
   });
 
   final String title;

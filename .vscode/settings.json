@@ -7,5 +7,9 @@
     "drift"
   ],
   "dart.lineLength": 80,
-  "dart.flutterSdkPath": ".fvm/versions/3.27.1"
+  "dart.flutterSdkPath": ".fvm/versions/3.27.1",
+  "cSpell.words": [
+    "endtemplate"
+  ],
+  "cSpell.enabled": false
 }

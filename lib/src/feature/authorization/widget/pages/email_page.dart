@@ -12,11 +12,11 @@ import 'package:learning_platform/src/feature/initialization/widget/dependencies
 
 class EmailPage extends StatefulWidget {
   const EmailPage({
-    super.key,
     required this.firstName,
     required this.lastName,
     required this.email,
     required this.password,
+    super.key,
   });
 
   final String firstName;
@@ -120,7 +120,7 @@ class _EmailPageState extends State<EmailPage> {
       );
 
   void checkCode() {
-    String enteredCode = _textControllers.map((digit) => digit.text).join();
+    final enteredCode = _textControllers.map((digit) => digit.text).join();
     if (enteredCode.length == _textControllers.length) {
       CustomSnackBar.showSuccessful(context, message: 'Успешная авторизация!');
       context.go('/courses');

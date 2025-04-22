@@ -6,7 +6,7 @@ import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class AdminUserManagementPage extends StatefulWidget {
-  const AdminUserManagementPage({Key? key}) : super(key: key);
+  const AdminUserManagementPage({super.key});
 
   @override
   State<AdminUserManagementPage> createState() =>
@@ -135,7 +135,9 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
             items: const [
               DropdownMenuItem(value: UserRole.teacher, child: Text('Учитель')),
               DropdownMenuItem(
-                  value: UserRole.admin, child: Text('Администратор')),
+                value: UserRole.admin,
+                child: Text('Администратор'),
+              ),
               DropdownMenuItem(value: UserRole.student, child: Text('Ученик')),
             ],
             onChanged: (value) {
