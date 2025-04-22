@@ -13,6 +13,7 @@ import 'package:learning_platform/src/feature/authorization/data/storage/token_s
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/initialization/model/dependencies_container.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 import 'package:learning_platform/src/feature/profile/data/data_source/profile_data_source.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/profile_repository.dart';
 import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
@@ -160,17 +161,16 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
       orgIdStorage: orgIdStorage,
     ).create();
 
-    final profileDataSource = ProfileDataSource(dio: dio);
-    final profileRepository = ProfileRepository(
-      dataSource: profileDataSource,
+    final profileBloc = await ProfileBlocFactory(
+      dio: dio,
       tokenStorage: tokenStorage,
       orgIdStorage: orgIdStorage,
-    );
-    final profileBloc = ProfileBloc(profileRepository: profileRepository);
+    ).create();
 
     return DependenciesContainer(
       logger: logger,
       config: config,
+      dio: dio,
       errorReporter: errorReporter,
       packageInfo: packageInfo,
       tokenStorage: tokenStorage,
@@ -296,5 +296,42 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
       ),
       authRepository: authRepository,
     );
+  }
+}
+
+/// {@template app_settings_bloc_factory}
+/// Factory that creates an instance of [ProfileBlocFactory].
+///
+/// The [ProfileBlocFactory] should be initialized during the application startup
+/// in order to load the user profile info from the server storage, so user can see
+/// their info and role.
+/// {@endtemplate}
+class ProfileBlocFactory extends AsyncFactory<ProfileBloc> {
+  /// {@macro app_settings_bloc_factory}
+  const ProfileBlocFactory({
+    required this.dio,
+    required this.tokenStorage,
+    required this.orgIdStorage,
+  });
+
+  /// Dio instance
+  final Dio dio;
+
+  /// TokenStorage instance
+  final TokenStorage tokenStorage;
+
+  /// TokenStorage instance
+  final OrganizationIdStorage orgIdStorage;
+
+  @override
+  Future<ProfileBloc> create() async {
+    final profileDataSource = ProfileDataSource(dio: dio);
+    final profileRepository = ProfileRepository(
+      dataSource: profileDataSource,
+      tokenStorage: tokenStorage,
+      orgIdStorage: orgIdStorage,
+    );
+    return ProfileBloc(profileRepository: profileRepository)
+      ..add(const ProfileBlocEvent.fetchUserInfo());
   }
 }

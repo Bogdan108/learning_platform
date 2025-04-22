@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/core/constant/localization/localization.dart';
+import 'package:learning_platform/src/core/navigation/app_router.dart';
 import 'package:learning_platform/src/feature/settings/model/app_theme.dart';
 import 'package:learning_platform/src/feature/settings/widget/settings_scope.dart';
-import 'package:provider/provider.dart';
 
 /// {@template material_context}
 /// [MaterialContext] is an entry point to the material context.
@@ -20,7 +19,6 @@ class MaterialContext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final routerConfig = context.read<GoRouter>();
     final settings = SettingsScope.settingsOf(context);
     final mediaQueryData = MediaQuery.of(context);
     final theme = settings.appTheme ?? AppTheme.defaultTheme;
@@ -35,7 +33,7 @@ class MaterialContext extends StatelessWidget {
       locale: settings.locale,
       localizationsDelegates: Localization.localizationDelegates,
       supportedLocales: Localization.supportedLocales,
-      routerConfig: routerConfig,
+      routerConfig: AppRouter.router,
       builder: (context, child) => MediaQuery(
         key: _globalKey,
         data: mediaQueryData.copyWith(

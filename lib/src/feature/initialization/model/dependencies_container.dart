@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:learning_platform/src/core/constant/application_config.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
@@ -18,6 +19,7 @@ class DependenciesContainer {
   const DependenciesContainer({
     required this.logger,
     required this.config,
+    required this.dio,
     required this.tokenStorage,
     required this.organizationIdStorage,
     required this.appSettingsBloc,
@@ -32,6 +34,9 @@ class DependenciesContainer {
 
   /// [ApplicationConfig] instance, contains configuration of the application.
   final ApplicationConfig config;
+
+  /// [Dio] instance, used to make HTTP requests.
+  final Dio dio;
 
   ///[TokenStorage] instance, used to manage user token.
   final TokenStorage tokenStorage;

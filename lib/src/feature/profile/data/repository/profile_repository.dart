@@ -1,4 +1,4 @@
-import 'package:learning_platform/src/feature/authorization/data/storage/i_organization_storage.dart';
+import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/profile/data/data_source/i_profile_data_source.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/i_profile_repository.dart';
