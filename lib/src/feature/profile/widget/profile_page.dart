@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
@@ -26,15 +28,23 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${info?.fullName.secondName} ${info?.fullName.firstName}',
+                      '${info.fullName.secondName} ${info.fullName.firstName}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Text(
-                      info?.email ?? '',
+                      info.email,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      info.role.name,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -43,8 +53,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 32),
                     TextButton(
                       onPressed: () {
-                        // здесь ваш логаут, например:
-                        // context.read<AuthBloc>().add(SignOutEvent());
+                        context.read<AuthBloc>().add(const SignOutEvent());
                         context.go('/login');
                       },
                       child: const Text(
