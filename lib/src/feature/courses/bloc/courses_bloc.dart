@@ -2,17 +2,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/utils/set_state_mixin.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
+import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/i_courses_repository.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     with SetStateMixin {
-  final ICoursesRepository _courseRepository;
+  final ICoursesRepository _coursesRepository;
 
-  CoursesBloc(
-    super.initialState, {
-    required ICoursesRepository courseRepository,
-  }) : _courseRepository = courseRepository {
+  CoursesBloc({
+    required CoursesRepository coursesRepository,
+    CoursesBlocState? initialState,
+  })  : _coursesRepository = coursesRepository,
+        super(initialState ?? const CoursesBlocState.idle()) {
     on<CoursesBlocEvent>(
       (event, emit) => switch (event) {
         FetchCoursesEvent() => _fetchCourses(event, emit),
@@ -35,10 +37,10 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     );
 
     try {
-      await _courseRepository.createCourse(
+      await _coursesRepository.createCourse(
         event.course,
       );
-      final courses = await _courseRepository.getTeacherCourses(
+      final courses = await _coursesRepository.getTeacherCourses(
         '',
       );
       emit(
@@ -68,11 +70,11 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     );
 
     try {
-      await _courseRepository.editCourse(
+      await _coursesRepository.editCourse(
         event.courseId,
         event.course,
       );
-      final courses = await _courseRepository.getTeacherCourses(
+      final courses = await _coursesRepository.getTeacherCourses(
         '',
       );
       emit(
@@ -102,10 +104,10 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     );
 
     try {
-      await _courseRepository.deleteCourse(
+      await _coursesRepository.deleteCourse(
         event.courseId,
       );
-      final courses = await _courseRepository.getTeacherCourses(
+      final courses = await _coursesRepository.getTeacherCourses(
         '',
       );
       emit(
@@ -136,10 +138,10 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
 
     try {
       final courses = switch (event.role) {
-        UserRole.student => await _courseRepository.getTeacherCourses(
+        UserRole.student => await _coursesRepository.getTeacherCourses(
             event.searchQuery,
           ),
-        _ => await _courseRepository.getStudentCourses(
+        _ => await _coursesRepository.getStudentCourses(
             event.searchQuery,
           ),
       };
@@ -170,10 +172,10 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     );
 
     try {
-      await _courseRepository.enrollCourse(
+      await _coursesRepository.enrollCourse(
         event.courseId,
       );
-      final courses = await _courseRepository.getStudentCourses(
+      final courses = await _coursesRepository.getStudentCourses(
         '',
       );
       emit(
