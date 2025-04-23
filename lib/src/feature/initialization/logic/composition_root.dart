@@ -61,7 +61,8 @@ final class CompositionRoot {
 
     stopwatch.stop();
     logger.info(
-        'Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
+      'Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.',
+    );
     final result = CompositionResult(
       dependencies: dependencies,
       millisecondsSpent: stopwatch.elapsedMilliseconds,
