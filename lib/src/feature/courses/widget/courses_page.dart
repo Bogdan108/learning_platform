@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc.dart';
+import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
+import 'package:learning_platform/src/feature/courses/data/data_source/courses_data_source.dart';
+import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
+import 'package:learning_platform/src/feature/courses/widget/components/edit_course_dialog.dart';
+import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
@@ -14,19 +19,31 @@ class CoursesPage extends StatefulWidget {
 }
 
 class _TeacherCoursesPageState extends State<CoursesPage> {
+  late final CoursesBloc _coursesBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final depsScope = DependenciesScope.of(context);
+    final profileRole = depsScope.profileBloc.state.profileInfo.role;
+    _coursesBloc = CoursesBloc(
+      coursesRepository: CoursesRepository(
+        dataSource: CoursesDataSource(dio: depsScope.dio),
+        tokenStorage: depsScope.tokenStorage,
+        orgIdStorage: depsScope.organizationIdStorage,
+      ),
+    )..add(CoursesBlocEvent.fetchCourses(role: profileRole, searchQuery: ''));
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Мои курсы'),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.person),
-              onPressed: () => context.push('/profile'),
-            ),
-          ],
         ),
         body: BlocBuilder<CoursesBloc, CoursesBlocState>(
+          bloc: _coursesBloc,
           builder: (context, state) => ListView.separated(
             itemCount: state.courses.length,
             separatorBuilder: (context, index) => const Padding(
@@ -38,8 +55,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
             itemBuilder: (context, index) {
               final course = state.courses[index];
               return GestureDetector(
-                onTap: () =>
-                    context.go('/courses/course_details', extra: course),
+                onTap: () => context.go('/course_details', extra: course),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 12,
@@ -68,9 +84,33 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        course.description,
-                        style: const TextStyle(fontSize: 14),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              course.description,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextButton(
+                                onPressed: () => {},
+                                child: Text('Удалить'),
+                              ),
+                              IconButton(
+                                onPressed: () => EditCourseDialog(
+                                  onCancel: () => {},
+                                  onSave: (_, __) => {},
+                                ).show(context),
+                                icon: Icon(Icons.edit),
+                                iconSize: 15,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       // const SizedBox(height: 4),
                       // Text(
@@ -88,51 +128,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
           ),
         ),
         // floatingActionButton: FloatingActionButton(
-        //   onPressed: () => _showAddCourseDialog(context),
+        //   onPressed: () => {},
         //   child: const Icon(Icons.add),
         // ),
       );
-
-  Future<void> _showAddCourseDialog(BuildContext context) async {
-    final titleController = TextEditingController();
-    final descController = TextEditingController();
-
-    // ignore: inference_failure_on_function_invocation
-    await showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Добавить новый курс'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Название курса'),
-              ),
-              TextField(
-                controller: descController,
-                decoration: const InputDecoration(labelText: 'Описание'),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Отмена'),
-          ),
-          TextButton(
-            onPressed: () {
-              // final title = titleController.text.trim();
-              // final description = descController.text.trim();
-
-              Navigator.pop(ctx);
-            },
-            child: const Text('Сохранить'),
-          ),
-        ],
-      ),
-    );
-  }
 }
