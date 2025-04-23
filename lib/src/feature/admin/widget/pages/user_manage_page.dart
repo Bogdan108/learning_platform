@@ -87,7 +87,7 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                 title: Text(
                   '${user.fullName.secondName} ${user.fullName.firstName} ${user.fullName.middleName}',
                 ),
-                subtitle: Text('${user.email}  |  ${_roleToString(user.role)}'),
+                subtitle: Text('${user.email}  |  ${user.role.name}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -107,19 +107,6 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
         ),
       ],
     );
-  }
-
-  String _roleToString(UserRole role) {
-    switch (role) {
-      case UserRole.admin:
-        return 'Администратор';
-      case UserRole.teacher:
-        return 'Учитель';
-      case UserRole.student:
-        return 'Ученик';
-      case UserRole.unauthorized:
-        return 'Неавторизован';
-    }
   }
 
   void _showChangeRoleDialog(User user) {
