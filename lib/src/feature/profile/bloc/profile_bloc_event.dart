@@ -5,4 +5,5 @@ part 'profile_bloc_event.freezed.dart';
 @freezed
 sealed class ProfileBlocEvent with _$ProfileBlocEvent {
   const factory ProfileBlocEvent.fetchUserInfo() = FetchUserInfoEvent;
+  const factory ProfileBlocEvent.editUserInfo() = EditUserInfoEvent;
 }

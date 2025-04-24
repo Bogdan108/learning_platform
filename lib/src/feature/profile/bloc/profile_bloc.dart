@@ -16,6 +16,7 @@ class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState>
     on<ProfileBlocEvent>(
       (event, emit) => switch (event) {
         FetchUserInfoEvent() => _fetchUserInfo(event, emit),
+        EditUserInfoEvent() => _editUserInfo(event, emit),
       },
     );
   }
@@ -26,6 +27,27 @@ class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState>
   ) async {
     emit(ProfileBlocState.loading(profileInfo: state.profileInfo));
     try {
+      final profileInfo = await _profileRepository.getUserInfo();
+      emit(ProfileBlocState.idle(profileInfo: profileInfo));
+    } catch (ex, stackTrace) {
+      emit(
+        ProfileBlocState.error(
+          profileInfo: state.profileInfo,
+          error: ex.toString(),
+        ),
+      );
+      onError(ex, stackTrace);
+    }
+  }
+
+  // TODO(b.luckyanchuk): Implement _editUserInfo after backend will be ready
+  Future<void> _editUserInfo(
+    EditUserInfoEvent event,
+    Emitter<ProfileBlocState> emit,
+  ) async {
+    emit(ProfileBlocState.loading(profileInfo: state.profileInfo));
+    try {
+      await _profileRepository.editUserInfo();
       final profileInfo = await _profileRepository.getUserInfo();
       emit(ProfileBlocState.idle(profileInfo: profileInfo));
     } catch (ex, stackTrace) {
