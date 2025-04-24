@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 part 'courses_bloc_event.freezed.dart';
@@ -8,12 +7,14 @@ part 'courses_bloc_event.freezed.dart';
 sealed class CoursesBlocEvent with _$CoursesBlocEvent {
   /// Teacher
   const factory CoursesBlocEvent.createCourse({
-    required CourseRequest course,
+    required String name,
+    required String description,
   }) = CreateCourseEvent;
 
   const factory CoursesBlocEvent.editCourse({
     required String courseId,
-    required CourseRequest course,
+    required String name,
+    required String description,
   }) = EditCourseEvent;
 
   const factory CoursesBlocEvent.deleteCourse({

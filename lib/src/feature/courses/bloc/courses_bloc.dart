@@ -4,6 +4,7 @@ import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.da
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/i_courses_repository.dart';
+import 'package:learning_platform/src/feature/courses/model/course_request.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
@@ -37,9 +38,10 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     );
 
     try {
-      await _coursesRepository.createCourse(
-        event.course,
-      );
+      final courseRequest =
+          CourseRequest(name: event.name, description: event.description);
+      await _coursesRepository.createCourse(courseRequest);
+
       final courses = await _coursesRepository.getTeacherCourses(
         '',
       );
@@ -70,10 +72,13 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
     );
 
     try {
+      final courseRequest =
+          CourseRequest(name: event.name, description: event.description);
       await _coursesRepository.editCourse(
         event.courseId,
-        event.course,
+        courseRequest,
       );
+
       final courses = await _coursesRepository.getTeacherCourses(
         '',
       );
