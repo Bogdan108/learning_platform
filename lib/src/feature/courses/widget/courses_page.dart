@@ -1,15 +1,18 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/common/widget/custom_search_field.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
 import 'package:learning_platform/src/feature/courses/data/data_source/courses_data_source.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
+import 'package:learning_platform/src/feature/courses/widget/components/create_course_dialog.dart';
+import 'package:learning_platform/src/feature/courses/widget/components/delete_course_dialog.dart';
 import 'package:learning_platform/src/feature/courses/widget/components/edit_course_dialog.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
@@ -19,21 +22,24 @@ class CoursesPage extends StatefulWidget {
 }
 
 class _TeacherCoursesPageState extends State<CoursesPage> {
+  late final UserRole _profileRole;
   late final CoursesBloc _coursesBloc;
+  late final TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
 
     final depsScope = DependenciesScope.of(context);
-    final profileRole = depsScope.profileBloc.state.profileInfo.role;
+    _profileRole = depsScope.profileBloc.state.profileInfo.role;
     _coursesBloc = CoursesBloc(
       coursesRepository: CoursesRepository(
         dataSource: CoursesDataSource(dio: depsScope.dio),
         tokenStorage: depsScope.tokenStorage,
         orgIdStorage: depsScope.organizationIdStorage,
       ),
-    )..add(CoursesBlocEvent.fetchCourses(role: profileRole, searchQuery: ''));
+    )..add(CoursesBlocEvent.fetchCourses(role: _profileRole, searchQuery: ''));
+    _searchController = TextEditingController();
   }
 
   @override
@@ -42,94 +48,137 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
           title: const Text('Мои курсы'),
           centerTitle: true,
         ),
-        body: BlocBuilder<CoursesBloc, CoursesBlocState>(
-          bloc: _coursesBloc,
-          builder: (context, state) => ListView.separated(
-            itemCount: state.courses.length,
-            separatorBuilder: (context, index) => const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(
-                color: Colors.blue,
-              ),
-            ),
-            itemBuilder: (context, index) {
-              final course = state.courses[index];
-              return GestureDetector(
-                onTap: () => context.go('/course_details', extra: course),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            course.name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            course.isActive ? 'Активен' : 'Неактивен',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              course.description,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextButton(
-                                onPressed: () => {},
-                                child: Text('Удалить'),
-                              ),
-                              IconButton(
-                                onPressed: () => EditCourseDialog(
-                                  onCancel: () => {},
-                                  onSave: (_, __) => {},
-                                ).show(context),
-                                icon: Icon(Icons.edit),
-                                iconSize: 15,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      // const SizedBox(height: 4),
-                      // Text(
-                      //   '${course.studentCount} учеников',
-                      //   style: const TextStyle(
-                      //     fontSize: 12,
-                      //     color: Colors.grey,
-                      //   ),
-                      // ),
-                    ],
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CustomSearchField(
+                hintText: 'Поиск',
+                controller: _searchController,
+                onChanged: (value) => _coursesBloc.add(
+                  CoursesBlocEvent.fetchCourses(
+                    role: _profileRole,
+                    searchQuery: value,
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+            Expanded(
+              child: BlocBuilder<CoursesBloc, CoursesBlocState>(
+                bloc: _coursesBloc,
+                builder: (context, state) => ListView.separated(
+                  itemCount: state.courses.length + 1,
+                  padding: EdgeInsets.zero,
+                  separatorBuilder: (context, index) => const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Divider(color: Colors.blue, height: 1),
+                  ),
+                  itemBuilder: (context, index) {
+                    if (index == state.courses.length) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: CustomElevatedButton(
+                            title: 'Добавить курс',
+                            onPressed: () => CreateCourseDialog(
+                              onCreateCallBack: (name, description) =>
+                                  _coursesBloc.add(
+                                CoursesBlocEvent.createCourse(
+                                  name: name,
+                                  description: description,
+                                ),
+                              ),
+                            ).show(context),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final course = state.courses[index];
+                    return GestureDetector(
+                      onTap: () => context.go(
+                        '/course_details',
+                        extra: course,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Заголовок + статус
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  course.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  course.isActive ? 'Активен' : 'Неактивен',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            // Описание + кнопки
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    course.description,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () => DeleteCourseDialog(
+                                        onTapCallback: () => _coursesBloc.add(
+                                          CoursesBlocEvent.deleteCourse(
+                                            courseId: course.id,
+                                          ),
+                                        ),
+                                      ).show(context),
+                                      child: const Text('Удалить'),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => EditCourseDialog(
+                                        onSaveCallback: (name, description) =>
+                                            _coursesBloc.add(
+                                          CoursesBlocEvent.editCourse(
+                                            courseId: course.id,
+                                            name: name,
+                                            description: description,
+                                          ),
+                                        ),
+                                      ).show(context),
+                                      icon: const Icon(Icons.edit, size: 15),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () => {},
-        //   child: const Icon(Icons.add),
-        // ),
       );
 }
