@@ -7,6 +7,8 @@ import 'package:learning_platform/src/feature/authorization/widget/pages/registe
 import 'package:learning_platform/src/feature/course/widget/course_detail_page.dart';
 import 'package:learning_platform/src/feature/courses/model/course.dart';
 import 'package:learning_platform/src/feature/courses/widget/courses_page.dart';
+import 'package:learning_platform/src/feature/profile/model/user.dart';
+import 'package:learning_platform/src/feature/profile/widget/edit_profile_page.dart';
 import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
 
 const _defaultFadeTransitionDuration = Duration(milliseconds: 200);
@@ -94,6 +96,15 @@ class AppRouter {
                   transitionDuration: _defaultFadeTransitionDuration,
                   reverseTransitionDuration: _defaultFadeTransitionDuration,
                 ),
+                routes: [
+                  GoRoute(
+                    path: '/edit',
+                    builder: (context, state) {
+                      final user = state.extra! as User;
+                      return EditProfilePage(user: user);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

@@ -23,4 +23,8 @@ class ProfileRepository implements IProfileRepository {
     final organizationId = _orgIdStorage.load();
     return _dataSource.getUserInfo(organizationId ?? '', token);
   }
+
+  // TODO(b.luckyanchuk): Implement editUserInfo after backend will be ready
+  @override
+  Future<void> editUserInfo() async => {};
 }

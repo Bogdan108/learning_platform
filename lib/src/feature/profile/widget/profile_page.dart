@@ -52,6 +52,19 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     TextButton(
+                      onPressed: () => context.go(
+                        '/profile/edit',
+                        extra: state.profileInfo,
+                      ),
+                      child: const Text(
+                        'Редактировать данные',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(const SignOutEvent());
                         context.go('/login');
