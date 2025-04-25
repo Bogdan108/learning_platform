@@ -71,7 +71,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                   itemCount: state.courses.length + 1,
                   padding: EdgeInsets.zero,
                   separatorBuilder: (context, index) => const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Divider(color: Colors.blue, height: 1),
                   ),
                   itemBuilder: (context, index) {
@@ -103,13 +103,12 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15,
+                          vertical: 10,
                           horizontal: 16,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Заголовок + статус
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -130,45 +129,45 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                               ],
                             ),
                             const SizedBox(height: 4),
-                            // Описание + кнопки
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    course.description,
-                                    style: const TextStyle(fontSize: 14),
+                            Text(
+                              course.description,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextButton(
+                                    onPressed: () => DeleteCourseDialog(
+                                      onTapCallback: () => _coursesBloc.add(
+                                        CoursesBlocEvent.deleteCourse(
+                                          courseId: course.id,
+                                        ),
+                                      ),
+                                    ).show(context),
+                                    child: const Text(
+                                      'Удалить',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () => DeleteCourseDialog(
-                                        onTapCallback: () => _coursesBloc.add(
-                                          CoursesBlocEvent.deleteCourse(
-                                            courseId: course.id,
-                                          ),
+                                  IconButton(
+                                    onPressed: () => EditCourseDialog(
+                                      initialName: course.name,
+                                      initialDescription: course.description,
+                                      onSaveCallback: (name, description) =>
+                                          _coursesBloc.add(
+                                        CoursesBlocEvent.editCourse(
+                                          courseId: course.id,
+                                          name: name,
+                                          description: description,
                                         ),
-                                      ).show(context),
-                                      child: const Text('Удалить'),
-                                    ),
-                                    IconButton(
-                                      onPressed: () => EditCourseDialog(
-                                        onSaveCallback: (name, description) =>
-                                            _coursesBloc.add(
-                                          CoursesBlocEvent.editCourse(
-                                            courseId: course.id,
-                                            name: name,
-                                            description: description,
-                                          ),
-                                        ),
-                                      ).show(context),
-                                      icon: const Icon(Icons.edit, size: 15),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      ),
+                                    ).show(context),
+                                    icon: const Icon(Icons.edit, size: 15),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

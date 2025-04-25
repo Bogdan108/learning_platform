@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/core/root_screen/admin_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
+import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
+import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
@@ -18,7 +21,7 @@ class AppRouter {
 
   static final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/',
+    initialLocation: '/admin_courses',
     routes: [
       GoRoute(
         path: '/login',
@@ -111,6 +114,69 @@ class AppRouter {
         ],
         builder: (context, state, navigationShell) =>
             UserRootScreen(navigationShell: navigationShell),
+      ),
+      StatefulShellRoute.indexedStack(
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/admin_courses',
+                pageBuilder: (context, state) => CustomTransitionPage<void>(
+                  key: state.pageKey,
+                  child: const CoursesManagePage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                  transitionDuration: _defaultFadeTransitionDuration,
+                  reverseTransitionDuration: _defaultFadeTransitionDuration,
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/admin_users',
+                pageBuilder: (context, state) => CustomTransitionPage<void>(
+                  key: state.pageKey,
+                  child: const UsersManagePage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                  transitionDuration: _defaultFadeTransitionDuration,
+                  reverseTransitionDuration: _defaultFadeTransitionDuration,
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/admin_profile',
+                pageBuilder: (context, state) => CustomTransitionPage<void>(
+                  key: state.pageKey,
+                  child: const ProfilePage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                  transitionDuration: _defaultFadeTransitionDuration,
+                  reverseTransitionDuration: _defaultFadeTransitionDuration,
+                ),
+                routes: [
+                  GoRoute(
+                    path: '/edit',
+                    builder: (context, state) {
+                      final user = state.extra! as User;
+                      return EditProfilePage(user: user);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+        builder: (context, state, navigationShell) =>
+            AdminRootScreen(navigationShell: navigationShell),
       ),
     ],
   );
