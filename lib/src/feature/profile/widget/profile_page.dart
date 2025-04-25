@@ -23,7 +23,9 @@ class ProfilePage extends StatelessWidget {
           child: BlocBuilder<ProfileBloc, ProfileBlocState>(
             bloc: DependenciesScope.of(context).profileBloc,
             builder: (context, state) => switch (state) {
-              Loading() => const Center(child: CircularProgressIndicator()),
+              Loading() => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
               Idle(profileInfo: final info) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
