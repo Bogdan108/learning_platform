@@ -13,9 +13,9 @@ enum UserRole {
   unauthorized;
 
   String get name => switch (this) {
-        UserRole.student => 'Студент',
+        UserRole.student => 'Ученик',
         UserRole.teacher => 'Учитель',
-        UserRole.admin => 'Администратор',
+        UserRole.admin => 'Админ',
         UserRole.unauthorized => 'Неавторизован',
       };
 }
