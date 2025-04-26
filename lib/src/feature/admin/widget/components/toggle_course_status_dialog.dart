@@ -5,9 +5,9 @@ class ToggleCourseStatusDialog extends StatelessWidget {
   final bool isActive;
 
   const ToggleCourseStatusDialog({
-    required this.onTapCallback, 
-    required this.isActive, 
-    super.key
+    required this.onTapCallback,
+    required this.isActive,
+    super.key,
   });
 
   Future<bool?> show(BuildContext context) => showDialog<bool>(
@@ -34,8 +34,8 @@ class ToggleCourseStatusDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                isActive 
-                    ? 'Вы действительно хотите деактивировать курс?' 
+                isActive
+                    ? 'Вы действительно хотите деактивировать курс?'
                     : 'Вы действительно хотите активировать курс?',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -74,7 +74,8 @@ class ToggleCourseStatusDialog extends StatelessWidget {
                         Navigator.of(context).pop(true),
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isActive ? Colors.orange : Colors.green,
+                        backgroundColor:
+                            isActive ? Colors.orange : Colors.green,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),

@@ -34,9 +34,11 @@ class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
     ));
     try {
       final list = await _repo.getUsers(e.searchQuery);
-      emit(AdminUsersBlocState.idle(
-        users: list,
-      ));
+      emit(
+        AdminUsersBlocState.idle(
+          users: list,
+        ),
+      );
     } on Object catch (e, st) {
       emit(
         AdminUsersBlocState.error(
