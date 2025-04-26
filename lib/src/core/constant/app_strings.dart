@@ -7,7 +7,7 @@ class AppStrings {
   static const successful = 'Успешно';
   static const info = 'Информация';
   static const somethingWrong = 'Что-то пошло не так, попробуйте позже';
-  static const tryAgain = 'Попробовать снова';
+  static const tryAgain = 'Попробуйте снова';
   static const lessons = 'Уроки';
   static const courses = 'Курсы';
   static const categories = 'Категории';

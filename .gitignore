@@ -58,3 +58,8 @@ pubspec.lock
 
 # Test reports
 reports/
+
+.metadata
+
+# Android related
+.cxx/
