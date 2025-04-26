@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'course_bloc_event.freezed.dart';
@@ -18,4 +20,9 @@ sealed class CourseBlocEvent with _$CourseBlocEvent {
     required String courseId,
     required String link,
   }) = AddLinkAdditionEvent;
+
+  const factory CourseBlocEvent.uploadMaterial({
+    required String courseId,
+    required File? file,
+  }) = UploadMaterialEvent;
 }

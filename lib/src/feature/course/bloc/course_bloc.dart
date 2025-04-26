@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/utils/set_state_mixin.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc_event.dart';
@@ -26,6 +28,7 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
         FetchCourseAdditionEvent() => _fetchCourseAdditions(event, emit),
         DeleteAdditionEvent() => _deleteAddition(event, emit),
         AddLinkAdditionEvent() => _addLinkAddition(event, emit),
+        UploadMaterialEvent() => _onUploadMaterial(event, emit),
       },
     );
   }
@@ -130,6 +133,47 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
         CourseBlocState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
+      emit(
+        CourseBlocState.error(
+          additions: state.additions,
+          students: state.students,
+          error: e.toString(),
+        ),
+      );
+      onError(e, st);
+    }
+  }
+
+  Future<void> _onUploadMaterial(
+    UploadMaterialEvent event,
+    Emitter<CourseBlocState> emit,
+  ) async {
+    emit(
+      CourseBlocState.loading(
+        additions: state.additions,
+        students: state.students,
+      ),
+    );
+
+    if (event.file == null) return;
+    log('Empty upload file');
+
+    try {
+      await _courseRepository.uploadMaterial(
+        event.courseId,
+        event.file!,
+      );
+
+      final additions = await _courseRepository.getCourseAdditions(
+        event.courseId,
+      );
+      emit(
+        CourseBlocState.idle(
+          additions: additions,
+          students: state.students,
+        ),
+      );
+    } catch (e, st) {
       emit(
         CourseBlocState.error(
           additions: state.additions,

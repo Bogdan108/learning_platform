@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
 
@@ -20,4 +21,12 @@ abstract class ICourseRepository {
   Future<List<Student>> getCourseStudents(
     String courseId,
   );
+
+  Future<String> downloadMaterial(
+    String courseId,
+    String name,
+    String additionId,
+  );
+
+  Future<void> uploadMaterial(String courseId, File file);
 }

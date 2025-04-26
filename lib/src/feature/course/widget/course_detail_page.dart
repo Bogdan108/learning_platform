@@ -1,18 +1,26 @@
+// ignore_for_file: use_build_context_synchronously
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc_event.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc_state.dart'
     as course_state;
 import 'package:learning_platform/src/feature/course/data/data_source/course_data_source.dart';
 import 'package:learning_platform/src/feature/course/data/repository/course_repository.dart';
+import 'package:learning_platform/src/feature/course/widget/components/add_addition_dialog.dart';
+import 'package:learning_platform/src/feature/course/widget/components/delete_course_addition.dart';
 import 'package:learning_platform/src/feature/course/widget/components/exit_course_dialog.dart';
 import 'package:learning_platform/src/feature/courses/model/course.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final Course courseDetails;
@@ -28,18 +36,20 @@ class CourseDetailPage extends StatefulWidget {
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
   late final CourseBloc _courseBloc;
+  late final CourseRepository _courseRepository;
 
   @override
   void initState() {
     super.initState();
 
     final depsScope = DependenciesScope.of(context);
+    _courseRepository = CourseRepository(
+      dataSource: CourseDataSource(dio: depsScope.dio),
+      tokenStorage: depsScope.tokenStorage,
+      orgIdStorage: depsScope.organizationIdStorage,
+    );
     _courseBloc = CourseBloc(
-      courseRepository: CourseRepository(
-        dataSource: CourseDataSource(dio: depsScope.dio),
-        tokenStorage: depsScope.tokenStorage,
-        orgIdStorage: depsScope.organizationIdStorage,
-      ),
+      courseRepository: _courseRepository,
     )..add(
         CourseBlocEvent.fetchCourseAdditions(
           courseId: widget.courseDetails.id,
@@ -80,10 +90,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       color: Colors.blue,
                     ),
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Материалы к курсу',
                         style: TextStyle(
                           fontSize: 16,
@@ -91,30 +101,29 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                           color: Colors.blue,
                         ),
                       ),
-                      // IconButton(
-                      //   icon: const Icon(Icons.add),
-                      //   onPressed: () {},
-                      // ),
+                      if (isTeacher)
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () => AddAdditionDialog(
+                            onLinkSave: ({required type, required link}) =>
+                                _courseBloc.add(
+                              CourseBlocEvent.addLinkAddition(
+                                courseId: widget.courseDetails.id,
+                                link: link,
+                              ),
+                            ),
+                            onFileSave: ({required type, file}) {
+                              _courseBloc.add(
+                                CourseBlocEvent.uploadMaterial(
+                                  courseId: widget.courseDetails.id,
+                                  file: file,
+                                ),
+                              );
+                            },
+                          ).show(context),
+                        ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  for (final link in courseState.additions.links)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Row(
-                        children: [
-                          Text(
-                            link.name,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(
-                            Icons.download,
-                          ),
-                        ],
-                      ),
-                    ),
                   Column(
                     children: switch (courseState) {
                       course_state.Loading() => [
@@ -126,15 +135,117 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                           ),
                         ],
                       _ => [
+                          /// Материалы файлы
                           for (final material
                               in courseState.additions.materials)
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
+                              padding: const EdgeInsets.only(top: 12),
                               child: Row(
                                 children: [
                                   Expanded(child: Text(material.name)),
                                   const SizedBox(width: 10),
-                                  const Icon(Icons.download),
+
+                                  /// Скачивание файла
+                                  GestureDetector(
+                                    child: const Icon(Icons.download),
+                                    onTap: () async {
+                                      CustomSnackBar.showSuccessful(
+                                        context,
+                                        title: 'Скачиваем ${material.name}...',
+                                      );
+
+                                      try {
+                                        final filePath = await _courseRepository
+                                            .downloadMaterial(
+                                          widget.courseDetails.id,
+                                          material.name,
+                                          material.id,
+                                        );
+
+                                        final params = ShareParams(
+                                          title: material.name,
+                                          files: [XFile(filePath)],
+                                        );
+
+                                        await SharePlus.instance.share(params);
+                                      } catch (e) {
+                                        CustomSnackBar.showError(
+                                          context,
+                                          title: 'Ошибка: $e',
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  if (isTeacher)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10,
+                                      ),
+                                      child: GestureDetector(
+                                        child: const Icon(Icons.delete),
+                                        onTap: () => DeleteCourseAdditionDialog(
+                                          onTapCallback: () => _courseBloc.add(
+                                            CourseBlocEvent.deleteAddition(
+                                              courseId: widget.courseDetails.id,
+                                              additionType: 'material',
+                                              additionId: material.id,
+                                            ),
+                                          ),
+                                        ).show(context),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+
+                          /// Материалы ссылки
+                          for (final link in courseState.additions.links)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        final uri = Uri.parse(link.name);
+
+                                        try {
+                                          await launchUrl(
+                                            uri,
+                                          );
+                                        } catch (e, _) {
+                                          CustomSnackBar.showError(
+                                            context,
+                                            title: 'Ошибка открытия ссылки',
+                                          );
+                                        }
+                                      },
+                                      child: Text(
+                                        link.name,
+                                        style: const TextStyle(
+                                          color: Colors.blueAccent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  if (isTeacher)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10,
+                                      ),
+                                      child: GestureDetector(
+                                        child: const Icon(Icons.delete),
+                                        onTap: () => DeleteCourseAdditionDialog(
+                                          onTapCallback: () => _courseBloc.add(
+                                            CourseBlocEvent.deleteAddition(
+                                              courseId: widget.courseDetails.id,
+                                              additionType: 'link',
+                                              additionId: link.id,
+                                            ),
+                                          ),
+                                        ).show(context),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),

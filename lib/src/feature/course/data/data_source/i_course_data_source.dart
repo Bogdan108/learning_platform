@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
 
@@ -23,9 +25,23 @@ abstract class ICourseDataSource {
     String link,
   );
 
+  Future<Uint8List> downloadMaterial({
+    required String organizationId,
+    required String token,
+    required String courseId,
+    required String additionId,
+  });
+
   Future<List<Student>> getCourseStudents(
     String organizationId,
     String token,
     String courseId,
   );
+
+  Future<void> uploadMaterial({
+    required String organizationId,
+    required String token,
+    required String courseId,
+    required File file,
+  });
 }

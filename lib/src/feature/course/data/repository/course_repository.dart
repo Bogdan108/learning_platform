@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/course/data/data_source/i_course_data_source.dart';
 import 'package:learning_platform/src/feature/course/data/repository/i_course_repository.dart';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CourseRepository implements ICourseRepository {
   final ICourseDataSource dataSource;
@@ -51,4 +54,34 @@ class CourseRepository implements ICourseRepository {
     String courseId,
   ) =>
       dataSource.getCourseStudents(organizationId, token, courseId);
+
+  @override
+  Future<String> downloadMaterial(
+    String courseId,
+    String name,
+    String additionId,
+  ) async {
+    final bytes = await dataSource.downloadMaterial(
+      organizationId: organizationId,
+      token: token,
+      courseId: courseId,
+      additionId: additionId,
+    );
+
+    final dir = await getApplicationDocumentsDirectory();
+    final filePath = '${dir.path}/${courseId}_$name.pdf';
+    final file = File(filePath);
+    await file.writeAsBytes(bytes);
+
+    return filePath;
+  }
+
+  @override
+  Future<void> uploadMaterial(String courseId, File file) =>
+      dataSource.uploadMaterial(
+        organizationId: organizationId,
+        token: token,
+        courseId: courseId,
+        file: file,
+      );
 }
