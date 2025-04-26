@@ -24,7 +24,8 @@ class InitializationFailedApp extends StatefulWidget {
   });
 
   @override
-  State<InitializationFailedApp> createState() => _InitializationFailedAppState();
+  State<InitializationFailedApp> createState() =>
+      _InitializationFailedAppState();
 }
 
 class _InitializationFailedAppState extends State<InitializationFailedApp> {
@@ -45,6 +46,7 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: Center(
             child: Column(
