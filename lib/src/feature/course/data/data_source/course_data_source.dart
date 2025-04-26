@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -10,7 +9,6 @@ import 'package:learning_platform/src/feature/course/model/student.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
-import 'package:path/path.dart';
 
 // class CourseDataSource implements ICourseDataSource {
 //   final Dio _dio;

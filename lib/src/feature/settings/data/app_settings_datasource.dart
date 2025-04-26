@@ -42,8 +42,10 @@ final class AppSettingsDatasourceImpl implements AppSettingsDatasource {
 /// Persisted entry for [AppSettings]
 class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
   /// Create [AppSettingsPersistedEntry]
-  AppSettingsPersistedEntry(
-      {required super.sharedPreferences, required super.key});
+  AppSettingsPersistedEntry({
+    required super.sharedPreferences,
+    required super.key,
+  });
 
   late final _themeMode = StringPreferencesEntry(
     sharedPreferences: sharedPreferences,

@@ -31,7 +31,8 @@ final class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
       emit(_IdleAppSettingsState(appSettings: event.appSettings));
     } catch (error) {
       emit(
-          _ErrorAppSettingsState(appSettings: event.appSettings, error: error));
+        _ErrorAppSettingsState(appSettings: event.appSettings, error: error),
+      );
     }
   }
 }

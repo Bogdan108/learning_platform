@@ -33,7 +33,9 @@ void main() {
           // assert
           final expectedThemeData = ThemeData.from(
             colorScheme: ColorScheme.fromSeed(
-                seedColor: theme.seed, brightness: Brightness.dark),
+              seedColor: theme.seed,
+              brightness: Brightness.dark,
+            ),
             useMaterial3: true,
           );
           expect(themeData, expectedThemeData);

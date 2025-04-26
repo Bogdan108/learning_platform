@@ -97,7 +97,8 @@ class PopupBuilder extends StatefulWidget {
   /// A [DisplayFeature] obstructs the screen when the area it occupies is
   /// not 0 or the `state` is [DisplayFeatureState.postureHalfOpened].
   static Iterable<Rect> findDisplayFeatureBounds(
-          List<DisplayFeature> features) =>
+    List<DisplayFeature> features,
+  ) =>
       features
           .where(
             (DisplayFeature d) =>
@@ -164,7 +165,9 @@ class _PopupBuilderState extends State<PopupBuilder> {
 
 /// Follower builder that wraps the child widget.
 typedef PopupFollowerBuilder = Widget Function(
-    BuildContext context, Widget? child);
+  BuildContext context,
+  Widget? child,
+);
 
 /// Handles for follower widgets.
 abstract interface class PopupFollowerController {

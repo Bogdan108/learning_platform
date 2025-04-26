@@ -55,8 +55,11 @@ sealed class AppRunner {
 
             runApp(RootContext(compositionResult: compositionResult));
           } on Object catch (e, stackTrace) {
-            logger.error('Initialization failed',
-                error: e, stackTrace: stackTrace);
+            logger.error(
+              'Initialization failed',
+              error: e,
+              stackTrace: stackTrace,
+            );
             runApp(
               InitializationFailedApp(
                 error: e,

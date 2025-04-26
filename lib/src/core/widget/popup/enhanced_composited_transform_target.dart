@@ -64,7 +64,9 @@ class EnhancedCompositedTransformTarget extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, EnhancedRenderLeaderLayer renderObject) {
+    BuildContext context,
+    EnhancedRenderLeaderLayer renderObject,
+  ) {
     renderObject.link = link;
   }
 }

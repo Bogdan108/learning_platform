@@ -80,7 +80,10 @@ sealed class WindowSize extends Size {
 
   /// Returns true if the window size is large or larger.
   bool get isLargeOrLarger => maybeMap(
-      orElse: () => false, large: (_) => true, extraLarge: (_) => true);
+        orElse: () => false,
+        large: (_) => true,
+        extraLarge: (_) => true,
+      );
 
   /// Returns true if the window size is extra large.
   bool get isExtraLarge =>

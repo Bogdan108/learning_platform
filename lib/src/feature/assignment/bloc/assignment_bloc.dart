@@ -61,7 +61,9 @@ class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
   }
 
   Future<void> _onDelete(
-      DeleteEvent event, Emitter<AssignmentBlocState> emit) async {
+    DeleteEvent event,
+    Emitter<AssignmentBlocState> emit,
+  ) async {
     emit(AssignmentBlocState.loading(items: state.items));
     try {
       await _repo.deleteAssignment(event.assignmentId);

@@ -29,9 +29,11 @@ class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
     FetchUsersEvent e,
     Emitter<AdminUsersBlocState> emit,
   ) async {
-    emit(AdminUsersBlocState.loading(
-      users: state.users,
-    ));
+    emit(
+      AdminUsersBlocState.loading(
+        users: state.users,
+      ),
+    );
     try {
       final list = await _repo.getUsers(e.searchQuery);
       emit(
@@ -54,16 +56,20 @@ class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
     ChangeUserRoleEvent e,
     Emitter<AdminUsersBlocState> emit,
   ) async {
-    emit(AdminUsersBlocState.loading(
-      users: state.users,
-    ));
+    emit(
+      AdminUsersBlocState.loading(
+        users: state.users,
+      ),
+    );
     try {
       final userRoleRequest = UserRoleRequest(id: e.userId, role: e.role);
       await _repo.changeUserRole(userRoleRequest);
       final list = await _repo.getUsers('');
-      emit(AdminUsersBlocState.idle(
-        users: list,
-      ));
+      emit(
+        AdminUsersBlocState.idle(
+          users: list,
+        ),
+      );
     } on Object catch (e, st) {
       emit(
         AdminUsersBlocState.error(
@@ -79,15 +85,19 @@ class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
     DeleteUserEvent e,
     Emitter<AdminUsersBlocState> emit,
   ) async {
-    emit(AdminUsersBlocState.loading(
-      users: state.users,
-    ));
+    emit(
+      AdminUsersBlocState.loading(
+        users: state.users,
+      ),
+    );
     try {
       await _repo.deleteUser(e.userId);
       final list = await _repo.getUsers('');
-      emit(AdminUsersBlocState.idle(
-        users: list,
-      ));
+      emit(
+        AdminUsersBlocState.idle(
+          users: list,
+        ),
+      );
     } on Object catch (e, st) {
       emit(
         AdminUsersBlocState.error(
