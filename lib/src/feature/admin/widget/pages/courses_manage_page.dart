@@ -91,14 +91,6 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  Text(
-                                    course.isActive ? 'Активен' : 'Не активен',
-                                    style: TextStyle(
-                                      color: course.isActive
-                                          ? Colors.blue
-                                          : Colors.grey[600],
-                                    ),
-                                  ),
                                 ],
                               ),
                               const SizedBox(height: 4),

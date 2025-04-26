@@ -7,6 +7,7 @@ import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users
 import 'package:learning_platform/src/feature/admin/data/data_source/admin_data_source.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/admin_repository.dart';
 import 'package:learning_platform/src/feature/admin/model/admin_user.dart';
+import 'package:learning_platform/src/feature/admin/widget/components/delete_user_dialog.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
@@ -164,11 +165,13 @@ class _UsersManagePageState extends State<UsersManagePage> {
                                     Icons.delete,
                                     size: 20,
                                   ),
-                                  onPressed: () => _adminBloc.add(
-                                    AdminUsersBlocEvent.deleteUser(
-                                      userId: u.id,
+                                  onPressed: () => DeleteUserDialog(
+                                    onTapCallback: () => _adminBloc.add(
+                                      AdminUsersBlocEvent.deleteUser(
+                                        userId: u.id,
+                                      ),
                                     ),
-                                  ),
+                                  ).show(context),
                                 ),
                               ),
                             ],
