@@ -96,12 +96,15 @@ class PopupBuilder extends StatefulWidget {
   ///
   /// A [DisplayFeature] obstructs the screen when the area it occupies is
   /// not 0 or the `state` is [DisplayFeatureState.postureHalfOpened].
-  static Iterable<Rect> findDisplayFeatureBounds(List<DisplayFeature> features) => features
-      .where(
-        (DisplayFeature d) =>
-            d.bounds.shortestSide > 0 || d.state == DisplayFeatureState.postureHalfOpened,
-      )
-      .map((DisplayFeature d) => d.bounds);
+  static Iterable<Rect> findDisplayFeatureBounds(
+          List<DisplayFeature> features) =>
+      features
+          .where(
+            (DisplayFeature d) =>
+                d.bounds.shortestSide > 0 ||
+                d.state == DisplayFeatureState.postureHalfOpened,
+          )
+          .map((DisplayFeature d) => d.bounds);
 
   @override
   State<PopupBuilder> createState() => _PopupBuilderState();
@@ -117,14 +120,16 @@ class _PopupBuilderState extends State<PopupBuilder> {
   @override
   void initState() {
     super.initState();
-    portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
+    portalController =
+        widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
   }
 
   @override
   void didUpdateWidget(covariant PopupBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!identical(widget.controller, oldWidget.controller)) {
-      portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
+      portalController =
+          widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
     }
   }
 
@@ -158,7 +163,8 @@ class _PopupBuilderState extends State<PopupBuilder> {
 }
 
 /// Follower builder that wraps the child widget.
-typedef PopupFollowerBuilder = Widget Function(BuildContext context, Widget? child);
+typedef PopupFollowerBuilder = Widget Function(
+    BuildContext context, Widget? child);
 
 /// Handles for follower widgets.
 abstract interface class PopupFollowerController {
@@ -248,7 +254,8 @@ class _PopupFollowerState extends State<PopupFollower>
   @override
   void didChangeDependencies() {
     _scrollPosition?.removeListener(_scrollableListener);
-    _scrollPosition = Scrollable.maybeOf(context)?.position?..addListener(_scrollableListener);
+    _scrollPosition = Scrollable.maybeOf(context)?.position
+      ?..addListener(_scrollableListener);
     _parent = _FollowerScope.maybeOf(context, listen: true);
     super.didChangeDependencies();
   }
@@ -338,10 +345,12 @@ class _FollowerScope extends InheritedWidget {
   final _FollowerScope? parent;
 
   /// Returns the closest [_FollowerScope] instance.
-  static _FollowerScope? maybeOf(BuildContext context, {bool listen = false}) => listen
-      ? context.dependOnInheritedWidgetOfExactType<_FollowerScope>()
-      : context.getElementForInheritedWidgetOfExactType<_FollowerScope>()?.widget
-          as _FollowerScope?;
+  static _FollowerScope? maybeOf(BuildContext context, {bool listen = false}) =>
+      listen
+          ? context.dependOnInheritedWidgetOfExactType<_FollowerScope>()
+          : context
+              .getElementForInheritedWidgetOfExactType<_FollowerScope>()
+              ?.widget as _FollowerScope?;
 
   @override
   bool updateShouldNotify(_FollowerScope oldWidget) => false;

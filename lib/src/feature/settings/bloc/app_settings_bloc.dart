@@ -30,7 +30,8 @@ final class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
       await _appSettingsRepository.setAppSettings(event.appSettings);
       emit(_IdleAppSettingsState(appSettings: event.appSettings));
     } catch (error) {
-      emit(_ErrorAppSettingsState(appSettings: event.appSettings, error: error));
+      emit(
+          _ErrorAppSettingsState(appSettings: event.appSettings, error: error));
     }
   }
 }
@@ -43,10 +44,12 @@ sealed class AppSettingsState {
   final AppSettings? appSettings;
 
   /// The app settings are idle.
-  const factory AppSettingsState.idle({AppSettings? appSettings}) = _IdleAppSettingsState;
+  const factory AppSettingsState.idle({AppSettings? appSettings}) =
+      _IdleAppSettingsState;
 
   /// The app settings are loading.
-  const factory AppSettingsState.loading({AppSettings? appSettings}) = _LoadingAppSettingsState;
+  const factory AppSettingsState.loading({AppSettings? appSettings}) =
+      _LoadingAppSettingsState;
 
   /// The app settings have an error.
   const factory AppSettingsState.error({
@@ -79,7 +82,8 @@ final class _LoadingAppSettingsState extends AppSettingsState {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is _LoadingAppSettingsState && other.appSettings == appSettings;
+    return other is _LoadingAppSettingsState &&
+        other.appSettings == appSettings;
   }
 
   @override
@@ -108,7 +112,8 @@ final class _ErrorAppSettingsState extends AppSettingsState {
   int get hashCode => Object.hash(appSettings, error);
 
   @override
-  String toString() => 'SettingsState.error(appSettings: $appSettings, error: $error)';
+  String toString() =>
+      'SettingsState.error(appSettings: $appSettings, error: $error)';
 }
 
 /// Events for the [AppSettingsBloc].
@@ -128,5 +133,6 @@ final class _UpdateAppSettingsEvent extends AppSettingsEvent {
   final AppSettings appSettings;
 
   @override
-  String toString() => 'SettingsEvent.updateAppSettings(appSettings: $appSettings)';
+  String toString() =>
+      'SettingsEvent.updateAppSettings(appSettings: $appSettings)';
 }

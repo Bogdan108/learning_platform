@@ -6,7 +6,8 @@ import 'package:flutter/foundation.dart';
 /// {@endtemplate}
 base class AppLogger extends Logger {
   /// Constructs an instance of [AppLogger].
-  AppLogger({List<LogObserver> observers = const []}) : _observers = List.unmodifiable(observers);
+  AppLogger({List<LogObserver> observers = const []})
+      : _observers = List.unmodifiable(observers);
 
   final List<LogObserver> _observers;
 

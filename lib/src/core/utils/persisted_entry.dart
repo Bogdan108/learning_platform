@@ -17,13 +17,15 @@ abstract class PersistedEntry<T extends Object> {
   Future<void> remove();
 
   /// Set the value in the cache if the value is not null, otherwise remove the value from the cache.
-  Future<void> setIfNullRemove(T? value) => value == null ? remove() : set(value);
+  Future<void> setIfNullRemove(T? value) =>
+      value == null ? remove() : set(value);
 }
 
 /// {@template shared_preferences_entry}
 /// [SharedPreferencesEntry] describes a single persisted entry in [SharedPreferences].
 /// {@endtemplate}
-abstract class SharedPreferencesEntry<T extends Object> extends PersistedEntry<T> {
+abstract class SharedPreferencesEntry<T extends Object>
+    extends PersistedEntry<T> {
   /// {@macro shared_preferences_entry}
   const SharedPreferencesEntry({
     required this.sharedPreferences,

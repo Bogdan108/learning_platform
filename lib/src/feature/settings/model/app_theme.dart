@@ -26,7 +26,8 @@ final class AppTheme with Diagnosticable {
   /// This can also be used to add additional properties to the [ThemeData],
   /// such as extensions or custom properties.
   ThemeData buildThemeData(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
+    final colorScheme =
+        ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
     return ThemeData.from(colorScheme: colorScheme, useMaterial3: true);
   }
 

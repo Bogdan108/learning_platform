@@ -35,13 +35,15 @@ final class AppSettingsDatasourceImpl implements AppSettingsDatasource {
   Future<AppSettings?> getAppSettings() => _appSettings.read();
 
   @override
-  Future<void> setAppSettings(AppSettings appSettings) => _appSettings.set(appSettings);
+  Future<void> setAppSettings(AppSettings appSettings) =>
+      _appSettings.set(appSettings);
 }
 
 /// Persisted entry for [AppSettings]
 class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
   /// Create [AppSettingsPersistedEntry]
-  AppSettingsPersistedEntry({required super.sharedPreferences, required super.key});
+  AppSettingsPersistedEntry(
+      {required super.sharedPreferences, required super.key});
 
   late final _themeMode = StringPreferencesEntry(
     sharedPreferences: sharedPreferences,
@@ -126,7 +128,8 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
   Future<void> set(AppSettings value) async {
     if (value.appTheme != null) {
       await (
-        _themeMode.set(const ThemeModeCodec().encode(value.appTheme!.themeMode)),
+        _themeMode
+            .set(const ThemeModeCodec().encode(value.appTheme!.themeMode)),
         _themeSeedColor.set(colorCodec.encode(value.appTheme!.seed)),
       ).wait;
     }

@@ -48,7 +48,8 @@ final class ErrorReporterLogObserver extends LogObserver {
     // If the log level is error or higher, report the error
     if (logMessage.level.index >= LogLevel.error.index) {
       _errorReporter.captureException(
-        throwable: logMessage.error ?? ReportedMessageException(logMessage.message),
+        throwable:
+            logMessage.error ?? ReportedMessageException(logMessage.message),
         stackTrace: logMessage.stackTrace ?? StackTrace.current,
       );
     }
