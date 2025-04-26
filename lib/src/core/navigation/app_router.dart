@@ -4,6 +4,7 @@ import 'package:learning_platform/src/core/root_screen/admin_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
+import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
@@ -21,7 +22,7 @@ class AppRouter {
 
   static final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/admin_courses',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/login',
@@ -81,6 +82,15 @@ class AppRouter {
                       final course = state.extra! as Course;
                       return CourseDetailPage(courseDetails: course);
                     },
+                    routes: [
+                      GoRoute(
+                        path: '/assignments',
+                        builder: (ctx, state) {
+                          final course = state.extra! as Course;
+                          return AssignmentsPage(courseId: course.id);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

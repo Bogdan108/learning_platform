@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,6 +89,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       color: Colors.blue,
                     ),
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -290,6 +290,36 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       },
                     ),
                   ],
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Divider(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => context.go(
+                      '/course_details/assignments',
+                      extra: widget.courseDetails,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Задания',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: Colors.blue,
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
