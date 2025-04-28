@@ -6,10 +6,9 @@ import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users
 import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_bloc_state.dart';
 import 'package:learning_platform/src/feature/admin/data/data_source/admin_data_source.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/admin_repository.dart';
-import 'package:learning_platform/src/feature/admin/model/admin_user.dart';
 import 'package:learning_platform/src/feature/admin/widget/components/delete_user_dialog.dart';
+import 'package:learning_platform/src/feature/admin/widget/components/edit_role_dialog.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
-import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class UsersManagePage extends StatefulWidget {
   const UsersManagePage({super.key});
@@ -41,44 +40,6 @@ class _UsersManagePageState extends State<UsersManagePage> {
     _searchController.dispose();
     _adminBloc.close();
     super.dispose();
-  }
-
-  Future<void> _showChangeRoleDialog(AdminUser user) {
-    var role = user.role;
-
-    return showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Изменить роль'),
-        content: DropdownButtonFormField<UserRole>(
-          value: role,
-          items: const [
-            DropdownMenuItem(value: UserRole.student, child: Text('Ученик')),
-            DropdownMenuItem(value: UserRole.teacher, child: Text('Учитель')),
-            DropdownMenuItem(value: UserRole.admin, child: Text('Админ')),
-          ],
-          onChanged: (v) => role = v ?? UserRole.student,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Отмена'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _adminBloc.add(
-                AdminUsersBlocEvent.changeUserRole(
-                  userId: user.id,
-                  role: role,
-                ),
-              );
-              Navigator.pop(ctx);
-            },
-            child: const Text('Сохранить'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -156,7 +117,15 @@ class _UsersManagePageState extends State<UsersManagePage> {
                                     Icons.edit,
                                     size: 16,
                                   ),
-                                  onPressed: () => _showChangeRoleDialog(u),
+                                  onPressed: () => EditRoleDialog(
+                                    role: u.role,
+                                    onTapCallback: (role) => _adminBloc.add(
+                                      AdminUsersBlocEvent.changeUserRole(
+                                        userId: u.id,
+                                        role: role,
+                                      ),
+                                    ),
+                                  ).show(context),
                                 ),
                               ),
                               Flexible(

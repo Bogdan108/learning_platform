@@ -155,13 +155,13 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    Text(
-                                      course.isActive ? 'Активен' : 'Неактивен',
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
+                                    // Text(
+                                    //   course.isActive ? 'Активен' : 'Неактивен',
+                                    //   style: const TextStyle(
+                                    //     fontSize: 14,
+                                    //     color: Colors.blue,
+                                    //   ),
+                                    //),
                                   ],
                                 ),
                                 const SizedBox(height: 4),

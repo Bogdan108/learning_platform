@@ -105,38 +105,38 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                                       MainAxisAlignment.spaceBetween,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    if (course.isActive)
-                                      TextButton(
-                                        onPressed: () => _adminBloc.add(
-                                          AdminCoursesBlocEvent.editCourse(
-                                            courseId: course.id,
-                                            name: course.name,
-                                            description: course.description,
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Деактивировать',
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      )
-                                    else
-                                      TextButton(
-                                        onPressed: () => _adminBloc.add(
-                                          AdminCoursesBlocEvent.editCourse(
-                                            courseId: course.id,
-                                            name: course.name,
-                                            description: course.description,
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Активировать',
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ),
+                                    // if (course.isActive)
+                                    //   TextButton(
+                                    //     onPressed: () => _adminBloc.add(
+                                    //       AdminCoursesBlocEvent.editCourse(
+                                    //         courseId: course.id,
+                                    //         name: course.name,
+                                    //         description: course.description,
+                                    //       ),
+                                    //     ),
+                                    //     child: const Text(
+                                    //       'Деактивировать',
+                                    //       style: TextStyle(
+                                    //         color: Colors.blue,
+                                    //       ),
+                                    //     ),
+                                    //   )
+                                    // else
+                                    //   TextButton(
+                                    //     onPressed: () => _adminBloc.add(
+                                    //       AdminCoursesBlocEvent.editCourse(
+                                    //         courseId: course.id,
+                                    //         name: course.name,
+                                    //         description: course.description,
+                                    //       ),
+                                    //     ),
+                                    //     child: const Text(
+                                    //       'Активировать',
+                                    //       style: TextStyle(
+                                    //         color: Colors.blue,
+                                    //       ),
+                                    //     ),
+                                    //   ),
                                     TextButton(
                                       onPressed: () => DeleteCourseDialog(
                                         onTapCallback: () => _adminBloc.add(
