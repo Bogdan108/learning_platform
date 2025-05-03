@@ -6,7 +6,6 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart'
 import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
-import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// {@template dependencies_container}
@@ -22,7 +21,7 @@ class DependenciesContainer {
     required this.dio,
     required this.tokenStorage,
     required this.organizationIdStorage,
-    required this.appSettingsBloc,
+    //  required this.appSettingsBloc,
     required this.authBloc,
     required this.profileBloc,
     required this.errorReporter,
@@ -43,9 +42,6 @@ class DependenciesContainer {
 
   ///[OrganizationIdStorage] instance, used to manage org id.
   final OrganizationIdStorage organizationIdStorage;
-
-  /// [AppSettingsBloc] instance, used to manage theme and locale.
-  final AppSettingsBloc appSettingsBloc;
 
   ///[AuthBloc] instance, used to manage authorization.
   final AuthBloc authBloc;

@@ -16,9 +16,6 @@ import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 import 'package:learning_platform/src/feature/profile/data/data_source/profile_data_source.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/profile_repository.dart';
-import 'package:learning_platform/src/feature/settings/bloc/app_settings_bloc.dart';
-import 'package:learning_platform/src/feature/settings/data/app_settings_datasource.dart';
-import 'package:learning_platform/src/feature/settings/data/app_settings_repository.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -149,8 +146,8 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     final sharedPreferences = await SharedPreferences.getInstance();
 
     final packageInfo = await PackageInfo.fromPlatform();
-    final settingsBloc =
-        await AppSettingsBlocFactory(sharedPreferencesAsync).create();
+    // final settingsBloc =
+    //     await AppSettingsBlocFactory(sharedPreferencesAsync).create();
 
     final tokenStorage = TokenStorage(sharedPreferences: sharedPreferences);
     final orgIdStorage = OrganizationIdStorage(
@@ -176,7 +173,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
       packageInfo: packageInfo,
       tokenStorage: tokenStorage,
       organizationIdStorage: orgIdStorage,
-      appSettingsBloc: settingsBloc,
+      //appSettingsBloc: settingsBloc,
       profileBloc: profileBloc,
       authBloc: authBloc,
     );
@@ -222,36 +219,36 @@ class ErrorReporterFactory extends AsyncFactory<ErrorReporter> {
   }
 }
 
-/// {@template app_settings_bloc_factory}
-/// Factory that creates an instance of [AppSettingsBloc].
-///
-/// The [AppSettingsBloc] should be initialized during the application startup
-/// in order to load the app settings from the local storage, so user can see
-/// their selected theme,locale, etc.
-/// {@endtemplate}
-class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
-  /// {@macro app_settings_bloc_factory}
-  const AppSettingsBlocFactory(this.sharedPreferences);
+// /// {@template app_settings_bloc_factory}
+// /// Factory that creates an instance of [AppSettingsBloc].
+// ///
+// /// The [AppSettingsBloc] should be initialized during the application startup
+// /// in order to load the app settings from the local storage, so user can see
+// /// their selected theme,locale, etc.
+// /// {@endtemplate}
+// class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
+//   /// {@macro app_settings_bloc_factory}
+//   const AppSettingsBlocFactory(this.sharedPreferences);
 
-  /// Shared preferences instance
-  final SharedPreferencesAsync sharedPreferences;
+//   /// Shared preferences instance
+//   final SharedPreferencesAsync sharedPreferences;
 
-  @override
-  Future<AppSettingsBloc> create() async {
-    final appSettingsRepository = AppSettingsRepositoryImpl(
-      datasource:
-          AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
-    );
+//   @override
+//   Future<AppSettingsBloc> create() async {
+//     final appSettingsRepository = AppSettingsRepositoryImpl(
+//       datasource:
+//           AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
+//     );
 
-    final appSettings = await appSettingsRepository.getAppSettings();
-    final initialState = AppSettingsState.idle(appSettings: appSettings);
+//     final appSettings = await appSettingsRepository.getAppSettings();
+//     final initialState = AppSettingsState.idle(appSettings: appSettings);
 
-    return AppSettingsBloc(
-      appSettingsRepository: appSettingsRepository,
-      initialState: initialState,
-    );
-  }
-}
+//     return AppSettingsBloc(
+//       appSettingsRepository: appSettingsRepository,
+//       initialState: initialState,
+//     );
+//   }
+// }
 
 /// {@template auth_bloc_factory}
 /// Factory that creates an instance of [AuthBlocFactory].
