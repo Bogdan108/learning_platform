@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                             //   ),
                             // );
 
-                            context.go('/courses');
+                            context.goNamed('courses');
                             CustomSnackBar.showSuccessful(
                               context,
                               message: 'Успешная авторизация!',
@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       ChangeAuthTypeButton(
                         title: AppStrings.dontHaveAnAccount,
                         subTitle: AppStrings.register,
-                        onPressed: () => context.go('/register'),
+                        onPressed: () => context.goNamed('register'),
                       ),
                     ],
                   ),

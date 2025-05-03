@@ -59,7 +59,7 @@ class _EmailPageState extends State<EmailPage> {
         listener: (context, state) {
           switch (state) {
             case Idle(status: AuthenticationStatus.authenticated):
-              context.go('/home');
+
             // case Error(error: final error):
             //   CustomSnackBar.showError(context, message: error);
             default:
@@ -123,7 +123,7 @@ class _EmailPageState extends State<EmailPage> {
     final enteredCode = _textControllers.map((digit) => digit.text).join();
     if (enteredCode.length == _textControllers.length) {
       CustomSnackBar.showSuccessful(context, message: 'Успешная авторизация!');
-      context.go('/courses');
+      context.goNamed('courses');
       // authBloc.add(
       //   AuthBlocEvent.verifyEmail(
       //     code: enteredCode,

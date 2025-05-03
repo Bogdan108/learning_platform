@@ -29,7 +29,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? firstName;
   String? lastName;
-  String? username;
+  String? middleName;
+  String? email;
   String? password;
   String? organizationId;
 
@@ -117,8 +118,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: CustomTextField(
+                          hintText: AppStrings.middleName,
+                          onChanged: (value) => middleName = value,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppStrings.pleaseEnterSomething;
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: CustomTextField(
                           hintText: AppStrings.login,
-                          onChanged: (value) => username = value,
+                          onChanged: (value) => email = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return AppStrings.pleaseEnterSomething;
@@ -154,9 +169,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               extra: {
                                 'firstName': firstName!,
                                 'lastName': lastName!,
-                                'email': username!,
+                                'email': email!,
                                 'password': password!,
-                                'organizationId': organizationId!,
                               },
                             );
                           }
@@ -167,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: ChangeAuthTypeButton(
                           title: AppStrings.haveAnAccount,
                           subTitle: AppStrings.comeIn,
-                          onPressed: () => context.go('/login'),
+                          onPressed: () => context.goNamed('login'),
                         ),
                       ),
                     ],

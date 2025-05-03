@@ -14,6 +14,7 @@ import 'package:learning_platform/src/feature/courses/widget/courses_page.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 import 'package:learning_platform/src/feature/profile/widget/edit_profile_page.dart';
 import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
+import 'package:learning_platform/src/feature/task/widget/task_page.dart';
 
 const _defaultFadeTransitionDuration = Duration(milliseconds: 200);
 
@@ -25,6 +26,7 @@ class AppRouter {
     initialLocation: '/',
     routes: [
       GoRoute(
+        name: '/login',
         path: '/login',
         pageBuilder: (context, state) => CustomTransitionPage<void>(
           key: state.pageKey,
@@ -36,6 +38,7 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        name: '/register',
         path: '/register',
         pageBuilder: (context, state) => CustomTransitionPage<void>(
           key: state.pageKey,
@@ -47,6 +50,7 @@ class AppRouter {
         ),
         routes: [
           GoRoute(
+            name: 'valideteCode',
             path: 'validate_code',
             builder: (context, state) {
               final data = state.extra! as Map<String, String>;
@@ -65,6 +69,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                name: 'courses',
                 path: '/',
                 pageBuilder: (context, state) => CustomTransitionPage<void>(
                   key: state.pageKey,
@@ -77,18 +82,36 @@ class AppRouter {
                 ),
                 routes: [
                   GoRoute(
-                    path: '/course_details',
+                    name: 'courseDetails',
+                    path: 'course_details',
                     builder: (context, state) {
                       final course = state.extra! as Course;
+
                       return CourseDetailPage(courseDetails: course);
                     },
                     routes: [
                       GoRoute(
-                        path: '/assignments',
+                        name: 'assignments',
+                        path: 'assignments/:courseId',
                         builder: (ctx, state) {
-                          final course = state.extra! as Course;
-                          return AssignmentsPage(courseId: course.id);
+                          final courseId = state.pathParameters['courseId']!;
+
+                          return AssignmentsPage(courseId: courseId);
                         },
+                        routes: [
+                          GoRoute(
+                            name: 'tasks',
+                            path: 'tasks/:assignmentId',
+                            builder: (ctx, state) {
+                              final assignmentId =
+                                  state.pathParameters['assignmentId']!;
+
+                              return TasksPage(
+                                assignmentId: assignmentId,
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -99,6 +122,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                name: 'profile',
                 path: '/profile',
                 pageBuilder: (context, state) => CustomTransitionPage<void>(
                   key: state.pageKey,
@@ -111,7 +135,8 @@ class AppRouter {
                 ),
                 routes: [
                   GoRoute(
-                    path: '/edit',
+                    name: 'edit',
+                    path: 'edit',
                     builder: (context, state) {
                       final user = state.extra! as User;
                       return EditProfilePage(user: user);
@@ -130,6 +155,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                name: 'adminCourses',
                 path: '/admin_courses',
                 pageBuilder: (context, state) => CustomTransitionPage<void>(
                   key: state.pageKey,
@@ -146,6 +172,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                name: 'adminUsers',
                 path: '/admin_users',
                 pageBuilder: (context, state) => CustomTransitionPage<void>(
                   key: state.pageKey,
@@ -162,6 +189,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                name: 'adminProfile',
                 path: '/admin_profile',
                 pageBuilder: (context, state) => CustomTransitionPage<void>(
                   key: state.pageKey,
@@ -174,7 +202,8 @@ class AppRouter {
                 ),
                 routes: [
                   GoRoute(
-                    path: '/edit',
+                    name: 'editAdmin',
+                    path: 'edit',
                     builder: (context, state) {
                       final user = state.extra! as User;
                       return EditProfilePage(user: user);

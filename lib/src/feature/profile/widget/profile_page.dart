@@ -54,8 +54,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     TextButton(
-                      onPressed: () => context.go(
-                        '/profile/edit',
+                      onPressed: () => context.goNamed(
+                        'edit',
                         extra: state.profileInfo,
                       ),
                       child: const Text(
@@ -68,8 +68,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        context.read<AuthBloc>().add(const SignOutEvent());
-                        context.go('/login');
+                        //context.read<AuthBloc>().add(const SignOutEvent());
+                        context.goNamed('login');
                       },
                       child: const Text(
                         'Выйти из системы',

@@ -297,8 +297,11 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => context.go(
-                      '/course_details/assignments',
+                    onTap: () => context.goNamed(
+                      'assignments',
+                      pathParameters: {
+                        'courseId': widget.courseDetails.id,
+                      },
                       extra: widget.courseDetails,
                     ),
                     child: const Row(

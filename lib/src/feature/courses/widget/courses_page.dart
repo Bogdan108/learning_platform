@@ -132,8 +132,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
 
                         final course = state.courses[index];
                         return GestureDetector(
-                          onTap: () => context.go(
-                            '/course_details',
+                          onTap: () => context.goNamed(
+                            'courseDetails',
                             extra: course,
                           ),
                           child: Padding(

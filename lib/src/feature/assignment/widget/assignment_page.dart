@@ -141,7 +141,13 @@ class _State extends State<AssignmentsPage> {
                                 color: Colors.blue,
                               ),
                               onTap: () {
-                                context.go('/assignment_detail', extra: a);
+                                context.pushNamed(
+                                  'tasks',
+                                  pathParameters: {
+                                    'courseId': widget.courseId,
+                                    'assignmentId': a.id,
+                                  },
+                                );
                               },
                             ),
                           ],
