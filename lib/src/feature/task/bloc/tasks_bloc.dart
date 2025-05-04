@@ -1,5 +1,3 @@
-// src/feature/task/bloc/tasks_bloc.dart
-
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
@@ -48,7 +46,11 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      await _repo.createTask(e.assignmentId, e.req);
+      final taskId = await _repo.createTask(e.assignmentId, e.req);
+
+      final taskFile = e.file;
+      if (taskFile != null) await _repo.addQuestionFile(taskId, taskFile);
+
       final list = await _repo.listTasks(e.assignmentId);
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
@@ -64,9 +66,8 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
       await _repo.deleteTask(e.taskId);
-      emit(TasksBlocState.idle(
-        tasks: state.tasks.where((t) => t.id != e.taskId).toList(),
-      ));
+      final list = await _repo.listTasks(e.assignmentId);
+      emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
       emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
       onError(err, st);

@@ -11,9 +11,11 @@ sealed class TasksBlocEvent with _$TasksBlocEvent {
   const factory TasksBlocEvent.create({
     required String assignmentId,
     required TaskRequest req,
+    File? file,
   }) = CreateTask;
 
-  const factory TasksBlocEvent.delete(String taskId) = DeleteTask;
+  const factory TasksBlocEvent.delete(String taskId, String assignmentId) =
+      DeleteTask;
 
   const factory TasksBlocEvent.addFile({
     required String taskId,
