@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -14,6 +15,7 @@ abstract interface class ITasksDataSource {
   );
 
   Future<void> deleteTask(String org, String tok, String taskId);
+
   Future<void> addQuestionFile(
     String org,
     String tok,
@@ -21,7 +23,7 @@ abstract interface class ITasksDataSource {
     File file,
   );
 
-  //Future<File> downloadQuestionFile(String org, String tok, String taskId);
+  Future<Uint8List> downloadQuestionFile(String org, String tok, String taskId);
 
   Future<void> answerText(
     String org,
