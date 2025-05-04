@@ -1,12 +1,17 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/feature/task/model/answer_type.dart';
+import 'package:learning_platform/src/feature/task/model/question_type.dart';
 
 class CreateTaskDialog extends StatefulWidget {
   final void Function({
-    required String questionType,
-    required String answerType,
+    required QuestionType questionType,
+    required AnswerType answerType,
     String? questionText,
     List<String>? answerVariants,
     File? questionFile,
@@ -28,17 +33,17 @@ class CreateTaskDialog extends StatefulWidget {
 }
 
 class _CreateTaskDialogState extends State<CreateTaskDialog> {
-  String _questionType = 'text';
+  QuestionType _questionType = QuestionType.text;
+  AnswerType _answerType = AnswerType.text;
+
   final TextEditingController _questionTextController = TextEditingController();
   File? _questionFile;
 
-  String _answerType = 'text';
-  final TextEditingController _variantsController = TextEditingController();
+  final List<TextEditingController> _answersControllers = [];
 
   @override
   void dispose() {
     _questionTextController.dispose();
-    _variantsController.dispose();
     super.dispose();
   }
 
@@ -48,6 +53,12 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
       setState(() {
         _questionFile = File(result.files.single.path!);
       });
+      final list = await _questionFile!.readAsBytes();
+      final sb = StringBuffer();
+      for (final byte in list) {
+        sb.write(', $byte');
+      }
+      log(sb.toString());
     }
   }
 
@@ -57,18 +68,19 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         backgroundColor: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+          padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
                   'Создание задачи',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 16),
-
-                // Question type
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -83,13 +95,19 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: DropdownButton<String>(
+                  child: DropdownButton<QuestionType>(
                     value: _questionType,
                     isExpanded: true,
                     underline: const SizedBox(),
                     items: const [
-                      DropdownMenuItem(value: 'text', child: Text('Текст')),
-                      DropdownMenuItem(value: 'file', child: Text('Файл')),
+                      DropdownMenuItem(
+                        value: QuestionType.text,
+                        child: Text('Текст'),
+                      ),
+                      DropdownMenuItem(
+                        value: QuestionType.file,
+                        child: Text('Файл'),
+                      ),
                     ],
                     onChanged: (v) {
                       if (v != null) {
@@ -102,11 +120,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     },
                   ),
                 ),
-
                 const SizedBox(height: 12),
-
-                // Question content
-                if (_questionType == 'text') ...[
+                if (_questionType == QuestionType.text) ...[
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -169,10 +184,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     ),
                   ),
                 ],
-
                 const SizedBox(height: 24),
-
-                // Answer type
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -187,15 +199,17 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: DropdownButton<String>(
+                  child: DropdownButton<AnswerType>(
                     value: _answerType,
                     isExpanded: true,
                     underline: const SizedBox(),
                     items: const [
-                      DropdownMenuItem(value: 'text', child: Text('Текст')),
-                      DropdownMenuItem(value: 'file', child: Text('Файл')),
                       DropdownMenuItem(
-                        value: 'variants',
+                          value: AnswerType.text, child: Text('Текст')),
+                      DropdownMenuItem(
+                          value: AnswerType.file, child: Text('Файл')),
+                      DropdownMenuItem(
+                        value: AnswerType.variants,
                         child: Text('Варианты'),
                       ),
                     ],
@@ -203,44 +217,52 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                       if (v != null) {
                         setState(() {
                           _answerType = v;
-                          _variantsController.clear();
                         });
                       }
                     },
                   ),
                 ),
-
                 const SizedBox(height: 12),
-
-                // Variants input
-                if (_answerType == 'variants') ...[
+                if (_answerType == AnswerType.variants) ...[
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Варианты (через запятую)',
+                      'Варианты ответов',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  TextField(
-                    controller: _variantsController,
-                    decoration: InputDecoration(
-                      hintText: 'Например: Вариант1, Вариант2, Вариант3',
-                      filled: true,
-                      fillColor: Colors.grey.shade200,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
+                  for (final answer in _answersControllers) ...[
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TextField(
+                        controller: answer,
+                        decoration: InputDecoration(
+                          hintText: 'Введите вариант ответа',
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 12,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
                       ),
                     ),
+                  ],
+                  const SizedBox(height: 4),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _answersControllers.add(TextEditingController());
+                      });
+                    },
+                    title: 'Добавить вариант ответа',
                   ),
                 ],
-
                 const SizedBox(height: 24),
                 Row(
                   children: [
@@ -263,37 +285,19 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          final qText = _questionType == 'text'
+                          final qText = _questionType == QuestionType.text
                               ? _questionTextController.text.trim()
                               : null;
-                          if (_questionType == 'text' &&
-                              (qText == null || qText.isEmpty)) {
-                            return; // require question text
-                          }
-                          if (_questionType == 'file' &&
-                              _questionFile == null) {
-                            return; // require file
-                          }
-                          final variants = _answerType == 'variants'
-                              ? _variantsController.text
-                                  .split(',')
-                                  .map((s) => s.trim())
-                                  .where((s) => s.isNotEmpty)
-                                  .toList()
-                              : null;
-                          if (_answerType == 'variants' &&
-                              (variants == null || variants.isEmpty)) {
-                            return;
-                          }
 
                           widget.onSave(
                             questionType: _questionType,
                             questionText: qText,
                             answerType: _answerType,
-                            answerVariants: variants,
+                            answerVariants:
+                                _answersControllers.map((e) => e.text).toList(),
                             questionFile: _questionFile,
                           );
-                          Navigator.of(context).pop(true);
+                          context.pop();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
