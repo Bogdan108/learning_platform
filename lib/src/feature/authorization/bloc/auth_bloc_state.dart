@@ -17,6 +17,11 @@ sealed class AuthBlocState with _$AuthBlocState {
     required AuthenticationStatus status,
   }) = Loading;
 
+  const factory AuthBlocState.success({
+    required String token,
+    required AuthenticationStatus status,
+  }) = Success;
+
   const factory AuthBlocState.error({
     required String token,
     required AuthenticationStatus status,

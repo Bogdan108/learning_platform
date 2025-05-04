@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
@@ -66,7 +67,9 @@ class ProfilePage extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        //context.read<AuthBloc>().add(const SignOutEvent());
+                        DependenciesScope.of(context).authBloc.add(
+                              const AuthBlocEvent.signOut(),
+                            );
                         context.goNamed('login');
                       },
                       child: const Text(

@@ -9,6 +9,8 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class EmailPage extends StatefulWidget {
   const EmailPage({
@@ -30,12 +32,15 @@ class EmailPage extends StatefulWidget {
 
 class _EmailPageState extends State<EmailPage> {
   late final AuthBloc authBloc;
+  late final ProfileBloc profileBloc;
   late final List<TextEditingController> _textControllers;
   late final List<FocusNode> _focusNodes;
 
   @override
   void initState() {
     super.initState();
+    final deps = DependenciesScope.of(context);
+    profileBloc = deps.profileBloc;
     authBloc = DependenciesScope.of(context).authBloc
       ..add(const AuthBlocEvent.sendEmailCode());
     _textControllers = List.generate(6, (index) => TextEditingController());
@@ -59,9 +64,18 @@ class _EmailPageState extends State<EmailPage> {
         listener: (context, state) {
           switch (state) {
             case Idle(status: AuthenticationStatus.authenticated):
-
-            // case Error(error: final error):
-            //   CustomSnackBar.showError(context, message: error);
+            case Success():
+              CustomSnackBar.showSuccessful(
+                context,
+                message: 'Успешная авторизация!',
+              );
+              if (profileBloc.state.profileInfo.role == UserRole.admin) {
+                context.goNamed('adminCourses');
+              } else {
+                context.goNamed('courses');
+              }
+            case Error(error: final error):
+              CustomSnackBar.showError(context, message: error);
             default:
               break;
           }
@@ -122,13 +136,11 @@ class _EmailPageState extends State<EmailPage> {
   void checkCode() {
     final enteredCode = _textControllers.map((digit) => digit.text).join();
     if (enteredCode.length == _textControllers.length) {
-      CustomSnackBar.showSuccessful(context, message: 'Успешная авторизация!');
-      context.goNamed('courses');
-      // authBloc.add(
-      //   AuthBlocEvent.verifyEmail(
-      //     code: enteredCode,
-      //   ),
-      //);
+      authBloc.add(
+        AuthBlocEvent.verifyEmail(
+          code: enteredCode,
+        ),
+      );
     }
   }
 }

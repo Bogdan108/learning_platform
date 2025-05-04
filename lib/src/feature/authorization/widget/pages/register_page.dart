@@ -10,6 +10,8 @@ import 'package:learning_platform/src/feature/authorization/model/auth_status_mo
 import 'package:learning_platform/src/feature/authorization/widget/components/auth_button.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/change_auth_type_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,11 +22,14 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late final AuthBloc authBloc;
+  late final ProfileBloc profileBloc;
 
   @override
   void initState() {
     super.initState();
-    authBloc = DependenciesScope.of(context).authBloc;
+    final deps = DependenciesScope.of(context);
+    profileBloc = deps.profileBloc;
+    authBloc = deps.authBloc;
   }
 
   String? firstName;
@@ -42,14 +47,18 @@ class _RegisterPageState extends State<RegisterPage> {
         listener: (context, state) {
           switch (state) {
             case Idle(status: AuthenticationStatus.authenticated):
-              //  context.go('/home');
+            case Success():
               CustomSnackBar.showSuccessful(
                 context,
                 message: 'Успешная авторизация!',
               );
-            // case Error(error: final error):
-            //   CustomSnackBar.showError(context,
-            //       message: 'Ошибка регистрации! \n попробуйте снова');
+              if (profileBloc.state.profileInfo.role == UserRole.admin) {
+                context.goNamed('adminCourses');
+              } else {
+                context.goNamed('courses');
+              }
+            case Error(error: final error):
+              CustomSnackBar.showError(context, message: error);
             default:
               break;
           }
