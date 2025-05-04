@@ -11,7 +11,7 @@ import 'package:learning_platform/src/feature/task/data/repository/tasks_reposit
 import 'package:learning_platform/src/feature/task/model/answer_type.dart';
 import 'package:learning_platform/src/feature/task/model/question_type.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
-import 'package:learning_platform/src/feature/task/widget/components/create_task.dart';
+import 'package:learning_platform/src/feature/task/widget/components/create_task_dialog.dart';
 import 'package:learning_platform/src/feature/task/widget/components/delete_task_dialog.dart';
 import 'package:learning_platform/src/feature/task/widget/components/task_tile.dart';
 

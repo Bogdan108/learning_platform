@@ -4,6 +4,7 @@ import 'package:learning_platform/src/core/root_screen/admin_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
+import 'package:learning_platform/src/feature/answers/widget/answers_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
@@ -26,7 +27,7 @@ class AppRouter {
     initialLocation: '/',
     routes: [
       GoRoute(
-        name: '/login',
+        name: 'login',
         path: '/login',
         pageBuilder: (context, state) => CustomTransitionPage<void>(
           key: state.pageKey,
@@ -38,7 +39,7 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        name: '/register',
+        name: 'register',
         path: '/register',
         pageBuilder: (context, state) => CustomTransitionPage<void>(
           key: state.pageKey,
@@ -112,6 +113,15 @@ class AppRouter {
                             },
                           ),
                         ],
+                      ),
+                      GoRoute(
+                        name: 'answers',
+                        path: 'answers/:courseId',
+                        builder: (ctx, state) {
+                          final courseId = state.pathParameters['courseId']!;
+
+                          return AnswersPage(courseId: courseId);
+                        },
                       ),
                     ],
                   ),

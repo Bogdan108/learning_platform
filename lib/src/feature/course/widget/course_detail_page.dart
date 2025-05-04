@@ -324,6 +324,36 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     ),
                   ),
                   const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () => context.goNamed(
+                      'answers',
+                      pathParameters: {
+                        'courseId': widget.courseDetails.id,
+                      },
+                      extra: widget.courseDetails,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Ответы учеников',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: Colors.blue,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
                     height: 30,
                   ),
                   // TODO(b.luckyanchuk): Add exit from course event
