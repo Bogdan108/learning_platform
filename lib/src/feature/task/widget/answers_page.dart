@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
-import 'package:learning_platform/src/feature/task/bloc/answers_bloc/answers_bloc.dart';
-import 'package:learning_platform/src/feature/task/bloc/answers_bloc/answers_bloc_event.dart';
-import 'package:learning_platform/src/feature/task/bloc/answers_bloc/answers_bloc_state.dart';
+import 'package:learning_platform/src/feature/task/bloc/answers_info_bloc/answers_info_bloc.dart';
+import 'package:learning_platform/src/feature/task/bloc/answers_info_bloc/answers_info_bloc_event.dart';
+import 'package:learning_platform/src/feature/task/bloc/answers_info_bloc/answers_info_bloc_state.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/data/repository/tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
@@ -18,25 +18,25 @@ class AnswersPage extends StatefulWidget {
 }
 
 class _AnswersPageState extends State<AnswersPage> {
-  late final AnswersBloc _bloc;
+  late final AnswersInfoBloc _bloc;
 
   @override
   void initState() {
     super.initState();
     final deps = DependenciesScope.of(context);
-    _bloc = AnswersBloc(
+    _bloc = AnswersInfoBloc(
       repo: TasksRepository(
         dataSource: TasksDataSource(dio: deps.dio),
         tokenStorage: deps.tokenStorage,
         orgIdStorage: deps.organizationIdStorage,
       ),
-    )..add(AnswersBlocEvent.fetch(courseId: widget.courseId));
+    )..add(AnswersInfoBlocEvent.fetch(courseId: widget.courseId));
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Ответы учеников')),
-        body: BlocBuilder<AnswersBloc, AnswersBlocState>(
+        body: BlocBuilder<AnswersInfoBloc, AnswersInfoBlocState>(
           bloc: _bloc,
           builder: (context, state) {
             switch (state) {
@@ -53,7 +53,7 @@ class _AnswersPageState extends State<AnswersPage> {
                 return _ErrorView(
                   message: state.error,
                   onRetry: () => _bloc.add(
-                    AnswersBlocEvent.fetch(courseId: widget.courseId),
+                    AnswersInfoBlocEvent.fetch(courseId: widget.courseId),
                   ),
                 );
               case Idle():
