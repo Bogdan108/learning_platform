@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:learning_platform/src/feature/answers/model/student_answer.dart';
+import 'package:learning_platform/src/feature/task/model/student_answer.dart';
 
 part 'assignment_answers.freezed.dart';
 part 'assignment_answers.g.dart';

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -57,5 +58,11 @@ abstract interface class ITasksDataSource {
     String taskId,
     String userId,
     String feedback,
+  );
+
+  Future<List<AssignmentAnswers>> fetchAnswers(
+    String orgId,
+    String token,
+    String courseId,
   );
 }

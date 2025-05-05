@@ -32,9 +32,9 @@ class ProfileDataSource implements IProfileDataSource {
           fullName: UserName(
             firstName: 'Bogdan',
             secondName: 'Luckyanchuk',
-            middleName: 'S',
+            middleName: 'Sergeevich',
           ),
-          role: UserRole.student,
+          role: UserRole.teacher,
           email: 'ibogdan533@gmail.com',
         ),
       );

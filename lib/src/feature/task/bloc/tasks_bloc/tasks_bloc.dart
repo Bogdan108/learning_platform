@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/task/bloc/tasks_bloc_event.dart';
-import 'package:learning_platform/src/feature/task/bloc/tasks_bloc_state.dart';
+import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_event.dart';
+import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_state.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 
 class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>

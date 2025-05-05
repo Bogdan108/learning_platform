@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -31,4 +32,6 @@ abstract interface class ITasksRepository {
     String userId,
     String feedback,
   );
+
+  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId);
 }

@@ -4,7 +4,7 @@ import 'package:learning_platform/src/core/root_screen/admin_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
-import 'package:learning_platform/src/feature/answers/widget/answers_page.dart';
+import 'package:learning_platform/src/feature/task/widget/answers_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';

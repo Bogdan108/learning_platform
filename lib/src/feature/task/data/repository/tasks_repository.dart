@@ -6,6 +6,7 @@ import 'package:learning_platform/src/feature/authorization/data/storage/i_stora
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
+import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 import 'package:path_provider/path_provider.dart';
@@ -78,4 +79,12 @@ class TasksRepository implements ITasksRepository {
     String fb,
   ) =>
       _ds.feedbackTask(_org, _tokS, assignmentId, taskId, userId, fb);
+
+  @override
+  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId) =>
+      _ds.fetchAnswers(
+        _org,
+        _tokS,
+        courseId,
+      );
 }

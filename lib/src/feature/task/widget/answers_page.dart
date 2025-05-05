@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/feature/answers/bloc/answers_bloc.dart';
-import 'package:learning_platform/src/feature/answers/bloc/answers_bloc_event.dart';
-import 'package:learning_platform/src/feature/answers/bloc/answers_bloc_state.dart';
-import 'package:learning_platform/src/feature/answers/data_source/answers_data_source.dart';
-import 'package:learning_platform/src/feature/answers/model/assignment_answers.dart';
-import 'package:learning_platform/src/feature/answers/repository/answers_repository.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/task/bloc/answers_bloc/answers_bloc.dart';
+import 'package:learning_platform/src/feature/task/bloc/answers_bloc/answers_bloc_event.dart';
+import 'package:learning_platform/src/feature/task/bloc/answers_bloc/answers_bloc_state.dart';
+import 'package:learning_platform/src/feature/task/data/data_source/tasks_data_source.dart';
+import 'package:learning_platform/src/feature/task/data/repository/tasks_repository.dart';
+import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
 
 class AnswersPage extends StatefulWidget {
   final String courseId;
@@ -25,8 +25,8 @@ class _AnswersPageState extends State<AnswersPage> {
     super.initState();
     final deps = DependenciesScope.of(context);
     _bloc = AnswersBloc(
-      repo: AnswersRepository(
-        dataSource: AnswersDataSource(dio: deps.dio),
+      repo: TasksRepository(
+        dataSource: TasksDataSource(dio: deps.dio),
         tokenStorage: deps.tokenStorage,
         orgIdStorage: deps.organizationIdStorage,
       ),

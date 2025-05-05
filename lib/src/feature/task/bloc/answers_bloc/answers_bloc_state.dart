@@ -1,6 +1,6 @@
 // lib/src/feature/answers/bloc/answers_bloc_state.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:learning_platform/src/feature/answers/model/assignment_answers.dart';
+import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
 part 'answers_bloc_state.freezed.dart';
 
 @freezed
