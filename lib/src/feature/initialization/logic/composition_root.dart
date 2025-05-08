@@ -142,7 +142,6 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   @override
   Future<DependenciesContainer> create() async {
     final dio = Dio();
-    final sharedPreferencesAsync = SharedPreferencesAsync();
     final sharedPreferences = await SharedPreferences.getInstance();
 
     final packageInfo = await PackageInfo.fromPlatform();
