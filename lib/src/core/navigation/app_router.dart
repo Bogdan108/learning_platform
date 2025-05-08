@@ -4,7 +4,6 @@ import 'package:learning_platform/src/core/root_screen/admin_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
-import 'package:learning_platform/src/feature/task/widget/answers_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
@@ -15,6 +14,8 @@ import 'package:learning_platform/src/feature/courses/widget/courses_page.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 import 'package:learning_platform/src/feature/profile/widget/edit_profile_page.dart';
 import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
+import 'package:learning_platform/src/feature/task/widget/assignment_answers_page.dart';
+import 'package:learning_platform/src/feature/task/widget/evaluate_assignment_page.dart';
 import 'package:learning_platform/src/feature/task/widget/task_page.dart';
 
 const _defaultFadeTransitionDuration = Duration(milliseconds: 200);
@@ -120,8 +121,26 @@ class AppRouter {
                         builder: (ctx, state) {
                           final courseId = state.pathParameters['courseId']!;
 
-                          return AnswersPage(courseId: courseId);
+                          return AssignmentAnswersPage(courseId: courseId);
                         },
+                        routes: [
+                          GoRoute(
+                            name: 'evaluateAnswers',
+                            path: 'evaluateAnswers/:answerId',
+                            builder: (ctx, state) {
+                              final answerId =
+                                  state.pathParameters['answerId']!;
+                              final title = state.extra! as String;
+
+                              // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
+                              return EvaluateAssignmentPage(
+                                answerId: answerId,
+                                assignmentId: '1',
+                                title: title,
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
