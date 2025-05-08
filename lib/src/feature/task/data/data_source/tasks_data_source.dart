@@ -208,6 +208,23 @@
 //         [];
 //   }
 // }
+// @override
+//   Future<List<EvaluateAnswers>> fetchEvaluateAnswers(String courseId) async {
+//     final org = _orgIdStorage.load() ?? '';
+//     final token = _tokenStorage.load() ?? '';
+//     final resp = await _dio.get<List<dynamic>>(
+//       '/evaluate-answers',
+//       queryParameters: {
+//         'organization_id': org,
+//         'token': token,
+//         'course_id': courseId,
+//         'assignment_id': assignmentId,
+//       },
+//     );
+//     return resp.data!
+//         .map((json) => EvaluateAnswers.fromJson(json as Map<String, dynamic>))
+//         .toList();
+//   }
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -217,6 +234,8 @@ import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data
 import 'package:learning_platform/src/feature/task/file.dart';
 import 'package:learning_platform/src/feature/task/model/answer_type.dart';
 import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
 import 'package:learning_platform/src/feature/task/model/question_type.dart';
 import 'package:learning_platform/src/feature/task/model/student_answer.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
@@ -349,23 +368,19 @@ class TasksDataSource implements ITasksDataSource {
   Future<void> evaluateTask(
     String org,
     String tok,
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     int score,
   ) async =>
-      Future.value();
+      Future.delayed(const Duration(seconds: 1));
 
   @override
   Future<void> feedbackTask(
     String org,
     String tok,
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     String feedback,
   ) async =>
-      Future.value();
+      Future.delayed(const Duration(seconds: 1));
 
   @override
   Future<Uint8List> downloadQuestionFile(
@@ -384,7 +399,7 @@ class TasksDataSource implements ITasksDataSource {
       name: 'Лексическое значение слов (задание 2)',
       students: [
         StudentAnswer(
-          studentId: 'u-101',
+          answerId: 'u-101',
           name: UserName(
             firstName: 'Ксения',
             secondName: 'Голубева',
@@ -393,7 +408,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: true,
         ),
         StudentAnswer(
-          studentId: 'u-102',
+          answerId: 'u-102',
           name: UserName(
             firstName: 'Адам',
             secondName: 'Бартоломей',
@@ -402,7 +417,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: false,
         ),
         StudentAnswer(
-          studentId: 'u-103',
+          answerId: 'u-103',
           name: UserName(
             firstName: 'Татьяна',
             secondName: 'Костюкова',
@@ -411,7 +426,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: false,
         ),
         StudentAnswer(
-          studentId: 'u-104',
+          answerId: 'u-104',
           name: UserName(
             firstName: 'Олег',
             secondName: 'Маликов',
@@ -420,7 +435,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: true,
         ),
         StudentAnswer(
-          studentId: 'u-105',
+          answerId: 'u-105',
           name: UserName(
             firstName: 'Эдуард',
             secondName: 'Гафанович',
@@ -429,7 +444,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: false,
         ),
         StudentAnswer(
-          studentId: 'u-106',
+          answerId: 'u-106',
           name: UserName(
             firstName: 'Илья',
             secondName: 'Пупков',
@@ -444,7 +459,7 @@ class TasksDataSource implements ITasksDataSource {
       name: 'Средства связи предложений в тексте (задание 1)',
       students: [
         StudentAnswer(
-          studentId: 'u-101',
+          answerId: 'u-101',
           name: UserName(
             firstName: 'Ксения',
             secondName: 'Голубева',
@@ -453,7 +468,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: true,
         ),
         StudentAnswer(
-          studentId: 'u-102',
+          answerId: 'u-102',
           name: UserName(
             firstName: 'Адам',
             secondName: 'Бартоломей',
@@ -462,7 +477,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: true,
         ),
         StudentAnswer(
-          studentId: 'u-103',
+          answerId: 'u-103',
           name: UserName(
             firstName: 'Татьяна',
             secondName: 'Костюкова',
@@ -471,7 +486,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: false,
         ),
         StudentAnswer(
-          studentId: 'u-104',
+          answerId: 'u-104',
           name: UserName(
             firstName: 'Олег',
             secondName: 'Маликов',
@@ -480,7 +495,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: false,
         ),
         StudentAnswer(
-          studentId: 'u-105',
+          answerId: 'u-105',
           name: UserName(
             firstName: 'Эдуард',
             secondName: 'Гафанович',
@@ -489,7 +504,7 @@ class TasksDataSource implements ITasksDataSource {
           evaluated: true,
         ),
         StudentAnswer(
-          studentId: 'u-106',
+          answerId: 'u-106',
           name: UserName(
             firstName: 'Илья',
             secondName: 'Пупков',
@@ -504,7 +519,7 @@ class TasksDataSource implements ITasksDataSource {
       name: 'Стилистический анализ текста (задание 3)',
       students: [
         StudentAnswer(
-          studentId: 'u-101',
+          answerId: 'u-101',
           name: UserName(
             firstName: 'Ксения',
             secondName: 'Голубева',
@@ -523,4 +538,66 @@ class TasksDataSource implements ITasksDataSource {
     String courseId,
   ) async =>
       await Future.delayed(const Duration(milliseconds: 450), () => _answers);
+
+  @override
+  Future<EvaluateAnswers> fetchEvaluateAnswers(
+    String orgId,
+    String token,
+    String courseId,
+    String assignmentId,
+  ) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
+    return const EvaluateAnswers(
+      id: 'assgn1',
+      name: 'Лексическое значение слов (задание 2)',
+      evaluateTasks: [
+        EvaluateTask(
+          id: 'task1',
+          questionType: QuestionType.text,
+          answerType: AnswerType.text,
+          questionText:
+              'Укажите варианты ответов, в которых во всех словах одного ряда пропущена одна и та же буква. Запишите номера ответов.',
+          answerText: '124',
+          evaluate: '6',
+          feedback: 'Правильный ответ: 124',
+        ),
+        EvaluateTask(
+          id: 'task2',
+          questionType: QuestionType.file,
+          answerType: AnswerType.file,
+          questionFile: 'Структура_сочинения.pdf',
+          answerFile: 'ответ_Голубева_КА.pdf',
+          evaluate: '7',
+        ),
+        EvaluateTask(
+          id: 'task3',
+          questionType: QuestionType.text,
+          answerType: AnswerType.variants,
+          questionText:
+              'Выберите варианты ответов, в которых верно выделена буква, обозначающая ударный гласный звук.',
+          answerVariants: [
+            '1) туфлЯ',
+            '2) понЯв',
+            '3) дОнельзя',
+            '4) карыстЬ',
+            '5) Оптовый',
+          ],
+          answerVariant: 2,
+          evaluate: '5',
+          feedback: 'Правильный ответ: 1',
+        ),
+        EvaluateTask(
+          id: 'task4',
+          questionType: QuestionType.text,
+          answerType: AnswerType.text,
+          questionText:
+              'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
+          answerText: 'Это было очень симп.тичное решение задачи.',
+          evaluate: '10',
+          feedback: 'Отлично молодец!',
+        ),
+      ],
+    );
+  }
 }
