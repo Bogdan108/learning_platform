@@ -121,6 +121,7 @@ class TaskTile extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 4),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: Colors.blue,
@@ -140,6 +141,7 @@ class TaskTile extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 4),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: Colors.blue,
@@ -169,6 +171,7 @@ class TaskTile extends StatelessWidget {
                                   margin: const EdgeInsets.only(bottom: 4),
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       color: Colors.blue,
