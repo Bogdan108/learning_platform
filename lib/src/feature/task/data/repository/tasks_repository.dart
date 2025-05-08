@@ -1,12 +1,10 @@
-// src/feature/task/data/repository/tasks_repository.dart
-
 import 'dart:io';
-
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 import 'package:path_provider/path_provider.dart';
@@ -64,21 +62,17 @@ class TasksRepository implements ITasksRepository {
 
   @override
   Future<void> evaluateTask(
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     int score,
   ) =>
-      _ds.evaluateTask(_org, _tokS, assignmentId, taskId, userId, score);
+      _ds.evaluateTask(_org, _tokS, answerId, score);
 
   @override
   Future<void> feedbackTask(
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     String fb,
   ) =>
-      _ds.feedbackTask(_org, _tokS, assignmentId, taskId, userId, fb);
+      _ds.feedbackTask(_org, _tokS, answerId, fb);
 
   @override
   Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId) =>
@@ -86,5 +80,17 @@ class TasksRepository implements ITasksRepository {
         _org,
         _tokS,
         courseId,
+      );
+
+  @override
+  Future<EvaluateAnswers> getEvaluateAnswers(
+    String courseId,
+    String assignmentId,
+  ) =>
+      _ds.fetchEvaluateAnswers(
+        _org,
+        _tokS,
+        courseId,
+        assignmentId,
       );
 }

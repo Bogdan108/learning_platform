@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -20,18 +21,19 @@ abstract interface class ITasksRepository {
   Future<void> answerFile(String assignmentId, String taskId, File file);
 
   Future<void> evaluateTask(
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     int score,
   );
 
   Future<void> feedbackTask(
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     String feedback,
   );
 
   Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId);
+
+  Future<EvaluateAnswers> getEvaluateAnswers(
+    String answerId,
+    String assignmentId,
+  );
 }

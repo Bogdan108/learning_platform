@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -45,18 +45,14 @@ abstract interface class ITasksDataSource {
   Future<void> evaluateTask(
     String org,
     String tok,
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     int score,
   );
 
   Future<void> feedbackTask(
     String org,
     String tok,
-    String assignmentId,
-    String taskId,
-    String userId,
+    String answerId,
     String feedback,
   );
 
@@ -64,5 +60,12 @@ abstract interface class ITasksDataSource {
     String orgId,
     String token,
     String courseId,
+  );
+
+  Future<EvaluateAnswers> fetchEvaluateAnswers(
+    String orgId,
+    String token,
+    String courseId,
+    String assignmentId,
   );
 }
