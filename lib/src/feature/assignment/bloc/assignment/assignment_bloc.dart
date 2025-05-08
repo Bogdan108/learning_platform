@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment_bloc_event.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment_bloc_state.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_event.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_state.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/i_assignment_repository.dart';
 
 class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
