@@ -7,7 +7,7 @@ part 'student_answer.g.dart';
 @freezed
 abstract class StudentAnswer with _$StudentAnswer {
   const factory StudentAnswer({
-    required String studentId,
+    required String answerId,
     @JsonKey(name: 'full_name') required UserName name,
     required bool evaluated,
   }) = _StudentAnswer;
