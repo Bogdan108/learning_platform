@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment_bloc.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment_bloc_event.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment_bloc_state.dart'
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_event.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_state.dart'
     as assignment;
 import 'package:learning_platform/src/feature/assignment/data/data_source/assignment_data_source.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/assignment_repository.dart';
@@ -58,10 +58,9 @@ class _State extends State<AssignmentsPage> {
                 const Center(child: CircularProgressIndicator()),
               assignment.Idle(items: final items) ||
               assignment.Error(items: final items, error: _) =>
-                ListView.separated(
-                  padding: const EdgeInsets.all(16),
+                ListView.builder(
+                  padding: EdgeInsets.zero,
                   itemCount: isTeacher ? items.length + 1 : items.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (_, idx) {
                     if (idx == items.length) {
                       return Center(
@@ -81,6 +80,10 @@ class _State extends State<AssignmentsPage> {
                     }
                     final a = items[idx];
                     return Card(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
                       color: const Color(0xFFE2F2FF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

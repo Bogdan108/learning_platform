@@ -37,7 +37,7 @@ class _TasksPageState extends State<TasksPage> {
       orgIdStorage: deps.organizationIdStorage,
     );
     _bloc = TasksBloc(
-      repo: tasksRepository,
+      tasksRepository: tasksRepository,
     )..add(TasksBlocEvent.fetch(widget.assignmentId));
   }
 
