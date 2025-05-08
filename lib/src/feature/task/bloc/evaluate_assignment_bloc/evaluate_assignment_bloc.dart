@@ -5,12 +5,12 @@ import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 
-class EvaluateAnswersBloc
+class EvaluateAssignmentBloc
     extends Bloc<EvaluateAssignmentEvent, EvaluateAssignmentState>
     with SetStateMixin {
   final ITasksRepository _tasksRepository;
 
-  EvaluateAnswersBloc({required ITasksRepository tasksRepository})
+  EvaluateAssignmentBloc({required ITasksRepository tasksRepository})
       : _tasksRepository = tasksRepository,
         super(
           EvaluateAssignmentState.idle(

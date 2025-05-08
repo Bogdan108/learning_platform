@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
 import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_event.dart';
@@ -7,10 +6,10 @@ import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repos
 
 class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
     with SetStateMixin {
-  final ITasksRepository _repo;
+  final ITasksRepository _tasksRepository;
 
-  TasksBloc({required ITasksRepository repo})
-      : _repo = repo,
+  TasksBloc({required ITasksRepository tasksRepository})
+      : _tasksRepository = tasksRepository,
         super(const TasksBlocState.idle(tasks: [])) {
     on<TasksBlocEvent>(
       (event, emit) => switch (event) {
@@ -20,8 +19,6 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
         AddFileToTask() => _onAddFile(event, emit),
         AnswerText() => _onAnswerText(event, emit),
         AnswerFile() => _onAnswerFile(event, emit),
-        EvaluateTask() => _onEvaluate(event, emit),
-        FeedbackTask() => _onFeedback(event, emit),
       },
     );
   }
@@ -32,7 +29,7 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      final list = await _repo.listTasks(e.assignmentId);
+      final list = await _tasksRepository.listTasks(e.assignmentId);
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
       emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
@@ -46,12 +43,14 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      final taskId = await _repo.createTask(e.assignmentId, e.req);
+      final taskId = await _tasksRepository.createTask(e.assignmentId, e.req);
 
       final taskFile = e.file;
-      if (taskFile != null) await _repo.addQuestionFile(taskId, taskFile);
+      if (taskFile != null) {
+        await _tasksRepository.addQuestionFile(taskId, taskFile);
+      }
 
-      final list = await _repo.listTasks(e.assignmentId);
+      final list = await _tasksRepository.listTasks(e.assignmentId);
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
       emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
@@ -65,8 +64,8 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      await _repo.deleteTask(e.taskId);
-      final list = await _repo.listTasks(e.assignmentId);
+      await _tasksRepository.deleteTask(e.taskId);
+      final list = await _tasksRepository.listTasks(e.assignmentId);
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
       emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
@@ -80,7 +79,7 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      await _repo.addQuestionFile(e.taskId, e.file);
+      await _tasksRepository.addQuestionFile(e.taskId, e.file);
       emit(TasksBlocState.idle(tasks: state.tasks));
     } catch (err, st) {
       emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
@@ -93,9 +92,14 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
     Emitter<TasksBlocState> emit,
   ) async {
     try {
-      await _repo.answerText(e.assignmentId, e.taskId, e.text);
+      await _tasksRepository.answerText(e.assignmentId, e.taskId, e.text);
     } catch (err) {
-      log('AnswerText failed: $err');
+      emit(
+        TasksBlocState.error(
+          error: 'Ошибка при отправке ответа',
+          tasks: state.tasks,
+        ),
+      );
     }
   }
 
@@ -104,31 +108,14 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
     Emitter<TasksBlocState> emit,
   ) async {
     try {
-      await _repo.answerFile(e.assignmentId, e.taskId, e.file);
+      await _tasksRepository.answerFile(e.assignmentId, e.taskId, e.file);
     } catch (err) {
-      log('AnswerFile failed: $err');
-    }
-  }
-
-  Future<void> _onEvaluate(
-    EvaluateTask e,
-    Emitter<TasksBlocState> emit,
-  ) async {
-    try {
-      await _repo.evaluateTask(e.assignmentId, e.taskId, e.userId, e.score);
-    } catch (err) {
-      log('EvaluateTask failed: $err');
-    }
-  }
-
-  Future<void> _onFeedback(
-    FeedbackTask e,
-    Emitter<TasksBlocState> emit,
-  ) async {
-    try {
-      await _repo.feedbackTask(e.assignmentId, e.taskId, e.userId, e.feedback);
-    } catch (err) {
-      log('FeedbackTask failed: $err');
+      emit(
+        TasksBlocState.error(
+          error: 'Ошибка при отправке ответа',
+          tasks: state.tasks,
+        ),
+      );
     }
   }
 }

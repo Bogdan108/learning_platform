@@ -33,18 +33,4 @@ sealed class TasksBlocEvent with _$TasksBlocEvent {
     required String taskId,
     required File file,
   }) = AnswerFile;
-
-  const factory TasksBlocEvent.evaluate({
-    required String assignmentId,
-    required String taskId,
-    required String userId,
-    required int score,
-  }) = EvaluateTask;
-
-  const factory TasksBlocEvent.feedback({
-    required String assignmentId,
-    required String taskId,
-    required String userId,
-    required String feedback,
-  }) = FeedbackTask;
 }
