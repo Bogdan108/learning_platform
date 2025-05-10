@@ -25,7 +25,7 @@ class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
   ) async {
     emit(AssignmentBlocState.loading(items: state.items));
     try {
-      final items = await _repo.fetchAssignments(event.courseId);
+      final items = await _repo.fetchCourseAssignments(event.courseId);
       emit(AssignmentBlocState.idle(items: items));
     } catch (e) {
       emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
@@ -39,7 +39,7 @@ class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
     emit(AssignmentBlocState.loading(items: state.items));
     try {
       await _repo.createAssignment(event.courseId, event.request);
-      final items = await _repo.fetchAssignments(event.courseId);
+      final items = await _repo.fetchCourseAssignments(event.courseId);
       emit(AssignmentBlocState.idle(items: items));
     } catch (e) {
       emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
@@ -53,7 +53,7 @@ class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
     emit(AssignmentBlocState.loading(items: state.items));
     try {
       await _repo.editAssignment(event.assignmentId, event.request);
-      final items = await _repo.fetchAssignments(event.courseId);
+      final items = await _repo.fetchCourseAssignments(event.courseId);
       emit(AssignmentBlocState.idle(items: items));
     } catch (e) {
       emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
@@ -67,7 +67,7 @@ class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
     emit(AssignmentBlocState.loading(items: state.items));
     try {
       await _repo.deleteAssignment(event.assignmentId);
-      final items = await _repo.fetchAssignments(event.courseId);
+      final items = await _repo.fetchCourseAssignments(event.courseId);
       emit(AssignmentBlocState.idle(items: items));
     } catch (e) {
       emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
