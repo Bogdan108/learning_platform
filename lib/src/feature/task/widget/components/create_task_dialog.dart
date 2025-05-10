@@ -205,9 +205,13 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     underline: const SizedBox(),
                     items: const [
                       DropdownMenuItem(
-                          value: AnswerType.text, child: Text('Текст')),
+                        value: AnswerType.text,
+                        child: Text('Текст'),
+                      ),
                       DropdownMenuItem(
-                          value: AnswerType.file, child: Text('Файл')),
+                        value: AnswerType.file,
+                        child: Text('Файл'),
+                      ),
                       DropdownMenuItem(
                         value: AnswerType.variants,
                         child: Text('Варианты'),

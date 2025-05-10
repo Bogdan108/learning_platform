@@ -7,7 +7,7 @@ import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc
 import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_state.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/data/repository/tasks_repository.dart';
-import 'package:learning_platform/src/feature/task/widget/components/evaluate_tile.dart';
+import 'package:learning_platform/src/feature/task/widget/components/evaluate_task_tile.dart';
 
 class EvaluateAssignmentPage extends StatefulWidget {
   final String answerId;
@@ -42,7 +42,9 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
       tasksRepository: tasksRepository,
     )..add(
         EvaluateAssignmentEvent.fetch(
-            answerId: widget.answerId, assignmentId: widget.assignmentId),
+          answerId: widget.answerId,
+          assignmentId: widget.assignmentId,
+        ),
       );
   }
 
@@ -69,7 +71,7 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
                           final task =
                               state.evaluateAnswers.evaluateTasks[index];
 
-                          return EvaluateTile(
+                          return EvaluateTaskTile(
                             number: index + 1,
                             task: task,
                             tasksRepository: tasksRepository,
@@ -101,7 +103,7 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
                           final task =
                               state.evaluateAnswers.evaluateTasks[index];
 
-                          return EvaluateTile(
+                          return EvaluateTaskTile(
                             number: index + 1,
                             task: task,
                             tasksRepository: tasksRepository,
