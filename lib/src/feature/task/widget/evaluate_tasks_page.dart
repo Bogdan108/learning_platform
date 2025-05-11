@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_bloc.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_event.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_state.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_assignment_bloc.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_event.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_state.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/data/repository/tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/widget/components/evaluate_task_tile.dart';
 
-class EvaluateAssignmentPage extends StatefulWidget {
+class EvaluateTasksPage extends StatefulWidget {
   final String answerId;
   final String assignmentId;
   final String title;
 
-  const EvaluateAssignmentPage({
+  const EvaluateTasksPage({
     required this.answerId,
     required this.assignmentId,
     required this.title,
@@ -22,11 +22,11 @@ class EvaluateAssignmentPage extends StatefulWidget {
   });
 
   @override
-  State<EvaluateAssignmentPage> createState() => _EvaluateAssignmentPageState();
+  State<EvaluateTasksPage> createState() => _EvaluateTasksPageState();
 }
 
-class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
-  late final EvaluateAssignmentBloc _bloc;
+class _EvaluateTasksPageState extends State<EvaluateTasksPage> {
+  late final EvaluateTasksBloc _bloc;
   late final TasksRepository tasksRepository;
 
   @override
@@ -38,10 +38,10 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
       tokenStorage: deps.tokenStorage,
       orgIdStorage: deps.organizationIdStorage,
     );
-    _bloc = EvaluateAssignmentBloc(
+    _bloc = EvaluateTasksBloc(
       tasksRepository: tasksRepository,
     )..add(
-        EvaluateAssignmentEvent.fetch(
+        EvaluateTasksEvent.fetch(
           answerId: widget.answerId,
           assignmentId: widget.assignmentId,
         ),
@@ -53,11 +53,11 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
         value: _bloc,
         child: Scaffold(
           appBar: AppBar(title: Text(widget.title)),
-          body: BlocBuilder<EvaluateAssignmentBloc, EvaluateAssignmentState>(
+          body: BlocBuilder<EvaluateTasksBloc, EvaluateTasksState>(
             bloc: _bloc,
             builder: (_, state) {
               switch (state) {
-                case EvaluateAssignmentState$Loading():
+                case EvaluateTasksState$Loading():
                   return Stack(
                     children: [
                       ListView.separated(
@@ -68,8 +68,7 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
                         ),
                         itemCount: state.evaluateAnswers.evaluateTasks.length,
                         itemBuilder: (_, index) {
-                          final task =
-                              state.evaluateAnswers.evaluateTasks[index];
+                          final task = state.evaluateAnswers.evaluateTasks[index];
 
                           return EvaluateTaskTile(
                             number: index + 1,
@@ -84,12 +83,12 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
                       ),
                     ],
                   );
-                case EvaluateAssignmentState$Error():
+                case EvaluateTasksState$Error():
                   return _ErrorView(
                     message: state.message,
                     onRetry: () => {},
                   );
-                case EvaluateAssignmentState$Idle():
+                case EvaluateTasksState$Idle():
                   return Stack(
                     children: [
                       ListView.separated(
@@ -100,8 +99,7 @@ class _EvaluateAssignmentPageState extends State<EvaluateAssignmentPage> {
                         ),
                         itemCount: state.evaluateAnswers.evaluateTasks.length,
                         itemBuilder: (_, index) {
-                          final task =
-                              state.evaluateAnswers.evaluateTasks[index];
+                          final task = state.evaluateAnswers.evaluateTasks[index];
 
                           return EvaluateTaskTile(
                             number: index + 1,

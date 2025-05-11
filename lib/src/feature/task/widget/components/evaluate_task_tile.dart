@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_bloc.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_event.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_assignment_bloc.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_event.dart';
 import 'package:learning_platform/src/feature/task/data/repository/tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/model/answer_type.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
@@ -30,9 +30,8 @@ class EvaluateTaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final evaluateBloc = context.read<EvaluateAssignmentBloc>();
-    final role =
-        DependenciesScope.of(context).profileBloc.state.profileInfo.role;
+    final evaluateBloc = context.read<EvaluateTasksBloc>();
+    final role = DependenciesScope.of(context).profileBloc.state.profileInfo.role;
     final isTeacher = role == UserRole.teacher;
 
     return Padding(
@@ -95,8 +94,7 @@ class EvaluateTaskTile extends StatelessWidget {
                             );
 
                             try {
-                              final filePath =
-                                  await tasksRepository.downloadQuestionFile(
+                              final filePath = await tasksRepository.downloadQuestionFile(
                                 task.id,
                               );
                               final params = ShareParams(
@@ -127,7 +125,7 @@ class EvaluateTaskTile extends StatelessWidget {
                   ),
                   onTap: () => EvaluateTaskDialog(
                     onSaveCallback: (score, feedback) => evaluateBloc.add(
-                      EvaluateAssignmentEvent.evaluate(
+                      EvaluateTasksEvent.evaluate(
                         answerId: task.id,
                         score: score,
                         feedback: feedback,

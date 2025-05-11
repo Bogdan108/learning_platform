@@ -1,36 +1,34 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_event.dart';
-import 'package:learning_platform/src/feature/task/bloc/evaluate_assignment_bloc/evaluate_assignment_state.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_event.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_state.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 
-class EvaluateAssignmentBloc
-    extends Bloc<EvaluateAssignmentEvent, EvaluateAssignmentState>
-    with SetStateMixin {
+class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> with SetStateMixin {
   final ITasksRepository _tasksRepository;
 
-  EvaluateAssignmentBloc({required ITasksRepository tasksRepository})
+  EvaluateTasksBloc({required ITasksRepository tasksRepository})
       : _tasksRepository = tasksRepository,
         super(
-          EvaluateAssignmentState.idle(
+          EvaluateTasksState.idle(
             evaluateAnswers: EvaluateAnswers.empty(),
           ),
         ) {
-    on<EvaluateAssignmentEvent>(
+    on<EvaluateTasksEvent>(
       (event, emit) => switch (event) {
-        EvaluateAssignmentEvent$FetchEvaluateTasks() => _onFetch(event, emit),
-        EvaluateAssignmentEvent$EvaluateTask() => _onEvaluate(event, emit),
+        EvaluateTasksEvent$FetchEvaluateTasks() => _onFetch(event, emit),
+        EvaluateTasksEvent$EvaluateTask() => _onEvaluate(event, emit),
       },
     );
   }
 
   Future<void> _onFetch(
-    EvaluateAssignmentEvent$FetchEvaluateTasks event,
-    Emitter<EvaluateAssignmentState> emit,
+    EvaluateTasksEvent$FetchEvaluateTasks event,
+    Emitter<EvaluateTasksState> emit,
   ) async {
     emit(
-      EvaluateAssignmentState.loading(
+      EvaluateTasksState.loading(
         evaluateAnswers: state.evaluateAnswers,
       ),
     );
@@ -39,10 +37,10 @@ class EvaluateAssignmentBloc
         event.answerId,
         event.assignmentId,
       );
-      emit(EvaluateAssignmentState.idle(evaluateAnswers: list));
+      emit(EvaluateTasksState.idle(evaluateAnswers: list));
     } catch (err, st) {
       emit(
-        EvaluateAssignmentState.error(
+        EvaluateTasksState.error(
           message: err.toString(),
           evaluateAnswers: state.evaluateAnswers,
         ),
@@ -52,11 +50,11 @@ class EvaluateAssignmentBloc
   }
 
   Future<void> _onEvaluate(
-    EvaluateAssignmentEvent$EvaluateTask event,
-    Emitter<EvaluateAssignmentState> emit,
+    EvaluateTasksEvent$EvaluateTask event,
+    Emitter<EvaluateTasksState> emit,
   ) async {
     emit(
-      EvaluateAssignmentState.loading(
+      EvaluateTasksState.loading(
         evaluateAnswers: state.evaluateAnswers,
       ),
     );
@@ -83,12 +81,12 @@ class EvaluateAssignmentBloc
       // );
 
       emit(
-        EvaluateAssignmentState.idle(
+        EvaluateTasksState.idle(
           evaluateAnswers: state.evaluateAnswers,
         ),
       );
     } catch (err, st) {
-      EvaluateAssignmentState.error(
+      EvaluateTasksState.error(
         message: err.toString(),
         evaluateAnswers: state.evaluateAnswers,
       );
