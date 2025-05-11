@@ -1,24 +1,26 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:learning_platform/src/feature/course/bloc/course_event.dart';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
 
-part 'course_bloc_state.freezed.dart';
+part 'course_state.freezed.dart';
 
 @freezed
-sealed class CourseBlocState with _$CourseBlocState {
-  const factory CourseBlocState.idle({
+sealed class CourseState with _$CourseState {
+  const factory CourseState.idle({
     required CourseAdditions additions,
     required List<Student> students,
-  }) = Idle;
+  }) = CourseState$Idle;
 
-  const factory CourseBlocState.loading({
+  const factory CourseState.loading({
     required CourseAdditions additions,
     required List<Student> students,
-  }) = Loading;
+  }) = CourseState$Loading;
 
-  const factory CourseBlocState.error({
+  const factory CourseState.error({
     required String error,
     required CourseAdditions additions,
     required List<Student> students,
-  }) = Error;
+    CourseEvent? event,
+  }) = CourseState$Error;
 }

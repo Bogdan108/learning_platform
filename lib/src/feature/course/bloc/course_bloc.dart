@@ -1,44 +1,42 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/course/bloc/course_bloc_event.dart';
-import 'package:learning_platform/src/feature/course/bloc/course_bloc_state.dart';
+import 'package:learning_platform/src/feature/course/bloc/course_event.dart';
+import 'package:learning_platform/src/feature/course/bloc/course_state.dart';
 import 'package:learning_platform/src/feature/course/data/repository/course_repository.dart';
 import 'package:learning_platform/src/feature/course/data/repository/i_course_repository.dart';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 
-class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMixin {
+class CourseBloc extends Bloc<CourseEvent, CourseState> with SetStateMixin {
   final ICourseRepository _courseRepository;
 
   CourseBloc({
     required CourseRepository courseRepository,
-    CourseBlocState? initialState,
+    CourseState? initialState,
   })  : _courseRepository = courseRepository,
         super(
           initialState ??
-              CourseBlocState.idle(
+              CourseState.idle(
                 additions: CourseAdditions.empty(),
                 students: const [],
               ),
         ) {
-    on<CourseBlocEvent>(
+    on<CourseEvent>(
       (event, emit) => switch (event) {
-        FetchCourseAdditionEvent() => _fetchCourseAdditions(event, emit),
-        DeleteAdditionEvent() => _deleteAddition(event, emit),
-        AddLinkAdditionEvent() => _addLinkAddition(event, emit),
-        UploadMaterialEvent() => _onUploadMaterial(event, emit),
-        LeaveCourseEvent() => _leaveCourse(event, emit),
+        CourseEvent$FetchCourseAddition() => _fetchCourseAdditions(event, emit),
+        CourseEvent$DeleteAddition() => _deleteAddition(event, emit),
+        CourseEvent$AddLinkAddition() => _addLinkAddition(event, emit),
+        CourseEvent$UploadMaterial() => _onUploadMaterial(event, emit),
+        CourseEvent$LeaveCourse() => _leaveCourse(event, emit),
       },
     );
   }
 
   Future<void> _fetchCourseAdditions(
-    FetchCourseAdditionEvent event,
-    Emitter<CourseBlocState> emit,
+    CourseEvent$FetchCourseAddition event,
+    Emitter<CourseState> emit,
   ) async {
     emit(
-      CourseBlocState.loading(
+      CourseState.loading(
         additions: state.additions,
         students: state.students,
       ),
@@ -53,14 +51,15 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
       );
 
       emit(
-        CourseBlocState.idle(additions: additions, students: students),
+        CourseState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
       emit(
-        CourseBlocState.error(
+        CourseState.error(
           additions: state.additions,
           students: state.students,
-          error: e.toString(),
+          error: 'Ошибка загрузки материалов',
+          event: event,
         ),
       );
       onError(e, st);
@@ -68,11 +67,11 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
   }
 
   Future<void> _deleteAddition(
-    DeleteAdditionEvent event,
-    Emitter<CourseBlocState> emit,
+    CourseEvent$DeleteAddition event,
+    Emitter<CourseState> emit,
   ) async {
     emit(
-      CourseBlocState.loading(
+      CourseState.loading(
         additions: state.additions,
         students: state.students,
       ),
@@ -92,14 +91,15 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
       );
 
       emit(
-        CourseBlocState.idle(additions: additions, students: students),
+        CourseState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
       emit(
-        CourseBlocState.error(
+        CourseState.error(
           additions: state.additions,
           students: state.students,
-          error: e.toString(),
+          error: 'Ошибка удаления материала',
+          event: event,
         ),
       );
       onError(e, st);
@@ -107,11 +107,11 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
   }
 
   Future<void> _addLinkAddition(
-    AddLinkAdditionEvent event,
-    Emitter<CourseBlocState> emit,
+    CourseEvent$AddLinkAddition event,
+    Emitter<CourseState> emit,
   ) async {
     emit(
-      CourseBlocState.loading(
+      CourseState.loading(
         additions: state.additions,
         students: state.students,
       ),
@@ -130,14 +130,15 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
       );
 
       emit(
-        CourseBlocState.idle(additions: additions, students: students),
+        CourseState.idle(additions: additions, students: students),
       );
     } on Object catch (e, st) {
       emit(
-        CourseBlocState.error(
+        CourseState.error(
           additions: state.additions,
           students: state.students,
-          error: e.toString(),
+          error: 'Ошибка добавления ссылки',
+          event: event,
         ),
       );
       onError(e, st);
@@ -145,18 +146,17 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
   }
 
   Future<void> _onUploadMaterial(
-    UploadMaterialEvent event,
-    Emitter<CourseBlocState> emit,
+    CourseEvent$UploadMaterial event,
+    Emitter<CourseState> emit,
   ) async {
     emit(
-      CourseBlocState.loading(
+      CourseState.loading(
         additions: state.additions,
         students: state.students,
       ),
     );
 
     if (event.file == null) return;
-    log('Empty upload file');
 
     try {
       await _courseRepository.uploadMaterial(
@@ -168,26 +168,30 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
         event.courseId,
       );
       emit(
-        CourseBlocState.idle(
+        CourseState.idle(
           additions: additions,
           students: state.students,
         ),
       );
     } catch (e, st) {
       emit(
-        CourseBlocState.error(
+        CourseState.error(
           additions: state.additions,
           students: state.students,
-          error: e.toString(),
+          error: 'Ошибка добавления файла',
+          event: event,
         ),
       );
       onError(e, st);
     }
   }
 
-  Future<void> _leaveCourse(LeaveCourseEvent event, Emitter<CourseBlocState> emit) async {
+  Future<void> _leaveCourse(
+    CourseEvent$LeaveCourse event,
+    Emitter<CourseState> emit,
+  ) async {
     emit(
-      CourseBlocState.loading(
+      CourseState.loading(
         additions: state.additions,
         students: state.students,
       ),
@@ -199,17 +203,18 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMix
       );
 
       emit(
-        CourseBlocState.idle(
+        CourseState.idle(
           additions: state.additions,
           students: state.students,
         ),
       );
     } catch (e, st) {
       emit(
-        CourseBlocState.error(
+        CourseState.error(
           additions: state.additions,
           students: state.students,
-          error: e.toString(),
+          error: 'Ошибка выхода с курса',
+          event: event,
         ),
       );
       onError(e, st);
