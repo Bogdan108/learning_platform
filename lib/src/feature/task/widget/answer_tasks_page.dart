@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import 'package:learning_platform/src/feature/task/model/question_type.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/widget/components/answer_type_widget.dart';
 import 'package:learning_platform/src/feature/task/widget/components/finish_answer_card.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AnswerTasksPage extends StatefulWidget {
   final String assignmentId;
@@ -31,6 +34,7 @@ class AnswerTasksPage extends StatefulWidget {
 }
 
 class _AnswerTasksPageState extends State<AnswerTasksPage> {
+  late final TasksRepository tasksRepository;
   late final AnswerTasksBloc _bloc;
 
   final _pageController = PageController();
@@ -46,12 +50,13 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
   void initState() {
     super.initState();
     final deps = DependenciesScope.of(context);
+    tasksRepository = TasksRepository(
+      dataSource: TasksDataSource(dio: deps.dio),
+      tokenStorage: deps.tokenStorage,
+      orgIdStorage: deps.organizationIdStorage,
+    );
     _bloc = AnswerTasksBloc(
-      tasksRepository: TasksRepository(
-        dataSource: TasksDataSource(dio: deps.dio),
-        tokenStorage: deps.tokenStorage,
-        orgIdStorage: deps.organizationIdStorage,
-      ),
+      tasksRepository: tasksRepository,
     )..add(
         AnswerTasksEvent.fetch(
           assignmentId: widget.assignmentId,
@@ -237,11 +242,30 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                                   ),
                                                 ),
                                                 GestureDetector(
-                                                  child: const Icon(
-                                                    Icons.download,
-                                                  ),
-                                                  onTap: () {
-                                                    /* TODO: скачать */
+                                                  child: const Icon(Icons.download),
+                                                  onTap: () async {
+                                                    CustomSnackBar.showSuccessful(
+                                                      context,
+                                                      title: 'Скачиваем ...',
+                                                    );
+
+                                                    try {
+                                                      final filePath = await tasksRepository
+                                                          .downloadQuestionFile(
+                                                        task.id,
+                                                      );
+                                                      final params = ShareParams(
+                                                        title: task.questionFile,
+                                                        files: [XFile(filePath)],
+                                                      );
+
+                                                      await SharePlus.instance.share(params);
+                                                    } catch (e) {
+                                                      CustomSnackBar.showError(
+                                                        context,
+                                                        title: 'Ошибка: $e',
+                                                      );
+                                                    }
                                                   },
                                                 ),
                                               ],
