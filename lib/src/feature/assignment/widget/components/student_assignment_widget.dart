@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_courses.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_status.dart';
+import 'package:learning_platform/src/feature/assignment/widget/components/assignment_tile.dart';
 
 class StudentAssignmentWidget extends StatelessWidget {
   final AssignmentCourses course;
@@ -41,51 +42,34 @@ class StudentAssignmentWidget extends StatelessWidget {
           endIndent: 16,
         ),
         // Список заданий
-        for (final asg in course.assignments) ...[
+        for (final assignment in course.assignments) ...[
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 8,
             ),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: const Color(
-                  0xFFE2F2FF,
-                ),
-                borderRadius: BorderRadius.circular(8),
+            child: AssignmentTile(
+              assignment: assignment,
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.blue,
               ),
-              child: ListTile(
-                title: Text(
-                  asg.name,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                subtitle: Text(
-                  asg.status.statusText,
-                  style: TextStyle(
-                    color: asg.status.statusColor,
-                  ),
-                ),
-                trailing: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Colors.blue,
-                ),
-                onTap: () {
-                  if (asg.status == AssignmentStatus.pending) {
-                    context.pushNamed(
-                      'answerAssignment',
-                      pathParameters: {'assignmentId': asg.id},
-                      extra: asg.name,
-                    );
-                  } else {
-                    context.pushNamed(
-                      'studentEvaluateAnswers',
-                      pathParameters: {'answerId': asg.id},
-                      extra: asg.name,
-                    );
-                  }
-                },
-              ),
+              onTap: () {
+                if (assignment.status == AssignmentStatus.pending) {
+                  context.pushNamed(
+                    'answerAssignment',
+                    pathParameters: {'assignmentId': assignment.id},
+                    extra: assignment.name,
+                  );
+                } else {
+                  context.pushNamed(
+                    'studentEvaluateAnswers',
+                    pathParameters: {'answerId': assignment.id},
+                    extra: assignment.name,
+                  );
+                }
+              },
             ),
           ),
         ],

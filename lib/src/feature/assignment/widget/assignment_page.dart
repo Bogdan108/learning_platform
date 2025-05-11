@@ -8,6 +8,8 @@ import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignm
     as assignment;
 import 'package:learning_platform/src/feature/assignment/data/data_source/assignment_data_source.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/assignment_repository.dart';
+import 'package:learning_platform/src/feature/assignment/model/assignment_status.dart';
+import 'package:learning_platform/src/feature/assignment/widget/components/assignment_tile.dart';
 import 'package:learning_platform/src/feature/assignment/widget/components/create_edit_assignment_dialog.dart';
 import 'package:learning_platform/src/feature/assignment/widget/components/delete_assignment_addition.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
@@ -54,15 +56,14 @@ class _State extends State<AssignmentsPage> {
           body: BlocBuilder<AssignmentBloc, assignment.AssignmentBlocState>(
             bloc: _assignmentBloc,
             builder: (context, state) => switch (state) {
-              assignment.Loading() =>
-                const Center(child: CircularProgressIndicator()),
+              assignment.Loading() => const Center(child: CircularProgressIndicator()),
               assignment.Idle(items: final items) ||
               assignment.Error(items: final items, error: _) =>
                 ListView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: isTeacher ? items.length + 1 : items.length,
-                  itemBuilder: (_, idx) {
-                    if (idx == items.length) {
+                  itemBuilder: (_, index) {
+                    if (index == items.length) {
                       return Center(
                         child: CustomElevatedButton(
                           onPressed: () => CreateEditAssignmentDialog(
@@ -78,32 +79,14 @@ class _State extends State<AssignmentsPage> {
                         ),
                       );
                     }
-                    final a = items[idx];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 8,
+                    final assignment = items[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 16,
+                        vertical: 8,
                       ),
-                      color: const Color(0xFFE2F2FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
-                        title: Text(
-                          a.name,
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Дедлайн: ${a.endedAt != null ? a.endedAt!.toLocal().toString().split(' ')[0] : '—'}',
-                            style: const TextStyle(color: Color(0xFFC1121F)),
-                          ),
-                        ),
+                      child: AssignmentTile(
+                        assignment: assignment,
                         trailing: Row(
                           spacing: 8,
                           mainAxisSize: MainAxisSize.min,
@@ -113,12 +96,12 @@ class _State extends State<AssignmentsPage> {
                                 child: const Icon(Icons.edit),
                                 onTap: () => CreateEditAssignmentDialog(
                                   title: 'Редактировать задание',
-                                  initialName: a.name,
-                                  initialStart: a.startedAt,
-                                  initialEnd: a.endedAt,
+                                  initialName: assignment.name,
+                                  initialStart: assignment.startedAt,
+                                  initialEnd: assignment.endedAt,
                                   onSave: (req) => _assignmentBloc.add(
                                     AssignmentBlocEvent.edit(
-                                      assignmentId: a.id,
+                                      assignmentId: assignment.id,
                                       courseId: widget.courseId,
                                       request: req,
                                     ),
@@ -126,35 +109,50 @@ class _State extends State<AssignmentsPage> {
                                 ).show(ctx),
                               ),
                               GestureDetector(
-                                child:
-                                    const Icon(Icons.delete, color: Colors.red),
+                                child: const Icon(Icons.delete, color: Colors.red),
                                 onTap: () => DeleteAssignmentDialog(
                                   onTapCallback: () => _assignmentBloc.add(
                                     AssignmentBlocEvent.delete(
-                                      assignmentId: a.id,
+                                      assignmentId: assignment.id,
                                       courseId: widget.courseId,
                                     ),
                                   ),
                                 ).show(context),
                               ),
                             ],
-                            GestureDetector(
-                              child: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.blue,
-                              ),
-                              onTap: () {
-                                context.pushNamed(
-                                  'tasks',
-                                  pathParameters: {
-                                    'courseId': widget.courseId,
-                                    'assignmentId': a.id,
-                                  },
-                                );
-                              },
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blue,
                             ),
                           ],
                         ),
+                        onTap: () {
+                          if (isTeacher) {
+                            context.pushNamed(
+                              'tasks',
+                              pathParameters: {
+                                'courseId': widget.courseId,
+                                'assignmentId': assignment.id,
+                              },
+                            );
+                          } else {
+                            {
+                              if (assignment.status == AssignmentStatus.pending) {
+                                context.pushNamed(
+                                  'answerAssignment',
+                                  pathParameters: {'assignmentId': assignment.id},
+                                  extra: assignment.name,
+                                );
+                              } else {
+                                context.pushNamed(
+                                  'studentEvaluateAnswers',
+                                  pathParameters: {'answerId': assignment.id},
+                                  extra: assignment.name,
+                                );
+                              }
+                            }
+                          }
+                        },
                       ),
                     );
                   },
