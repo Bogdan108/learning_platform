@@ -338,10 +338,11 @@ class TasksDataSource implements ITasksDataSource {
   ) async {
     final idx = _tasks.indexWhere((t) => t.id == taskId);
     if (idx != -1) {
-      _tasks[idx] =
-          _tasks[idx].copyWith(questionFile: file.path.split('/').last);
+      _tasks[idx] = _tasks[idx].copyWith(questionFile: file.path.split('/').last);
     }
-    return Future.value();
+    return Future.delayed(
+      const Duration(seconds: 1),
+    );
   }
 
   @override
@@ -352,7 +353,9 @@ class TasksDataSource implements ITasksDataSource {
     String taskId,
     String text,
   ) async =>
-      Future.value();
+      Future.delayed(
+        const Duration(seconds: 1),
+      );
 
   @override
   Future<void> answerFile(
@@ -362,7 +365,9 @@ class TasksDataSource implements ITasksDataSource {
     String taskId,
     File file,
   ) async =>
-      Future.value();
+      Future.delayed(
+        const Duration(seconds: 1),
+      );
 
   @override
   Future<void> evaluateTask(
@@ -591,8 +596,7 @@ class TasksDataSource implements ITasksDataSource {
           id: 'task4',
           questionType: QuestionType.text,
           answerType: AnswerType.text,
-          questionText:
-              'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
+          questionText: 'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
           answerText: 'Это было очень симп.тичное решение задачи.',
           evaluate: '10',
           feedback: 'Отлично молодец!',

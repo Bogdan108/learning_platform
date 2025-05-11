@@ -26,8 +26,11 @@ class TasksRepository implements ITasksRepository {
   String get _org => _orgId.load() ?? '';
 
   @override
-  Future<List<Task>> listTasks(String assignmentId) =>
-      _ds.listTasks(_org, _tokS, assignmentId);
+  Future<List<Task>> listTasks(String assignmentId) => _ds.listTasks(
+        _org,
+        _tokS,
+        assignmentId,
+      );
 
   @override
   Future<String> createTask(String assignmentId, TaskRequest req) =>
@@ -75,8 +78,7 @@ class TasksRepository implements ITasksRepository {
       _ds.feedbackTask(_org, _tokS, answerId, fb);
 
   @override
-  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId) =>
-      _ds.fetchAnswers(
+  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId) => _ds.fetchAnswers(
         _org,
         _tokS,
         courseId,
