@@ -244,4 +244,13 @@ class CourseDataSource implements ICourseDataSource {
   }) async {
     Future.delayed(_delay, () => {});
   }
+
+  @override
+  Future<void> leaveCourse({
+    required String organizationId,
+    required String token,
+    required String courseId,
+  }) async {
+    Future.delayed(_delay, () => {});
+  }
 }

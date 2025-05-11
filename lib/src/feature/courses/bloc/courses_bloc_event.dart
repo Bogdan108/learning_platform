@@ -5,6 +5,11 @@ part 'courses_bloc_event.freezed.dart';
 
 @freezed
 sealed class CoursesBlocEvent with _$CoursesBlocEvent {
+  const factory CoursesBlocEvent.fetchCourses({
+    required UserRole role,
+    required String searchQuery,
+  }) = FetchCoursesEvent;
+
   /// Teacher
   const factory CoursesBlocEvent.createCourse({
     required String name,
@@ -20,11 +25,6 @@ sealed class CoursesBlocEvent with _$CoursesBlocEvent {
   const factory CoursesBlocEvent.deleteCourse({
     required String courseId,
   }) = DeleteCourseEvent;
-
-  const factory CoursesBlocEvent.fetchCourses({
-    required UserRole role,
-    required String searchQuery,
-  }) = FetchCoursesEvent;
 
   /// Student
   const factory CoursesBlocEvent.enrollCourse({

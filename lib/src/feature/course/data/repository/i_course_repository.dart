@@ -29,4 +29,6 @@ abstract class ICourseRepository {
   );
 
   Future<void> uploadMaterial(String courseId, File file);
+
+  Future<void> leaveCourse(String courseId);
 }

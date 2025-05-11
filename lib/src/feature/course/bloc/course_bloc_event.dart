@@ -25,4 +25,9 @@ sealed class CourseBlocEvent with _$CourseBlocEvent {
     required String courseId,
     required File? file,
   }) = UploadMaterialEvent;
+
+  /// Student
+  const factory CourseBlocEvent.leaveCourse({
+    required String courseId,
+  }) = LeaveCourseEvent;
 }

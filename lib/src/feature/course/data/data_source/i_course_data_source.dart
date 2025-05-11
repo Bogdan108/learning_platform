@@ -44,4 +44,10 @@ abstract class ICourseDataSource {
     required String courseId,
     required File file,
   });
+
+  Future<void> leaveCourse({
+    required String organizationId,
+    required String token,
+    required String courseId,
+  });
 }

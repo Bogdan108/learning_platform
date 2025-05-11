@@ -77,11 +77,17 @@ class CourseRepository implements ICourseRepository {
   }
 
   @override
-  Future<void> uploadMaterial(String courseId, File file) =>
-      dataSource.uploadMaterial(
+  Future<void> uploadMaterial(String courseId, File file) => dataSource.uploadMaterial(
         organizationId: organizationId,
         token: token,
         courseId: courseId,
         file: file,
+      );
+
+  @override
+  Future<void> leaveCourse(String courseId) => dataSource.leaveCourse(
+        organizationId: organizationId,
+        token: token,
+        courseId: courseId,
       );
 }

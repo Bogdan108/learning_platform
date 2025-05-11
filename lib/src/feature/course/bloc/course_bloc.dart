@@ -8,8 +8,7 @@ import 'package:learning_platform/src/feature/course/data/repository/course_repo
 import 'package:learning_platform/src/feature/course/data/repository/i_course_repository.dart';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 
-class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
-    with SetStateMixin {
+class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState> with SetStateMixin {
   final ICourseRepository _courseRepository;
 
   CourseBloc({
@@ -29,6 +28,7 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
         DeleteAdditionEvent() => _deleteAddition(event, emit),
         AddLinkAdditionEvent() => _addLinkAddition(event, emit),
         UploadMaterialEvent() => _onUploadMaterial(event, emit),
+        LeaveCourseEvent() => _leaveCourse(event, emit),
       },
     );
   }
@@ -170,6 +170,37 @@ class CourseBloc extends Bloc<CourseBlocEvent, CourseBlocState>
       emit(
         CourseBlocState.idle(
           additions: additions,
+          students: state.students,
+        ),
+      );
+    } catch (e, st) {
+      emit(
+        CourseBlocState.error(
+          additions: state.additions,
+          students: state.students,
+          error: e.toString(),
+        ),
+      );
+      onError(e, st);
+    }
+  }
+
+  Future<void> _leaveCourse(LeaveCourseEvent event, Emitter<CourseBlocState> emit) async {
+    emit(
+      CourseBlocState.loading(
+        additions: state.additions,
+        students: state.students,
+      ),
+    );
+
+    try {
+      await _courseRepository.leaveCourse(
+        event.courseId,
+      );
+
+      emit(
+        CourseBlocState.idle(
+          additions: state.additions,
           students: state.students,
         ),
       );

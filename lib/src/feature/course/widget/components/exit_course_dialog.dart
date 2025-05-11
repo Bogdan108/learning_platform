@@ -63,8 +63,8 @@ class ExitCourseDialog extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => {
-                        onTapCallback,
                         Navigator.of(context).pop(true),
+                        onTapCallback(),
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,

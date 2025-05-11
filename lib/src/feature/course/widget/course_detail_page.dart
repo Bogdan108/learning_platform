@@ -6,8 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc_event.dart';
-import 'package:learning_platform/src/feature/course/bloc/course_bloc_state.dart'
-    as course_state;
+import 'package:learning_platform/src/feature/course/bloc/course_bloc_state.dart' as course_state;
 import 'package:learning_platform/src/feature/course/data/data_source/course_data_source.dart';
 import 'package:learning_platform/src/feature/course/data/repository/course_repository.dart';
 import 'package:learning_platform/src/feature/course/widget/components/add_addition_dialog.dart';
@@ -89,7 +88,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       color: Colors.blue,
                     ),
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -105,8 +103,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () => AddAdditionDialog(
-                            onLinkSave: ({required type, required link}) =>
-                                _courseBloc.add(
+                            onLinkSave: ({required type, required link}) => _courseBloc.add(
                               CourseBlocEvent.addLinkAddition(
                                 courseId: widget.courseDetails.id,
                                 link: link,
@@ -136,8 +133,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         ],
                       _ => [
                           /// Материалы файлы
-                          for (final material
-                              in courseState.additions.materials)
+                          for (final material in courseState.additions.materials)
                             Padding(
                               padding: const EdgeInsets.only(top: 12),
                               child: Row(
@@ -155,8 +151,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                       );
 
                                       try {
-                                        final filePath = await _courseRepository
-                                            .downloadMaterial(
+                                        final filePath = await _courseRepository.downloadMaterial(
                                           widget.courseDetails.id,
                                           material.name,
                                           material.id,
@@ -358,11 +353,15 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   const SizedBox(
                     height: 30,
                   ),
-                  // TODO(b.luckyanchuk): Add exit from course event
                   if (isStudent)
                     TextButton(
                       onPressed: () => ExitCourseDialog(
                         onTapCallback: () => {
+                          _courseBloc.add(
+                            CourseBlocEvent.leaveCourse(
+                              courseId: widget.courseDetails.id,
+                            ),
+                          ),
                           context.pop(),
                         },
                       ).show(context),
