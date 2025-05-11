@@ -1,4 +1,5 @@
 import 'package:learning_platform/src/feature/assignment/model/assignment.dart';
+import 'package:learning_platform/src/feature/assignment/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_courses.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 
@@ -32,5 +33,11 @@ abstract interface class IAssignmentDataSource {
   Future<List<AssignmentCourses>> getAssignments(
     String organizationId,
     String token,
+  );
+
+  Future<List<AssignmentAnswers>> fetchAssignmentAnswers(
+    String orgId,
+    String token,
+    String courseId,
   );
 }

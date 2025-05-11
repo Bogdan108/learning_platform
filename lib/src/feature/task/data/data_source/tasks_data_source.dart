@@ -229,15 +229,12 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/file.dart';
 import 'package:learning_platform/src/feature/task/model/answer_type.dart';
-import 'package:learning_platform/src/feature/task/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
 import 'package:learning_platform/src/feature/task/model/question_type.dart';
-import 'package:learning_platform/src/feature/task/model/student_answer.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -397,152 +394,6 @@ class TasksDataSource implements ITasksDataSource {
         const Duration(milliseconds: 500),
         () => fileList,
       );
-
-  final List<AssignmentAnswers> _answers = [
-    const AssignmentAnswers(
-      id: 'a-1',
-      name: 'Лексическое значение слов (задание 2)',
-      students: [
-        StudentAnswer(
-          answerId: 'u-101',
-          name: UserName(
-            firstName: 'Ксения',
-            secondName: 'Голубева',
-            middleName: 'А',
-          ),
-          evaluated: true,
-        ),
-        StudentAnswer(
-          answerId: 'u-102',
-          name: UserName(
-            firstName: 'Адам',
-            secondName: 'Бартоломей',
-            middleName: 'И',
-          ),
-          evaluated: false,
-        ),
-        StudentAnswer(
-          answerId: 'u-103',
-          name: UserName(
-            firstName: 'Татьяна',
-            secondName: 'Костюкова',
-            middleName: 'П',
-          ),
-          evaluated: false,
-        ),
-        StudentAnswer(
-          answerId: 'u-104',
-          name: UserName(
-            firstName: 'Олег',
-            secondName: 'Маликов',
-            middleName: 'Т',
-          ),
-          evaluated: true,
-        ),
-        StudentAnswer(
-          answerId: 'u-105',
-          name: UserName(
-            firstName: 'Эдуард',
-            secondName: 'Гафанович',
-            middleName: 'М',
-          ),
-          evaluated: false,
-        ),
-        StudentAnswer(
-          answerId: 'u-106',
-          name: UserName(
-            firstName: 'Илья',
-            secondName: 'Пупков',
-            middleName: 'А',
-          ),
-          evaluated: true,
-        ),
-      ],
-    ),
-    const AssignmentAnswers(
-      id: 'a-2',
-      name: 'Средства связи предложений в тексте (задание 1)',
-      students: [
-        StudentAnswer(
-          answerId: 'u-101',
-          name: UserName(
-            firstName: 'Ксения',
-            secondName: 'Голубева',
-            middleName: '',
-          ),
-          evaluated: true,
-        ),
-        StudentAnswer(
-          answerId: 'u-102',
-          name: UserName(
-            firstName: 'Адам',
-            secondName: 'Бартоломей',
-            middleName: 'И',
-          ),
-          evaluated: true,
-        ),
-        StudentAnswer(
-          answerId: 'u-103',
-          name: UserName(
-            firstName: 'Татьяна',
-            secondName: 'Костюкова',
-            middleName: 'П',
-          ),
-          evaluated: false,
-        ),
-        StudentAnswer(
-          answerId: 'u-104',
-          name: UserName(
-            firstName: 'Олег',
-            secondName: 'Маликов',
-            middleName: 'Т',
-          ),
-          evaluated: false,
-        ),
-        StudentAnswer(
-          answerId: 'u-105',
-          name: UserName(
-            firstName: 'Эдуард',
-            secondName: 'Гафанович',
-            middleName: 'М',
-          ),
-          evaluated: true,
-        ),
-        StudentAnswer(
-          answerId: 'u-106',
-          name: UserName(
-            firstName: 'Илья',
-            secondName: 'Пупков',
-            middleName: 'А',
-          ),
-          evaluated: false,
-        ),
-      ],
-    ),
-    const AssignmentAnswers(
-      id: 'a-3',
-      name: 'Стилистический анализ текста (задание 3)',
-      students: [
-        StudentAnswer(
-          answerId: 'u-101',
-          name: UserName(
-            firstName: 'Ксения',
-            secondName: 'Голубева',
-            middleName: 'А',
-          ),
-          evaluated: false,
-        ),
-      ],
-    ),
-  ];
-
-  @override
-  Future<List<AssignmentAnswers>> fetchAnswers(
-    String orgId,
-    String token,
-    String courseId,
-  ) async =>
-      await Future.delayed(const Duration(milliseconds: 450), () => _answers);
 
   @override
   Future<EvaluateAnswers> fetchEvaluateAnswers(

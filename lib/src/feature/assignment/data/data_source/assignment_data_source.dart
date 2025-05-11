@@ -1,12 +1,13 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:learning_platform/src/feature/assignment/data/data_source/i_assignment_data_source.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment.dart';
+import 'package:learning_platform/src/feature/assignment/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_courses.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_status.dart';
-import 'package:learning_platform/src/feature/assignment/model/student_assignment.dart';
+import 'package:learning_platform/src/feature/assignment/model/student_answer.dart';
+import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 class AssignmentDataSource implements IAssignmentDataSource {
   static const _delay = Duration(milliseconds: 500);
@@ -28,12 +29,14 @@ class AssignmentDataSource implements IAssignmentDataSource {
             name: 'Первое задание',
             startedAt: DateTime.now().subtract(const Duration(days: 5)),
             endedAt: DateTime.now().add(const Duration(days: 1)),
+            status: AssignmentStatus.graded,
           ),
           Assignment(
             id: 'a2',
             name: 'Второе задание',
             startedAt: DateTime.now().subtract(const Duration(days: 2)),
             endedAt: DateTime.now().add(const Duration(days: 4)),
+            status: AssignmentStatus.pending,
           ),
         ],
       );
@@ -79,14 +82,14 @@ class AssignmentDataSource implements IAssignmentDataSource {
             courseId: 'c1',
             courseName: 'Русский язык',
             assignments: [
-              StudentAssignment(
+              Assignment(
                 id: 'a1',
                 name: 'Лексическое значение слов',
                 status: AssignmentStatus.pending,
                 startedAt: DateTime.now().subtract(const Duration(days: 10)),
                 endedAt: DateTime.now().subtract(const Duration(days: 5)),
               ),
-              StudentAssignment(
+              Assignment(
                 id: 'a2',
                 name: 'Средства связи предложений',
                 status: AssignmentStatus.graded,
@@ -99,14 +102,14 @@ class AssignmentDataSource implements IAssignmentDataSource {
             courseId: 'c2',
             courseName: 'Mатематика',
             assignments: [
-              StudentAssignment(
+              Assignment(
                 id: 'a3',
                 name: 'Рациональные числа',
                 status: AssignmentStatus.inReview,
                 startedAt: DateTime.now().subtract(const Duration(days: 7)),
                 endedAt: DateTime.now().add(const Duration(days: 1)),
               ),
-              StudentAssignment(
+              Assignment(
                 id: 'a4',
                 name: 'Неравенства, уравнения',
                 status: AssignmentStatus.graded,
@@ -117,4 +120,150 @@ class AssignmentDataSource implements IAssignmentDataSource {
           ),
         ],
       );
+
+  @override
+  Future<List<AssignmentAnswers>> fetchAssignmentAnswers(
+    String orgId,
+    String token,
+    String courseId,
+  ) async =>
+      await Future.delayed(const Duration(milliseconds: 450), () => _answers);
 }
+
+final List<AssignmentAnswers> _answers = [
+  const AssignmentAnswers(
+    id: 'a-1',
+    name: 'Лексическое значение слов (задание 2)',
+    students: [
+      StudentAnswer(
+        answerId: 'u-101',
+        name: UserName(
+          firstName: 'Ксения',
+          secondName: 'Голубева',
+          middleName: 'А',
+        ),
+        evaluated: true,
+      ),
+      StudentAnswer(
+        answerId: 'u-102',
+        name: UserName(
+          firstName: 'Адам',
+          secondName: 'Бартоломей',
+          middleName: 'И',
+        ),
+        evaluated: false,
+      ),
+      StudentAnswer(
+        answerId: 'u-103',
+        name: UserName(
+          firstName: 'Татьяна',
+          secondName: 'Костюкова',
+          middleName: 'П',
+        ),
+        evaluated: false,
+      ),
+      StudentAnswer(
+        answerId: 'u-104',
+        name: UserName(
+          firstName: 'Олег',
+          secondName: 'Маликов',
+          middleName: 'Т',
+        ),
+        evaluated: true,
+      ),
+      StudentAnswer(
+        answerId: 'u-105',
+        name: UserName(
+          firstName: 'Эдуард',
+          secondName: 'Гафанович',
+          middleName: 'М',
+        ),
+        evaluated: false,
+      ),
+      StudentAnswer(
+        answerId: 'u-106',
+        name: UserName(
+          firstName: 'Илья',
+          secondName: 'Пупков',
+          middleName: 'А',
+        ),
+        evaluated: true,
+      ),
+    ],
+  ),
+  const AssignmentAnswers(
+    id: 'a-2',
+    name: 'Средства связи предложений в тексте (задание 1)',
+    students: [
+      StudentAnswer(
+        answerId: 'u-101',
+        name: UserName(
+          firstName: 'Ксения',
+          secondName: 'Голубева',
+          middleName: '',
+        ),
+        evaluated: true,
+      ),
+      StudentAnswer(
+        answerId: 'u-102',
+        name: UserName(
+          firstName: 'Адам',
+          secondName: 'Бартоломей',
+          middleName: 'И',
+        ),
+        evaluated: true,
+      ),
+      StudentAnswer(
+        answerId: 'u-103',
+        name: UserName(
+          firstName: 'Татьяна',
+          secondName: 'Костюкова',
+          middleName: 'П',
+        ),
+        evaluated: false,
+      ),
+      StudentAnswer(
+        answerId: 'u-104',
+        name: UserName(
+          firstName: 'Олег',
+          secondName: 'Маликов',
+          middleName: 'Т',
+        ),
+        evaluated: false,
+      ),
+      StudentAnswer(
+        answerId: 'u-105',
+        name: UserName(
+          firstName: 'Эдуард',
+          secondName: 'Гафанович',
+          middleName: 'М',
+        ),
+        evaluated: true,
+      ),
+      StudentAnswer(
+        answerId: 'u-106',
+        name: UserName(
+          firstName: 'Илья',
+          secondName: 'Пупков',
+          middleName: 'А',
+        ),
+        evaluated: false,
+      ),
+    ],
+  ),
+  const AssignmentAnswers(
+    id: 'a-3',
+    name: 'Стилистический анализ текста (задание 3)',
+    students: [
+      StudentAnswer(
+        answerId: 'u-101',
+        name: UserName(
+          firstName: 'Ксения',
+          secondName: 'Голубева',
+          middleName: 'А',
+        ),
+        evaluated: false,
+      ),
+    ],
+  ),
+];

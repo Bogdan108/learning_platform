@@ -1,6 +1,7 @@
 import 'package:learning_platform/src/feature/assignment/data/data_source/i_assignment_data_source.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/i_assignment_repository.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment.dart';
+import 'package:learning_platform/src/feature/assignment/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_courses.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
@@ -39,6 +40,13 @@ class AssignmentRepository implements IAssignmentRepository {
       _dataSource.deleteAssignment(_org, _token, assignmentId);
 
   @override
-  Future<List<AssignmentCourses>> fetchAssignments() =>
-      _dataSource.getAssignments(_org, _token);
+  Future<List<AssignmentCourses>> fetchAssignments() => _dataSource.getAssignments(_org, _token);
+
+  @override
+  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId) =>
+      _dataSource.fetchAssignmentAnswers(
+        _org,
+        _token,
+        courseId,
+      );
 }

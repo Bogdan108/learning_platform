@@ -1,4 +1,5 @@
 import 'package:learning_platform/src/feature/assignment/model/assignment.dart';
+import 'package:learning_platform/src/feature/assignment/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_courses.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 
@@ -12,4 +13,6 @@ abstract interface class IAssignmentRepository {
   Future<void> deleteAssignment(String assignmentId);
 
   Future<List<AssignmentCourses>> fetchAssignments();
+
+  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId);
 }
