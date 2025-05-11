@@ -5,8 +5,7 @@ import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.da
 import 'package:learning_platform/src/feature/profile/data/repository/i_profile_repository.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 
-class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState>
-    with SetStateMixin {
+class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState> with SetStateMixin {
   final IProfileRepository _profileRepository;
 
   ProfileBloc({
@@ -33,7 +32,8 @@ class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState>
       emit(
         ProfileBlocState.error(
           profileInfo: state.profileInfo,
-          error: ex.toString(),
+          error: 'Ошибка загрузки информации о пользователе',
+          event: event,
         ),
       );
       onError(ex, stackTrace);
@@ -54,7 +54,8 @@ class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState>
       emit(
         ProfileBlocState.error(
           profileInfo: state.profileInfo,
-          error: ex.toString(),
+          error: 'Ошибка изменения информации о пользователе',
+          event: event,
         ),
       );
       onError(ex, stackTrace);
