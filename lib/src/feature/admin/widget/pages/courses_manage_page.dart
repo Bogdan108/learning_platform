@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/common/widget/custom_search_field.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_bloc.dart';
-import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_bloc_event.dart';
-import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_bloc_state.dart';
+import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_event.dart';
+import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_state.dart';
 import 'package:learning_platform/src/feature/admin/data/data_source/admin_data_source.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/admin_repository.dart';
 import 'package:learning_platform/src/feature/courses/widget/components/delete_course_dialog.dart';
@@ -20,6 +21,8 @@ class CoursesManagePage extends StatefulWidget {
 class _CoursesManagePageState extends State<CoursesManagePage> {
   late final AdminCoursesBloc _adminBloc;
   late final TextEditingController _searchController;
+  late final ScrollController _scrollController;
+  final _scrollThreshold = 80.0;
 
   @override
   void initState() {
@@ -31,15 +34,37 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
         tokenStorage: deps.tokenStorage,
         orgIdStorage: deps.organizationIdStorage,
       ),
-    )..add(const AdminCoursesBlocEvent.fetchCourses(searchQuery: ''));
-    _searchController = TextEditingController();
+    )..add(const AdminCoursesEvent.fetchCourses(searchQuery: ''));
+    _searchController = TextEditingController()..addListener(_handleTextEditing);
+    _scrollController = ScrollController()..addListener(_handleRefresh);
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _searchController.dispose();
     _adminBloc.close();
     super.dispose();
+  }
+
+  void _handleRefresh() {
+    final pos = _scrollController.position;
+    if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
+        _adminBloc.state is! AdminCoursesState$Loading) {
+      _adminBloc.add(
+        AdminCoursesEvent.fetchCourses(
+          searchQuery: _searchController.text,
+        ),
+      );
+    }
+  }
+
+  void _handleTextEditing() {
+    _adminBloc.add(
+      AdminCoursesEvent.fetchCourses(
+        searchQuery: _searchController.text,
+      ),
+    );
   }
 
   @override
@@ -55,126 +80,99 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
               child: CustomSearchField(
                 hintText: 'Поиск',
                 controller: _searchController,
-                onChanged: (q) => _adminBloc
-                    .add(AdminCoursesBlocEvent.fetchCourses(searchQuery: q)),
               ),
             ),
             Expanded(
-              child: BlocBuilder<AdminCoursesBloc, AdminCoursesBlocState>(
+              child: BlocBuilder<AdminCoursesBloc, AdminCoursesState>(
                 bloc: _adminBloc,
                 builder: (context, state) => switch (state) {
-                  Idle() => ListView.separated(
-                      itemCount: state.courses.length,
-                      separatorBuilder: (_, __) => const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Divider(color: Colors.blue, height: 1),
-                      ),
-                      itemBuilder: (context, i) {
-                        final course = state.courses[i];
+                  AdminCoursesState$Error() => CustomErrorWidget(
+                      errorMessage: state.error,
+                      onRetry: state.event != null ? () => _adminBloc.add(state.event!) : null,
+                    ),
+                  _ => Stack(children: [
+                      ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        controller: _scrollController,
+                        itemCount: state.courses.length,
+                        separatorBuilder: (_, __) => const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Divider(color: Colors.blue, height: 1),
+                        ),
+                        itemBuilder: (context, i) {
+                          final course = state.courses[i];
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 16,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    course.name,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                course.description,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.min,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 16,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    // if (course.isActive)
-                                    //   TextButton(
-                                    //     onPressed: () => _adminBloc.add(
-                                    //       AdminCoursesBlocEvent.editCourse(
-                                    //         courseId: course.id,
-                                    //         name: course.name,
-                                    //         description: course.description,
-                                    //       ),
-                                    //     ),
-                                    //     child: const Text(
-                                    //       'Деактивировать',
-                                    //       style: TextStyle(
-                                    //         color: Colors.blue,
-                                    //       ),
-                                    //     ),
-                                    //   )
-                                    // else
-                                    //   TextButton(
-                                    //     onPressed: () => _adminBloc.add(
-                                    //       AdminCoursesBlocEvent.editCourse(
-                                    //         courseId: course.id,
-                                    //         name: course.name,
-                                    //         description: course.description,
-                                    //       ),
-                                    //     ),
-                                    //     child: const Text(
-                                    //       'Активировать',
-                                    //       style: TextStyle(
-                                    //         color: Colors.blue,
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    TextButton(
-                                      onPressed: () => DeleteCourseDialog(
-                                        onTapCallback: () => _adminBloc.add(
-                                          AdminCoursesBlocEvent.deleteCourse(
-                                            courseId: course.id,
-                                          ),
-                                        ),
-                                      ).show(context),
-                                      child: const Text(
-                                        'Удалить',
-                                        style: TextStyle(color: Colors.red),
+                                    Text(
+                                      course.name,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit, size: 16),
-                                      onPressed: () => EditCourseDialog(
-                                        onSaveCallback: (name, desc) =>
-                                            _adminBloc.add(
-                                          AdminCoursesBlocEvent.editCourse(
-                                            courseId: course.id,
-                                            name: name,
-                                            description: desc,
-                                          ),
-                                        ),
-                                        initialName: course.name,
-                                        initialDescription: course.description,
-                                      ).show(context),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  _ =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
+                                const SizedBox(height: 4),
+                                Text(
+                                  course.description,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () => DeleteCourseDialog(
+                                          onTapCallback: () => _adminBloc.add(
+                                            AdminCoursesEvent.deleteCourse(
+                                              courseId: course.id,
+                                            ),
+                                          ),
+                                        ).show(context),
+                                        child: const Text(
+                                          'Удалить',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.edit, size: 16),
+                                        onPressed: () => EditCourseDialog(
+                                          onSaveCallback: (name, desc) => _adminBloc.add(
+                                            AdminCoursesEvent.editCourse(
+                                              courseId: course.id,
+                                              name: name,
+                                              description: desc,
+                                            ),
+                                          ),
+                                          initialName: course.name,
+                                          initialDescription: course.description,
+                                        ).show(context),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      if (state is AdminCoursesState$Loading)
+                        const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                    ]),
                 },
               ),
             ),

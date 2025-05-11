@@ -1,44 +1,43 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_bloc_event.dart';
-import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_bloc_state.dart';
+import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_event.dart';
+import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_state.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/i_admin_repository.dart';
 import 'package:learning_platform/src/feature/courses/model/course_request.dart';
 
-class AdminCoursesBloc
-    extends Bloc<AdminCoursesBlocEvent, AdminCoursesBlocState>
-    with SetStateMixin {
+class AdminCoursesBloc extends Bloc<AdminCoursesEvent, AdminCoursesState> with SetStateMixin {
   final IAdminRepository _repo;
 
   AdminCoursesBloc({
     required IAdminRepository repository,
-    AdminCoursesBlocState? initialState,
+    AdminCoursesState? initialState,
   })  : _repo = repository,
         super(
-          initialState ?? const AdminCoursesBlocState.idle(),
+          initialState ?? const AdminCoursesState.idle(),
         ) {
-    on<AdminCoursesBlocEvent>(
+    on<AdminCoursesEvent>(
       (event, emit) => switch (event) {
-        FetchCoursesEvent() => _fetchCourses(event, emit),
-        EditCourseEvent() => _editCourse(event, emit),
-        DeleteCourseEvent() => _deleteCourse(event, emit),
+        AdminCoursesEvent$FetchCourses() => _fetchCourses(event, emit),
+        AdminCoursesEvent$EditCourse() => _editCourse(event, emit),
+        AdminCoursesEvent$DeleteCourse() => _deleteCourse(event, emit),
       },
     );
   }
 
   Future<void> _fetchCourses(
-    FetchCoursesEvent e,
-    Emitter<AdminCoursesBlocState> emit,
+    AdminCoursesEvent$FetchCourses event,
+    Emitter<AdminCoursesState> emit,
   ) async {
-    emit(AdminCoursesBlocState.loading(courses: state.courses));
+    emit(AdminCoursesState.loading(courses: state.courses));
     try {
-      final list = await _repo.getAllCourses(e.searchQuery);
-      emit(AdminCoursesBlocState.idle(courses: list));
+      final list = await _repo.getAllCourses(event.searchQuery);
+      emit(AdminCoursesState.idle(courses: list));
     } on Object catch (e, st) {
       emit(
-        AdminCoursesBlocState.error(
+        AdminCoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка загрузки курсов',
+          event: event,
         ),
       );
       onError(e, st);
@@ -46,21 +45,21 @@ class AdminCoursesBloc
   }
 
   Future<void> _editCourse(
-    EditCourseEvent e,
-    Emitter<AdminCoursesBlocState> emit,
+    AdminCoursesEvent$EditCourse event,
+    Emitter<AdminCoursesState> emit,
   ) async {
-    emit(AdminCoursesBlocState.loading(courses: state.courses));
+    emit(AdminCoursesState.loading(courses: state.courses));
     try {
-      final courseRequest =
-          CourseRequest(name: e.name, description: e.description);
-      await _repo.editCourse(e.courseId, courseRequest);
+      final courseRequest = CourseRequest(name: event.name, description: event.description);
+      await _repo.editCourse(event.courseId, courseRequest);
       final list = await _repo.getAllCourses('');
-      emit(AdminCoursesBlocState.idle(courses: list));
+      emit(AdminCoursesState.idle(courses: list));
     } on Object catch (e, st) {
       emit(
-        AdminCoursesBlocState.error(
+        AdminCoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка изменения курса',
+          event: event,
         ),
       );
       onError(e, st);
@@ -68,19 +67,20 @@ class AdminCoursesBloc
   }
 
   Future<void> _deleteCourse(
-    DeleteCourseEvent e,
-    Emitter<AdminCoursesBlocState> emit,
+    AdminCoursesEvent$DeleteCourse event,
+    Emitter<AdminCoursesState> emit,
   ) async {
-    emit(AdminCoursesBlocState.loading(courses: state.courses));
+    emit(AdminCoursesState.loading(courses: state.courses));
     try {
-      await _repo.deleteCourse(e.courseId);
+      await _repo.deleteCourse(event.courseId);
       final list = await _repo.getAllCourses('');
-      emit(AdminCoursesBlocState.idle(courses: list));
+      emit(AdminCoursesState.idle(courses: list));
     } on Object catch (e, st) {
       emit(
-        AdminCoursesBlocState.error(
+        AdminCoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка удаления курса',
+          event: event,
         ),
       );
       onError(e, st);
