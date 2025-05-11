@@ -26,8 +26,8 @@ class MaterialContext extends StatelessWidget {
       // theme: lightTheme,
       // darkTheme: darkTheme,
       // themeMode: themeMode,
-      localizationsDelegates: Localization.localizationDelegates,
-      supportedLocales: Localization.supportedLocales,
+      // localizationsDelegates: Localization.localizationDelegates,
+      // supportedLocales: Localization.supportedLocales,
       routerConfig: AppRouter.router,
       builder: (context, child) => MediaQuery(
         key: _globalKey,
