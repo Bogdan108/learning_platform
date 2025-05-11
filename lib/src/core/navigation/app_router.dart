@@ -5,6 +5,7 @@ import 'package:learning_platform/src/core/root_screen/user_root_screen.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
+import 'package:learning_platform/src/feature/assignment/widget/student_assignments_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
@@ -14,6 +15,7 @@ import 'package:learning_platform/src/feature/courses/widget/courses_page.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 import 'package:learning_platform/src/feature/profile/widget/edit_profile_page.dart';
 import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';
+import 'package:learning_platform/src/feature/task/widget/answer_tasks_page.dart';
 import 'package:learning_platform/src/feature/task/widget/assignment_answers_page.dart';
 import 'package:learning_platform/src/feature/task/widget/evaluate_assignment_page.dart';
 import 'package:learning_platform/src/feature/task/widget/task_page.dart';
@@ -52,7 +54,7 @@ class AppRouter {
         ),
         routes: [
           GoRoute(
-            name: 'valideteCode',
+            name: 'validateCode',
             path: 'validate_code',
             builder: (context, state) {
               final data = state.extra! as Map<String, String>;
@@ -68,6 +70,55 @@ class AppRouter {
       ),
       StatefulShellRoute.indexedStack(
         branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: 'studentAssignments',
+                path: '/student_assignments',
+                pageBuilder: (context, state) => CustomTransitionPage<void>(
+                  key: state.pageKey,
+                  child: const StudentAssignmentsPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                  transitionDuration: _defaultFadeTransitionDuration,
+                  reverseTransitionDuration: _defaultFadeTransitionDuration,
+                ),
+                routes: [
+                  GoRoute(
+                    name: 'studentEvaluateAnswers',
+                    path: 'student_evaluate_answers/:answerId',
+                    builder: (ctx, state) {
+                      final answerId = state.pathParameters['answerId']!;
+                      final title = state.extra! as String;
+
+                      // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
+                      return EvaluateAssignmentPage(
+                        answerId: answerId,
+                        assignmentId: '1',
+                        title: title,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: 'answerAssignment',
+                    path: 'answer_assignment/:assignmentId',
+                    builder: (ctx, state) {
+                      final assignmentId =
+                          state.pathParameters['assignmentId']!;
+                      final title = state.extra! as String;
+
+                      // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
+                      return AnswerTasksPage(
+                        assignmentId: assignmentId,
+                        title: title,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -126,7 +177,7 @@ class AppRouter {
                         routes: [
                           GoRoute(
                             name: 'evaluateAnswers',
-                            path: 'evaluateAnswers/:answerId',
+                            path: 'evaluate_answers/:answerId',
                             builder: (ctx, state) {
                               final answerId =
                                   state.pathParameters['answerId']!;

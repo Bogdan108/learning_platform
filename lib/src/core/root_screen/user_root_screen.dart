@@ -15,8 +15,18 @@ class UserRootScreen extends StatelessWidget {
         body: navigationShell,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Курсы'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.done_outline_sharp),
+              label: 'Задания',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Курсы',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Профиль',
+            ),
           ],
           currentIndex: navigationShell.currentIndex,
           onTap: navigationShell.goBranch,
