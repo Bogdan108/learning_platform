@@ -35,7 +35,7 @@ class UserRootScreen extends StatelessWidget {
                   label: 'Задания',
                 ),
               const BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.book),
                 label: 'Курсы',
               ),
               const BottomNavigationBarItem(
