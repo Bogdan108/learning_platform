@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:learning_platform/src/feature/courses/bloc/courses_event.dart';
 import 'package:learning_platform/src/feature/courses/model/course.dart';
 
 part 'courses_state.freezed.dart';
@@ -16,5 +17,6 @@ sealed class CoursesState with _$CoursesState {
   const factory CoursesState.error({
     required String error,
     @Default([]) List<Course> courses,
+    CoursesEvent? event,
   }) = CoursesState$Error;
 }

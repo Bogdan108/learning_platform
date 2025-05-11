@@ -48,14 +48,14 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
           courses: courses,
         ),
       );
-    } on Object catch (e, st) {
+    } on Object catch (_) {
       emit(
         CoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка создания курса',
+          event: event,
         ),
       );
-      onError(e, st);
     }
   }
 
@@ -84,14 +84,14 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
           courses: courses,
         ),
       );
-    } on Object catch (e, st) {
+    } on Object catch (_) {
       emit(
         CoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка изменения курса',
+          event: event,
         ),
       );
-      onError(e, st);
     }
   }
 
@@ -117,14 +117,14 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
           courses: courses,
         ),
       );
-    } on Object catch (e, st) {
+    } on Object catch (_) {
       emit(
         CoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка удаления курса',
+          event: event,
         ),
       );
-      onError(e, st);
     }
   }
 
@@ -152,14 +152,14 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
           courses: courses,
         ),
       );
-    } on Object catch (e, st) {
+    } on Object catch (_) {
       emit(
         CoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка загрузки курсов',
+          event: event,
         ),
       );
-      onError(e, st);
     }
   }
 
@@ -185,14 +185,14 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
           courses: courses,
         ),
       );
-    } on Object catch (e, st) {
+    } on Object catch (_) {
       emit(
         CoursesState.error(
           courses: state.courses,
-          error: e.toString(),
+          error: 'Ошибка записи на курс',
+          event: event,
         ),
       );
-      onError(e, st);
     }
   }
 }
