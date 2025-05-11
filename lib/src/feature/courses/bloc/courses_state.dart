@@ -1,20 +1,20 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:learning_platform/src/feature/courses/model/course.dart';
 
-part 'courses_bloc_state.freezed.dart';
+part 'courses_state.freezed.dart';
 
 @freezed
-sealed class CoursesBlocState with _$CoursesBlocState {
-  const factory CoursesBlocState.idle({
+sealed class CoursesState with _$CoursesState {
+  const factory CoursesState.idle({
     @Default([]) List<Course> courses,
-  }) = Idle;
+  }) = CoursesState$Idle;
 
-  const factory CoursesBlocState.loading({
+  const factory CoursesState.loading({
     @Default([]) List<Course> courses,
-  }) = Loading;
+  }) = CoursesState$Loading;
 
-  const factory CoursesBlocState.error({
+  const factory CoursesState.error({
     required String error,
     @Default([]) List<Course> courses,
-  }) = Error;
+  }) = CoursesState$Error;
 }

@@ -1,58 +1,56 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.dart';
-import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
+import 'package:learning_platform/src/feature/courses/bloc/courses_event.dart';
+import 'package:learning_platform/src/feature/courses/bloc/courses_state.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/i_courses_repository.dart';
 import 'package:learning_platform/src/feature/courses/model/course_request.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
-class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
-    with SetStateMixin {
+class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
   final ICoursesRepository _coursesRepository;
 
   CoursesBloc({
     required CoursesRepository coursesRepository,
-    CoursesBlocState? initialState,
+    CoursesState? initialState,
   })  : _coursesRepository = coursesRepository,
-        super(initialState ?? const CoursesBlocState.idle()) {
-    on<CoursesBlocEvent>(
+        super(initialState ?? const CoursesState.idle()) {
+    on<CoursesEvent>(
       (event, emit) => switch (event) {
-        FetchCoursesEvent() => _fetchCourses(event, emit),
-        CreateCourseEvent() => _createCourse(event, emit),
-        EditCourseEvent() => _editCourse(event, emit),
-        DeleteCourseEvent() => _deleteCourse(event, emit),
-        EnrollCourseEvent() => _enrollCourse(event, emit),
+        CoursesEvent$FetchCourses() => _fetchCourses(event, emit),
+        CoursesEvent$CreateCourse() => _createCourse(event, emit),
+        CoursesEvent$EditCourse() => _editCourse(event, emit),
+        CoursesEvent$DeleteCourse() => _deleteCourse(event, emit),
+        CoursesEvent$EnrollCourse() => _enrollCourse(event, emit),
       },
     );
   }
 
   Future<void> _createCourse(
-    CreateCourseEvent event,
-    Emitter<CoursesBlocState> emit,
+    CoursesEvent$CreateCourse event,
+    Emitter<CoursesState> emit,
   ) async {
     emit(
-      CoursesBlocState.loading(
+      CoursesState.loading(
         courses: state.courses,
       ),
     );
 
     try {
-      final courseRequest =
-          CourseRequest(name: event.name, description: event.description);
+      final courseRequest = CourseRequest(name: event.name, description: event.description);
       await _coursesRepository.createCourse(courseRequest);
 
       final courses = await _coursesRepository.getTeacherCourses(
         '',
       );
       emit(
-        CoursesBlocState.idle(
+        CoursesState.idle(
           courses: courses,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        CoursesBlocState.error(
+        CoursesState.error(
           courses: state.courses,
           error: e.toString(),
         ),
@@ -62,18 +60,17 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
   }
 
   Future<void> _editCourse(
-    EditCourseEvent event,
-    Emitter<CoursesBlocState> emit,
+    CoursesEvent$EditCourse event,
+    Emitter<CoursesState> emit,
   ) async {
     emit(
-      CoursesBlocState.loading(
+      CoursesState.loading(
         courses: state.courses,
       ),
     );
 
     try {
-      final courseRequest =
-          CourseRequest(name: event.name, description: event.description);
+      final courseRequest = CourseRequest(name: event.name, description: event.description);
       await _coursesRepository.editCourse(
         event.courseId,
         courseRequest,
@@ -83,13 +80,13 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
         '',
       );
       emit(
-        CoursesBlocState.idle(
+        CoursesState.idle(
           courses: courses,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        CoursesBlocState.error(
+        CoursesState.error(
           courses: state.courses,
           error: e.toString(),
         ),
@@ -99,11 +96,11 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
   }
 
   Future<void> _deleteCourse(
-    DeleteCourseEvent event,
-    Emitter<CoursesBlocState> emit,
+    CoursesEvent$DeleteCourse event,
+    Emitter<CoursesState> emit,
   ) async {
     emit(
-      CoursesBlocState.loading(
+      CoursesState.loading(
         courses: state.courses,
       ),
     );
@@ -116,13 +113,13 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
         '',
       );
       emit(
-        CoursesBlocState.idle(
+        CoursesState.idle(
           courses: courses,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        CoursesBlocState.error(
+        CoursesState.error(
           courses: state.courses,
           error: e.toString(),
         ),
@@ -132,11 +129,11 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
   }
 
   Future<void> _fetchCourses(
-    FetchCoursesEvent event,
-    Emitter<CoursesBlocState> emit,
+    CoursesEvent$FetchCourses event,
+    Emitter<CoursesState> emit,
   ) async {
     emit(
-      CoursesBlocState.loading(
+      CoursesState.loading(
         courses: state.courses,
       ),
     );
@@ -151,13 +148,13 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
           ),
       };
       emit(
-        CoursesBlocState.idle(
+        CoursesState.idle(
           courses: courses,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        CoursesBlocState.error(
+        CoursesState.error(
           courses: state.courses,
           error: e.toString(),
         ),
@@ -167,11 +164,11 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
   }
 
   Future<void> _enrollCourse(
-    EnrollCourseEvent event,
-    Emitter<CoursesBlocState> emit,
+    CoursesEvent$EnrollCourse event,
+    Emitter<CoursesState> emit,
   ) async {
     emit(
-      CoursesBlocState.loading(
+      CoursesState.loading(
         courses: state.courses,
       ),
     );
@@ -184,13 +181,13 @@ class CoursesBloc extends Bloc<CoursesBlocEvent, CoursesBlocState>
         '',
       );
       emit(
-        CoursesBlocState.idle(
+        CoursesState.idle(
           courses: courses,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        CoursesBlocState.error(
+        CoursesState.error(
           courses: state.courses,
           error: e.toString(),
         ),

@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
 import 'package:learning_platform/src/common/widget/custom_search_field.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc.dart';
-import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_event.dart';
-import 'package:learning_platform/src/feature/courses/bloc/courses_bloc_state.dart';
+import 'package:learning_platform/src/feature/courses/bloc/courses_event.dart';
+import 'package:learning_platform/src/feature/courses/bloc/courses_state.dart';
 import 'package:learning_platform/src/feature/courses/data/data_source/courses_data_source.dart';
 import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
 import 'package:learning_platform/src/feature/courses/widget/components/create_course_dialog.dart';
@@ -43,13 +43,12 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
         tokenStorage: depsScope.tokenStorage,
         orgIdStorage: depsScope.organizationIdStorage,
       ),
-    )..add(CoursesBlocEvent.fetchCourses(role: profileRole, searchQuery: ''));
+    )..add(CoursesEvent.fetchCourses(role: profileRole, searchQuery: ''));
     _searchController = TextEditingController();
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<ProfileBloc, ProfileBlocState>(
+  Widget build(BuildContext context) => BlocBuilder<ProfileBloc, ProfileBlocState>(
         bloc: _profileBloc,
         builder: (context, profileState) {
           final role = profileState.profileInfo.role;
@@ -69,7 +68,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                     hintText: 'Поиск',
                     controller: _searchController,
                     onChanged: (value) => _coursesBloc.add(
-                      CoursesBlocEvent.fetchCourses(
+                      CoursesEvent.fetchCourses(
                         role: profileState.profileInfo.role,
                         searchQuery: value,
                       ),
@@ -77,7 +76,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                   ),
                 ),
                 Expanded(
-                  child: BlocBuilder<CoursesBloc, CoursesBlocState>(
+                  child: BlocBuilder<CoursesBloc, CoursesState>(
                     bloc: _coursesBloc,
                     builder: (context, state) => ListView.separated(
                       itemCount: state.courses.length + 1,
@@ -97,9 +96,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                     child: CustomElevatedButton(
                                       title: 'Добавить курс',
                                       onPressed: () => CreateCourseDialog(
-                                        onCreateCallBack: (name, description) =>
-                                            _coursesBloc.add(
-                                          CoursesBlocEvent.createCourse(
+                                        onCreateCallBack: (name, description) => _coursesBloc.add(
+                                          CoursesEvent.createCourse(
                                             name: name,
                                             description: description,
                                           ),
@@ -120,7 +118,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                           name,
                                         ) =>
                                             _coursesBloc.add(
-                                          CoursesBlocEvent.enrollCourse(
+                                          CoursesEvent.enrollCourse(
                                             courseId: name,
                                           ),
                                         ),
@@ -145,8 +143,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       course.name,
@@ -177,9 +174,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                       children: [
                                         TextButton(
                                           onPressed: () => DeleteCourseDialog(
-                                            onTapCallback: () =>
-                                                _coursesBloc.add(
-                                              CoursesBlocEvent.deleteCourse(
+                                            onTapCallback: () => _coursesBloc.add(
+                                              CoursesEvent.deleteCourse(
                                                 courseId: course.id,
                                               ),
                                             ),
@@ -192,20 +188,16 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                         IconButton(
                                           onPressed: () => EditCourseDialog(
                                             initialName: course.name,
-                                            initialDescription:
-                                                course.description,
-                                            onSaveCallback:
-                                                (name, description) =>
-                                                    _coursesBloc.add(
-                                              CoursesBlocEvent.editCourse(
+                                            initialDescription: course.description,
+                                            onSaveCallback: (name, description) => _coursesBloc.add(
+                                              CoursesEvent.editCourse(
                                                 courseId: course.id,
                                                 name: name,
                                                 description: description,
                                               ),
                                             ),
                                           ).show(context),
-                                          icon:
-                                              const Icon(Icons.edit, size: 15),
+                                          icon: const Icon(Icons.edit, size: 15),
                                         ),
                                       ],
                                     ),
