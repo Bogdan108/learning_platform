@@ -1,51 +1,53 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_bloc_event.dart';
-import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_bloc_state.dart';
+import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_event.dart';
+import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_state.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/i_admin_repository.dart';
 import 'package:learning_platform/src/feature/admin/model/user_role_request.dart';
 
-class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
-    with SetStateMixin {
+class AdminUsersBloc extends Bloc<AdminUsersEvent, AdminUsersState> with SetStateMixin {
   final IAdminRepository _repo;
 
   AdminUsersBloc({
     required IAdminRepository repository,
-    AdminUsersBlocState? initialState,
+    AdminUsersState? initialState,
   })  : _repo = repository,
         super(
-          initialState ?? const AdminUsersBlocState.idle(),
+          initialState ?? const AdminUsersState.idle(),
         ) {
-    on<AdminUsersBlocEvent>(
+    on<AdminUsersEvent>(
       (event, emit) => switch (event) {
-        FetchUsersEvent() => _fetchUsers(event, emit),
-        ChangeUserRoleEvent() => _changeUserRole(event, emit),
-        DeleteUserEvent() => _deleteUser(event, emit),
+        AdminUsersEvent$FetchUsers() => _fetchUsers(event, emit),
+        AdminUsersEvent$ChangeUserRole() => _changeUserRole(event, emit),
+        AdminUsersEvent$DeleteUser() => _deleteUser(event, emit),
       },
     );
   }
 
   Future<void> _fetchUsers(
-    FetchUsersEvent e,
-    Emitter<AdminUsersBlocState> emit,
+    AdminUsersEvent$FetchUsers event,
+    Emitter<AdminUsersState> emit,
   ) async {
     emit(
-      AdminUsersBlocState.loading(
+      AdminUsersState.loading(
         users: state.users,
       ),
     );
     try {
-      final list = await _repo.getUsers(e.searchQuery);
+      final list = await _repo.getUsers(
+        event.searchQuery,
+      );
       emit(
-        AdminUsersBlocState.idle(
+        AdminUsersState.idle(
           users: list,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        AdminUsersBlocState.error(
+        AdminUsersState.error(
           users: state.users,
-          error: e.toString(),
+          error: 'Ошибка загрузки пользователей',
+          event: event,
         ),
       );
       onError(e, st);
@@ -53,28 +55,32 @@ class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
   }
 
   Future<void> _changeUserRole(
-    ChangeUserRoleEvent e,
-    Emitter<AdminUsersBlocState> emit,
+    AdminUsersEvent$ChangeUserRole event,
+    Emitter<AdminUsersState> emit,
   ) async {
     emit(
-      AdminUsersBlocState.loading(
+      AdminUsersState.loading(
         users: state.users,
       ),
     );
     try {
-      final userRoleRequest = UserRoleRequest(id: e.userId, role: e.role);
+      final userRoleRequest = UserRoleRequest(
+        id: event.userId,
+        role: event.role,
+      );
       await _repo.changeUserRole(userRoleRequest);
       final list = await _repo.getUsers('');
       emit(
-        AdminUsersBlocState.idle(
+        AdminUsersState.idle(
           users: list,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        AdminUsersBlocState.error(
+        AdminUsersState.error(
           users: state.users,
-          error: e.toString(),
+          error: 'Ошибка изменения роли пользователя',
+          event: event,
         ),
       );
       onError(e, st);
@@ -82,27 +88,28 @@ class AdminUsersBloc extends Bloc<AdminUsersBlocEvent, AdminUsersBlocState>
   }
 
   Future<void> _deleteUser(
-    DeleteUserEvent e,
-    Emitter<AdminUsersBlocState> emit,
+    AdminUsersEvent$DeleteUser event,
+    Emitter<AdminUsersState> emit,
   ) async {
     emit(
-      AdminUsersBlocState.loading(
+      AdminUsersState.loading(
         users: state.users,
       ),
     );
     try {
-      await _repo.deleteUser(e.userId);
+      await _repo.deleteUser(event.userId);
       final list = await _repo.getUsers('');
       emit(
-        AdminUsersBlocState.idle(
+        AdminUsersState.idle(
           users: list,
         ),
       );
     } on Object catch (e, st) {
       emit(
-        AdminUsersBlocState.error(
+        AdminUsersState.error(
           users: state.users,
-          error: e.toString(),
+          error: 'Ошибка удаления пользователя',
+          event: event,
         ),
       );
       onError(e, st);
