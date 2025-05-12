@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/task/bloc/answer_tasks_bloc/answer_tasks_bloc.dart';
@@ -160,16 +161,13 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
           bloc: _bloc,
           builder: (ctx, state) {
             if (state is AnswerTasksState$Error) {
-              return Center(child: Text(state.error));
+              return CustomErrorWidget(
+                errorMessage: state.error,
+                onRetry: state.event != null ? () => _bloc.add(state.event!) : null,
+              );
             }
 
             final tasks = state.tasks;
-
-            if (state.tasks.isEmpty && state is AnswerTasksState$Loading) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
             return Stack(
               children: [
                 Column(

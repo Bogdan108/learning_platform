@@ -41,8 +41,9 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
     } catch (err, st) {
       emit(
         EvaluateTasksState.error(
-          message: err.toString(),
+          message: 'Ошибка загрузки заданий',
           evaluateAnswers: state.evaluateAnswers,
+          event: event,
         ),
       );
       onError(err, st);
@@ -79,16 +80,18 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
       // emit(
       //   EvaluateAnswersBlocState.idle(evaluateAnswers: list),
       // );
-
       emit(
         EvaluateTasksState.idle(
           evaluateAnswers: state.evaluateAnswers,
         ),
       );
     } catch (err, st) {
-      EvaluateTasksState.error(
-        message: err.toString(),
-        evaluateAnswers: state.evaluateAnswers,
+      emit(
+        EvaluateTasksState.error(
+          message: 'Ошибка оценки задания ${event.answerId}',
+          evaluateAnswers: state.evaluateAnswers,
+          event: event,
+        ),
       );
 
       onError(err, st);

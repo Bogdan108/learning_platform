@@ -36,6 +36,7 @@ class AnswerTasksBloc extends Bloc<AnswerTasksEvent, AnswerTasksState> with SetS
         AnswerTasksState.error(
           error: 'Ошибка при загрузке списка заданий',
           tasks: state.tasks,
+          event: event,
         ),
       );
       onError(err, st);
@@ -64,6 +65,7 @@ class AnswerTasksBloc extends Bloc<AnswerTasksEvent, AnswerTasksState> with SetS
         AnswerTasksState.error(
           error: 'Ошибка при отправке текста ответа',
           tasks: state.tasks,
+          event: event,
         ),
       );
     }
@@ -92,6 +94,7 @@ class AnswerTasksBloc extends Bloc<AnswerTasksEvent, AnswerTasksState> with SetS
         AnswerTasksState.error(
           error: 'Ошибка при отправке файла с ответом',
           tasks: state.tasks,
+          event: event,
         ),
       );
     }

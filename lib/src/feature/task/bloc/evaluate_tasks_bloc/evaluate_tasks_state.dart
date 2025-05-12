@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_event.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 
 part 'evaluate_tasks_state.freezed.dart';
@@ -16,5 +17,6 @@ sealed class EvaluateTasksState with _$EvaluateTasksState {
   const factory EvaluateTasksState.error({
     required String message,
     required EvaluateAnswers evaluateAnswers,
+    EvaluateTasksEvent? event,
   }) = EvaluateTasksState$Error;
 }

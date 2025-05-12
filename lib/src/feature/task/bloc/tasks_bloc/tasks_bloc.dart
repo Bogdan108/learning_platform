@@ -4,8 +4,7 @@ import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_ev
 import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_state.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 
-class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
-    with SetStateMixin {
+class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin {
   final ITasksRepository _tasksRepository;
 
   TasksBloc({required ITasksRepository tasksRepository})
@@ -24,96 +23,134 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
   }
 
   Future<void> _onFetch(
-    FetchTasks e,
+    FetchTasks event,
     Emitter<TasksBlocState> emit,
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      final list = await _tasksRepository.listTasks(e.assignmentId);
+      final list = await _tasksRepository.listTasks(
+        event.assignmentId,
+      );
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
-      emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
+      emit(TasksBlocState.error(
+        error: 'Ошибка загрузки задач',
+        tasks: state.tasks,
+        event: event,
+      ));
       onError(err, st);
     }
   }
 
   Future<void> _onCreate(
-    CreateTask e,
+    CreateTask event,
     Emitter<TasksBlocState> emit,
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      final taskId = await _tasksRepository.createTask(e.assignmentId, e.req);
+      final taskId = await _tasksRepository.createTask(
+        event.assignmentId,
+        event.req,
+      );
 
-      final taskFile = e.file;
+      final taskFile = event.file;
       if (taskFile != null) {
         await _tasksRepository.addQuestionFile(taskId, taskFile);
       }
 
-      final list = await _tasksRepository.listTasks(e.assignmentId);
+      final list = await _tasksRepository.listTasks(
+        event.assignmentId,
+      );
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
-      emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
+      emit(TasksBlocState.error(
+        error: 'Ошибка создания задачи',
+        tasks: state.tasks,
+        event: event,
+      ));
       onError(err, st);
     }
   }
 
   Future<void> _onDelete(
-    DeleteTask e,
+    DeleteTask event,
     Emitter<TasksBlocState> emit,
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      await _tasksRepository.deleteTask(e.taskId);
-      final list = await _tasksRepository.listTasks(e.assignmentId);
+      await _tasksRepository.deleteTask(event.taskId);
+      final list = await _tasksRepository.listTasks(
+        event.assignmentId,
+      );
       emit(TasksBlocState.idle(tasks: list));
     } catch (err, st) {
-      emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
+      emit(TasksBlocState.error(
+        error: 'Ошибка удаления задачи',
+        tasks: state.tasks,
+        event: event,
+      ));
       onError(err, st);
     }
   }
 
   Future<void> _onAddFile(
-    AddFileToTask e,
+    AddFileToTask event,
     Emitter<TasksBlocState> emit,
   ) async {
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
-      await _tasksRepository.addQuestionFile(e.taskId, e.file);
+      await _tasksRepository.addQuestionFile(
+        event.taskId,
+        event.file,
+      );
       emit(TasksBlocState.idle(tasks: state.tasks));
     } catch (err, st) {
-      emit(TasksBlocState.error(error: err.toString(), tasks: state.tasks));
+      emit(TasksBlocState.error(
+        error: 'Ошибка прикрепления файла',
+        tasks: state.tasks,
+        event: event,
+      ));
       onError(err, st);
     }
   }
 
   Future<void> _onAnswerText(
-    AnswerText e,
+    AnswerText event,
     Emitter<TasksBlocState> emit,
   ) async {
     try {
-      await _tasksRepository.answerText(e.assignmentId, e.taskId, e.text);
+      await _tasksRepository.answerText(
+        event.assignmentId,
+        event.taskId,
+        event.text,
+      );
     } catch (err) {
       emit(
         TasksBlocState.error(
           error: 'Ошибка при отправке ответа',
           tasks: state.tasks,
+          event: event,
         ),
       );
     }
   }
 
   Future<void> _onAnswerFile(
-    AnswerFile e,
+    AnswerFile event,
     Emitter<TasksBlocState> emit,
   ) async {
     try {
-      await _tasksRepository.answerFile(e.assignmentId, e.taskId, e.file);
+      await _tasksRepository.answerFile(
+        event.assignmentId,
+        event.taskId,
+        event.file,
+      );
     } catch (err) {
       emit(
         TasksBlocState.error(
           error: 'Ошибка при отправке ответа',
           tasks: state.tasks,
+          event: event,
         ),
       );
     }

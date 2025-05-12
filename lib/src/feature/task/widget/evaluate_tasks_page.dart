@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_assignment_bloc.dart';
 import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_event.dart';
@@ -55,88 +55,38 @@ class _EvaluateTasksPageState extends State<EvaluateTasksPage> {
           appBar: AppBar(title: Text(widget.title)),
           body: BlocBuilder<EvaluateTasksBloc, EvaluateTasksState>(
             bloc: _bloc,
-            builder: (_, state) {
-              switch (state) {
-                case EvaluateTasksState$Loading():
-                  return Stack(
-                    children: [
-                      ListView.separated(
-                        padding: EdgeInsets.zero,
-                        separatorBuilder: (context, index) => const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Divider(color: Colors.blue, height: 1),
-                        ),
-                        itemCount: state.evaluateAnswers.evaluateTasks.length,
-                        itemBuilder: (_, index) {
-                          final task = state.evaluateAnswers.evaluateTasks[index];
-
-                          return EvaluateTaskTile(
-                            number: index + 1,
-                            task: task,
-                            tasksRepository: tasksRepository,
-                            onDeleteTask: () => {},
-                          );
-                        },
+            builder: (_, state) => switch (state) {
+              EvaluateTasksState$Error() => CustomErrorWidget(
+                  errorMessage: state.message,
+                  onRetry: state.event != null ? () => _bloc.add(state.event!) : null,
+                ),
+              _ => Stack(
+                  children: [
+                    ListView.separated(
+                      padding: EdgeInsets.zero,
+                      separatorBuilder: (context, index) => const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(color: Colors.blue, height: 1),
                       ),
+                      itemCount: state.evaluateAnswers.evaluateTasks.length,
+                      itemBuilder: (_, index) {
+                        final task = state.evaluateAnswers.evaluateTasks[index];
+
+                        return EvaluateTaskTile(
+                          number: index + 1,
+                          task: task,
+                          tasksRepository: tasksRepository,
+                          onDeleteTask: () => {},
+                        );
+                      },
+                    ),
+                    if (state is EvaluateTasksState$Loading)
                       const Center(
                         child: CircularProgressIndicator.adaptive(),
                       ),
-                    ],
-                  );
-                case EvaluateTasksState$Error():
-                  return _ErrorView(
-                    message: state.message,
-                    onRetry: () => {},
-                  );
-                case EvaluateTasksState$Idle():
-                  return Stack(
-                    children: [
-                      ListView.separated(
-                        padding: EdgeInsets.zero,
-                        separatorBuilder: (context, index) => const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Divider(color: Colors.blue, height: 1),
-                        ),
-                        itemCount: state.evaluateAnswers.evaluateTasks.length,
-                        itemBuilder: (_, index) {
-                          final task = state.evaluateAnswers.evaluateTasks[index];
-
-                          return EvaluateTaskTile(
-                            number: index + 1,
-                            task: task,
-                            tasksRepository: tasksRepository,
-                            onDeleteTask: () => {},
-                          );
-                        },
-                      ),
-                    ],
-                  );
-              }
+                  ],
+                ),
             },
-          ),
-        ),
-      );
-}
-
-class _ErrorView extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
-
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Ошибка: $message', textAlign: TextAlign.center),
-              const SizedBox(height: 12),
-              CustomElevatedButton(
-                onPressed: onRetry,
-                title: 'Повторить',
-              ),
-            ],
           ),
         ),
       );
