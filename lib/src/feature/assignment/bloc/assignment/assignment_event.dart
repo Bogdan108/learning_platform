@@ -1,27 +1,27 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 
-part 'assignment_bloc_event.freezed.dart';
+part 'assignment_event.freezed.dart';
 
 @freezed
-sealed class AssignmentBlocEvent with _$AssignmentBlocEvent {
-  const factory AssignmentBlocEvent.fetch({
+sealed class AssignmentEvent with _$AssignmentEvent {
+  const factory AssignmentEvent.fetch({
     required String courseId,
-  }) = FetchEvent;
+  }) = AssignmentEvent$Fetch;
 
-  const factory AssignmentBlocEvent.create({
+  const factory AssignmentEvent.create({
     required String courseId,
     required AssignmentRequest request,
-  }) = CreateEvent;
+  }) = AssignmentEvent$Create;
 
-  const factory AssignmentBlocEvent.edit({
+  const factory AssignmentEvent.edit({
     required String assignmentId,
     required String courseId,
     required AssignmentRequest request,
-  }) = EditEvent;
+  }) = AssignmentEvent$Edit;
 
-  const factory AssignmentBlocEvent.delete({
+  const factory AssignmentEvent.delete({
     required String assignmentId,
     required String courseId,
-  }) = DeleteEvent;
+  }) = AssignmentEvent$Delete;
 }

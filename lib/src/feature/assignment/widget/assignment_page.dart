@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_event.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_state.dart'
-    as assignment;
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_event.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_state.dart';
 import 'package:learning_platform/src/feature/assignment/data/data_source/assignment_data_source.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/assignment_repository.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_status.dart';
@@ -27,6 +27,8 @@ class AssignmentsPage extends StatefulWidget {
 
 class _State extends State<AssignmentsPage> {
   late final AssignmentBloc _assignmentBloc;
+  late final ScrollController _scrollController;
+  final _scrollThreshold = 80.0;
 
   @override
   void initState() {
@@ -38,7 +40,25 @@ class _State extends State<AssignmentsPage> {
         tokenStorage: depsScope.tokenStorage,
         orgIdStorage: depsScope.organizationIdStorage,
       ),
-    )..add(AssignmentBlocEvent.fetch(courseId: widget.courseId));
+    )..add(AssignmentEvent.fetch(courseId: widget.courseId));
+    _scrollController = ScrollController()..addListener(_handleRefresh);
+  }
+
+  void _handleRefresh() {
+    final pos = _scrollController.position;
+    if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
+        _assignmentBloc.state is! AssignmentState$Loading) {
+      _assignmentBloc.add(
+        AssignmentEvent.fetch(courseId: widget.courseId),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _assignmentBloc.close();
+    super.dispose();
   }
 
   @override
@@ -53,110 +73,119 @@ class _State extends State<AssignmentsPage> {
 
         return Scaffold(
           appBar: AppBar(title: const Text('Задания'), centerTitle: true),
-          body: BlocBuilder<AssignmentBloc, assignment.AssignmentBlocState>(
+          body: BlocBuilder<AssignmentBloc, AssignmentState>(
             bloc: _assignmentBloc,
             builder: (context, state) => switch (state) {
-              assignment.Loading() => const Center(child: CircularProgressIndicator()),
-              assignment.Idle(items: final items) ||
-              assignment.Error(items: final items, error: _) =>
-                ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: isTeacher ? items.length + 1 : items.length,
-                  itemBuilder: (_, index) {
-                    if (index == items.length) {
-                      return Center(
-                        child: CustomElevatedButton(
-                          onPressed: () => CreateEditAssignmentDialog(
+              AssignmentState$Error() => CustomErrorWidget(
+                  errorMessage: state.error,
+                  onRetry: state.event != null ? () => _assignmentBloc.add(state.event!) : null,
+                ),
+              _ => Stack(children: [
+                  ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    controller: _scrollController,
+                    padding: EdgeInsets.zero,
+                    itemCount: isTeacher ? state.items.length + 1 : state.items.length,
+                    itemBuilder: (_, index) {
+                      if (index == state.items.length) {
+                        return Center(
+                          child: CustomElevatedButton(
+                            onPressed: () => CreateEditAssignmentDialog(
+                              title: 'Добавить задание',
+                              onSave: (req) => _assignmentBloc.add(
+                                AssignmentEvent.create(
+                                  courseId: widget.courseId,
+                                  request: req,
+                                ),
+                              ),
+                            ).show(ctx),
                             title: 'Добавить задание',
-                            onSave: (req) => _assignmentBloc.add(
-                              AssignmentBlocEvent.create(
-                                courseId: widget.courseId,
-                                request: req,
-                              ),
-                            ),
-                          ).show(ctx),
-                          title: 'Добавить задание',
+                          ),
+                        );
+                      }
+                      final assignment = state.items[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
                         ),
-                      );
-                    }
-                    final assignment = items[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: AssignmentTile(
-                        assignment: assignment,
-                        trailing: Row(
-                          spacing: 8,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (isTeacher) ...[
-                              GestureDetector(
-                                child: const Icon(Icons.edit),
-                                onTap: () => CreateEditAssignmentDialog(
-                                  title: 'Редактировать задание',
-                                  initialName: assignment.name,
-                                  initialStart: assignment.startedAt,
-                                  initialEnd: assignment.endedAt,
-                                  onSave: (req) => _assignmentBloc.add(
-                                    AssignmentBlocEvent.edit(
-                                      assignmentId: assignment.id,
-                                      courseId: widget.courseId,
-                                      request: req,
+                        child: AssignmentTile(
+                          assignment: assignment,
+                          trailing: Row(
+                            spacing: 8,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isTeacher) ...[
+                                GestureDetector(
+                                  child: const Icon(Icons.edit),
+                                  onTap: () => CreateEditAssignmentDialog(
+                                    title: 'Редактировать задание',
+                                    initialName: assignment.name,
+                                    initialStart: assignment.startedAt,
+                                    initialEnd: assignment.endedAt,
+                                    onSave: (req) => _assignmentBloc.add(
+                                      AssignmentEvent.edit(
+                                        assignmentId: assignment.id,
+                                        courseId: widget.courseId,
+                                        request: req,
+                                      ),
                                     ),
-                                  ),
-                                ).show(ctx),
-                              ),
-                              GestureDetector(
-                                child: const Icon(Icons.delete, color: Colors.red),
-                                onTap: () => DeleteAssignmentDialog(
-                                  onTapCallback: () => _assignmentBloc.add(
-                                    AssignmentBlocEvent.delete(
-                                      assignmentId: assignment.id,
-                                      courseId: widget.courseId,
+                                  ).show(ctx),
+                                ),
+                                GestureDetector(
+                                  child: const Icon(Icons.delete, color: Colors.red),
+                                  onTap: () => DeleteAssignmentDialog(
+                                    onTapCallback: () => _assignmentBloc.add(
+                                      AssignmentEvent.delete(
+                                        assignmentId: assignment.id,
+                                        courseId: widget.courseId,
+                                      ),
                                     ),
-                                  ),
-                                ).show(context),
+                                  ).show(context),
+                                ),
+                              ],
+                              const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.blue,
                               ),
                             ],
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.blue,
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          if (isTeacher) {
-                            context.pushNamed(
-                              'tasks',
-                              pathParameters: {
-                                'courseId': widget.courseId,
-                                'assignmentId': assignment.id,
-                              },
-                            );
-                          } else {
-                            {
-                              if (assignment.status == AssignmentStatus.pending) {
-                                context.pushNamed(
-                                  'answerAssignment',
-                                  pathParameters: {'assignmentId': assignment.id},
-                                  extra: assignment.name,
-                                );
-                              } else {
-                                context.pushNamed(
-                                  'studentEvaluateAnswers',
-                                  pathParameters: {'answerId': assignment.id},
-                                  extra: assignment.name,
-                                );
+                          ),
+                          onTap: () {
+                            if (isTeacher) {
+                              context.pushNamed(
+                                'tasks',
+                                pathParameters: {
+                                  'courseId': widget.courseId,
+                                  'assignmentId': assignment.id,
+                                },
+                              );
+                            } else {
+                              {
+                                if (assignment.status == AssignmentStatus.pending) {
+                                  context.pushNamed(
+                                    'answerAssignment',
+                                    pathParameters: {'assignmentId': assignment.id},
+                                    extra: assignment.name,
+                                  );
+                                } else {
+                                  context.pushNamed(
+                                    'studentEvaluateAnswers',
+                                    pathParameters: {'answerId': assignment.id},
+                                    extra: assignment.name,
+                                  );
+                                }
                               }
                             }
-                          }
-                        },
-                      ),
-                    );
-                  },
-                )
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  if (state is AssignmentState$Loading)
+                    const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    )
+                ])
             },
           ),
         );

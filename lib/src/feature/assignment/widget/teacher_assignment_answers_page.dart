@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment_answers_bloc/teacher_assignment_answers_bloc.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment_answers_bloc/teacher_assignment_answers_event.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment_answers_bloc/teacher_assignment_answers_state.dart';
@@ -19,85 +19,73 @@ class AssignmentAnswersPage extends StatefulWidget {
 }
 
 class _AssignmentAnswersPageState extends State<AssignmentAnswersPage> {
-  late final TeacherAssignmentAnswersBloc _bloc;
+  late final TeacherAssignmentAnswersBloc _teacherAssignmentAnswersBloc;
+  late final ScrollController _scrollController;
+  final _scrollThreshold = 80.0;
 
   @override
   void initState() {
     super.initState();
     final deps = DependenciesScope.of(context);
-    _bloc = TeacherAssignmentAnswersBloc(
+    _teacherAssignmentAnswersBloc = TeacherAssignmentAnswersBloc(
       repository: AssignmentRepository(
         dataSource: AssignmentDataSource(dio: deps.dio),
         tokenStorage: deps.tokenStorage,
         orgIdStorage: deps.organizationIdStorage,
       ),
-    )..add(TeacherAssignmentAnswersEvent.fetch(courseId: widget.courseId));
+    )..add(
+        TeacherAssignmentAnswersEvent.fetch(
+          courseId: widget.courseId,
+        ),
+      );
+    _scrollController = ScrollController()..addListener(_handleRefresh);
+  }
+
+  @override
+  void dispose() {
+    _teacherAssignmentAnswersBloc.close();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _handleRefresh() {
+    final pos = _scrollController.position;
+    if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
+        _teacherAssignmentAnswersBloc.state is! TeacherAssignmentAnswersState$Loading) {
+      _teacherAssignmentAnswersBloc.add(
+        TeacherAssignmentAnswersEvent.fetch(
+          courseId: widget.courseId,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Ответы учеников')),
         body: BlocBuilder<TeacherAssignmentAnswersBloc, TeacherAssignmentAnswersState>(
-          bloc: _bloc,
-          builder: (context, state) {
-            switch (state) {
-              case TeacherAssignmentAnswersState$Loading():
-                return Stack(
-                  children: [
-                    _AnswersList(
-                      data: state.data,
-                      courseId: widget.courseId,
-                    ),
+          bloc: _teacherAssignmentAnswersBloc,
+          builder: (context, state) => switch (state) {
+            TeacherAssignmentAnswersState$Error() => CustomErrorWidget(
+                errorMessage: state.error,
+                onRetry: state.event != null
+                    ? () => _teacherAssignmentAnswersBloc.add(state.event!)
+                    : null,
+              ),
+            _ => Stack(
+                children: [
+                  _AnswersList(
+                    data: state.data,
+                    courseId: widget.courseId,
+                    scrollController: _scrollController,
+                  ),
+                  if (state is TeacherAssignmentAnswersState$Loading)
                     const Center(
                       child: CircularProgressIndicator.adaptive(),
-                    ),
-                  ],
-                );
-              case TeacherAssignmentAnswersState$Error():
-                return _ErrorView(
-                  message: state.error,
-                  onRetry: () => _bloc.add(
-                    TeacherAssignmentAnswersEvent.fetch(courseId: widget.courseId),
-                  ),
-                );
-              case TeacherAssignmentAnswersState$Idle():
-                if (state.data.isEmpty) {
-                  return const Center(child: Text('Пока нет ответов'));
-                }
-                return Stack(
-                  children: [
-                    _AnswersList(
-                      data: state.data,
-                      courseId: widget.courseId,
-                    ),
-                  ],
-                );
-            }
-          },
-        ),
-      );
-}
-
-class _ErrorView extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
-
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Ошибка: $message', textAlign: TextAlign.center),
-              const SizedBox(height: 12),
-              CustomElevatedButton(
-                onPressed: onRetry,
-                title: 'Повторить',
+                    )
+                ],
               ),
-            ],
-          ),
+          },
         ),
       );
 }
@@ -105,14 +93,18 @@ class _ErrorView extends StatelessWidget {
 class _AnswersList extends StatelessWidget {
   final String courseId;
   final List<AssignmentAnswers> data;
+  final ScrollController scrollController;
 
   const _AnswersList({
     required this.data,
     required this.courseId,
+    required this.scrollController,
   });
 
   @override
   Widget build(BuildContext context) => ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: scrollController,
         itemCount: data.length,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         separatorBuilder: (_, __) => const SizedBox(height: 24),

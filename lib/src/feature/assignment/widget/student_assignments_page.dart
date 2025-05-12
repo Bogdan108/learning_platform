@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_bloc.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_event.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_state.dart';
@@ -17,13 +17,15 @@ class StudentAssignmentsPage extends StatefulWidget {
 }
 
 class _StudentAssignmentsPageState extends State<StudentAssignmentsPage> {
-  late final StudentAssignmentsBloc _bloc;
+  late final StudentAssignmentsBloc _studentAssignmentsBloc;
+  late final ScrollController _scrollController;
+  final _scrollThreshold = 80.0;
 
   @override
   void initState() {
     super.initState();
     final deps = DependenciesScope.of(context);
-    _bloc = StudentAssignmentsBloc(
+    _studentAssignmentsBloc = StudentAssignmentsBloc(
       repo: AssignmentRepository(
         dataSource: AssignmentDataSource(dio: deps.dio),
         tokenStorage: deps.tokenStorage,
@@ -32,12 +34,25 @@ class _StudentAssignmentsPageState extends State<StudentAssignmentsPage> {
     )..add(
         const StudentAssignmentsEvent.fetch(),
       );
+
+    _scrollController = ScrollController()..addListener(_handleRefresh);
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _studentAssignmentsBloc.close();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _handleRefresh() {
+    final pos = _scrollController.position;
+    if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
+        _studentAssignmentsBloc.state is! StudentAssignmentsState$Loading) {
+      _studentAssignmentsBloc.add(
+        const StudentAssignmentsEvent.fetch(),
+      );
+    }
   }
 
   @override
@@ -47,49 +62,29 @@ class _StudentAssignmentsPageState extends State<StudentAssignmentsPage> {
           centerTitle: true,
         ),
         body: BlocBuilder<StudentAssignmentsBloc, StudentAssignmentsState>(
-          bloc: _bloc,
-          builder: (context, state) {
-            switch (state.runtimeType) {
-              case const (StudentAssignmentsState$Loading):
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              case StudentAssignmentsState$Error _:
-                final errorState = state as StudentAssignmentsState$Error;
-                return Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Ошибка: ${errorState.error}',
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                      const SizedBox(height: 16),
-                      CustomElevatedButton(
-                        onPressed: () => _bloc.add(
-                          const StudentAssignmentsEvent.fetch(),
-                        ),
-                        title: 'Повторить',
-                      ),
-                    ],
-                  ),
-                );
-              case const (StudentAssignmentsState$Idle):
-                final idleState = state as StudentAssignmentsState$Idle;
-                if (idleState.items.isEmpty) {
-                  return const Center(child: Text('Нет заданий'));
-                }
-                return ListView(
+          bloc: _studentAssignmentsBloc,
+          builder: (context, state) => switch (state) {
+            StudentAssignmentsState$Error() => CustomErrorWidget(
+                errorMessage: state.error,
+                onRetry:
+                    state.event != null ? () => _studentAssignmentsBloc.add(state.event!) : null,
+              ),
+            _ => Stack(children: [
+                ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _scrollController,
                   children: [
-                    for (final course in idleState.items)
+                    for (final course in state.items)
                       StudentAssignmentWidget(
                         course: course,
                       )
                   ],
-                );
-              default:
-                return const SizedBox.shrink();
-            }
+                ),
+                if (state is StudentAssignmentsState$Loading)
+                  const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+              ]),
           },
         ),
       );

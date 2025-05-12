@@ -3,8 +3,7 @@ import 'package:learning_platform/src/feature/assignment/bloc/student_assignment
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_state.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/i_assignment_repository.dart';
 
-class StudentAssignmentsBloc
-    extends Bloc<StudentAssignmentsEvent, StudentAssignmentsState> {
+class StudentAssignmentsBloc extends Bloc<StudentAssignmentsEvent, StudentAssignmentsState> {
   final IAssignmentRepository _repo;
 
   StudentAssignmentsBloc({required IAssignmentRepository repo})
@@ -28,8 +27,9 @@ class StudentAssignmentsBloc
     } catch (e) {
       emit(
         StudentAssignmentsState.error(
-          error: e.toString(),
+          error: 'Ошибка загрузки заданий',
           items: state.items,
+          event: event,
         ),
       );
     }

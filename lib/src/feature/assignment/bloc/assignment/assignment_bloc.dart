@@ -1,76 +1,100 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_event.dart';
-import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc_state.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_event.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_state.dart';
 import 'package:learning_platform/src/feature/assignment/data/repository/i_assignment_repository.dart';
 
-class AssignmentBloc extends Bloc<AssignmentBlocEvent, AssignmentBlocState> {
+class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
   final IAssignmentRepository _repo;
 
   AssignmentBloc({required IAssignmentRepository repo})
       : _repo = repo,
-        super(const AssignmentBlocState.idle(items: [])) {
-    on<AssignmentBlocEvent>(
+        super(const AssignmentState.idle(items: [])) {
+    on<AssignmentEvent>(
       (event, emit) => switch (event) {
-        FetchEvent() => _onFetch(event, emit),
-        CreateEvent() => _onCreate(event, emit),
-        EditEvent() => _onEdit(event, emit),
-        DeleteEvent() => _onDelete(event, emit),
+        AssignmentEvent$Fetch() => _onFetch(event, emit),
+        AssignmentEvent$Create() => _onCreate(event, emit),
+        AssignmentEvent$Edit() => _onEdit(event, emit),
+        AssignmentEvent$Delete() => _onDelete(event, emit),
       },
     );
   }
 
   Future<void> _onFetch(
-    FetchEvent event,
-    Emitter<AssignmentBlocState> emit,
+    AssignmentEvent$Fetch event,
+    Emitter<AssignmentState> emit,
   ) async {
-    emit(AssignmentBlocState.loading(items: state.items));
+    emit(AssignmentState.loading(items: state.items));
     try {
       final items = await _repo.fetchCourseAssignments(event.courseId);
-      emit(AssignmentBlocState.idle(items: items));
+      emit(AssignmentState.idle(items: items));
     } catch (e) {
-      emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
+      emit(
+        AssignmentState.error(
+          error: 'Ошибка загрузки заданий',
+          items: state.items,
+          event: event,
+        ),
+      );
     }
   }
 
   Future<void> _onCreate(
-    CreateEvent event,
-    Emitter<AssignmentBlocState> emit,
+    AssignmentEvent$Create event,
+    Emitter<AssignmentState> emit,
   ) async {
-    emit(AssignmentBlocState.loading(items: state.items));
+    emit(AssignmentState.loading(items: state.items));
     try {
       await _repo.createAssignment(event.courseId, event.request);
       final items = await _repo.fetchCourseAssignments(event.courseId);
-      emit(AssignmentBlocState.idle(items: items));
+      emit(AssignmentState.idle(items: items));
     } catch (e) {
-      emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
+      emit(
+        AssignmentState.error(
+          error: 'Ошибка создания задания',
+          items: state.items,
+          event: event,
+        ),
+      );
     }
   }
 
   Future<void> _onEdit(
-    EditEvent event,
-    Emitter<AssignmentBlocState> emit,
+    AssignmentEvent$Edit event,
+    Emitter<AssignmentState> emit,
   ) async {
-    emit(AssignmentBlocState.loading(items: state.items));
+    emit(AssignmentState.loading(items: state.items));
     try {
       await _repo.editAssignment(event.assignmentId, event.request);
       final items = await _repo.fetchCourseAssignments(event.courseId);
-      emit(AssignmentBlocState.idle(items: items));
+      emit(AssignmentState.idle(items: items));
     } catch (e) {
-      emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
+      emit(
+        AssignmentState.error(
+          error: 'Ошибка изменения задания',
+          items: state.items,
+          event: event,
+        ),
+      );
     }
   }
 
   Future<void> _onDelete(
-    DeleteEvent event,
-    Emitter<AssignmentBlocState> emit,
+    AssignmentEvent$Delete event,
+    Emitter<AssignmentState> emit,
   ) async {
-    emit(AssignmentBlocState.loading(items: state.items));
+    emit(AssignmentState.loading(items: state.items));
     try {
       await _repo.deleteAssignment(event.assignmentId);
       final items = await _repo.fetchCourseAssignments(event.courseId);
-      emit(AssignmentBlocState.idle(items: items));
+      emit(AssignmentState.idle(items: items));
     } catch (e) {
-      emit(AssignmentBlocState.error(error: e.toString(), items: state.items));
+      emit(
+        AssignmentState.error(
+          error: 'Ошибка удаления задания',
+          items: state.items,
+          event: event,
+        ),
+      );
     }
   }
 }

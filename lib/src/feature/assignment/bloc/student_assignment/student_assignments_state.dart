@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_event.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_courses.dart';
 
 part 'student_assignments_state.freezed.dart';
@@ -16,5 +17,6 @@ sealed class StudentAssignmentsState with _$StudentAssignmentsState {
   const factory StudentAssignmentsState.error({
     required String error,
     required List<AssignmentCourses> items,
+    StudentAssignmentsEvent? event,
   }) = StudentAssignmentsState$Error;
 }

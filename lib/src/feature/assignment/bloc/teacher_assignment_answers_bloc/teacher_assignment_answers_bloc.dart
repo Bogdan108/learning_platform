@@ -19,19 +19,20 @@ class TeacherAssignmentAnswersBloc
   }
 
   Future<void> _onFetch(
-    TeacherAssignmentAnswersEvent e,
+    TeacherAssignmentAnswersEvent event,
     Emitter<TeacherAssignmentAnswersState> emit,
   ) async {
     emit(TeacherAssignmentAnswersState.loading(data: state.data));
 
     try {
-      final list = await _assignmentRepository.getAnswersByCourse(e.courseId);
+      final list = await _assignmentRepository.getAnswersByCourse(event.courseId);
       emit(TeacherAssignmentAnswersState.idle(data: list));
     } catch (err, st) {
       emit(
         TeacherAssignmentAnswersState.error(
           error: 'Ошибка при загрузке ответов',
           data: state.data,
+          event: event,
         ),
       );
       onError(err, st);
