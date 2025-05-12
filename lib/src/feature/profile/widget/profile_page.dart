@@ -6,6 +6,7 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
+import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({
@@ -15,6 +16,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileBloc = DependenciesScope.of(context).profileBloc;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Профиль'),
@@ -57,7 +59,11 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 32),
                   TextButton(
                     onPressed: () => context.goNamed(
-                      'edit',
+                      info.role == UserRole.student
+                          ? 'edit'
+                          : info.role == UserRole.admin
+                              ? 'adminEdit'
+                              : 'teacherEdit',
                       extra: state.profileInfo,
                     ),
                     child: const Text(

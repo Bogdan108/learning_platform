@@ -5,11 +5,14 @@ import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/common/widget/text_fields/custom_text_field.dart';
 import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/auth_button.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/change_auth_type_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,11 +23,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late final AuthBloc authBloc;
+  late final ProfileBloc profileBloc;
 
   @override
   void initState() {
     super.initState();
-    authBloc = DependenciesScope.of(context).authBloc;
+    final deps = DependenciesScope.of(context);
+    profileBloc = deps.profileBloc;
+    authBloc = deps.authBloc;
   }
 
   String? username;
@@ -37,8 +43,14 @@ class _LoginPageState extends State<LoginPage> {
         bloc: authBloc,
         listener: (context, state) {
           switch (state) {
-            case Idle(status: AuthenticationStatus.authenticated):
-              context.go('/home');
+            case Success(status: AuthenticationStatus.authenticated):
+              if (profileBloc.state.profileInfo.role == UserRole.admin) {
+                context.goNamed('adminCourses');
+              } else if (profileBloc.state.profileInfo.role == UserRole.student) {
+                context.goNamed('courses');
+              } else {
+                context.goNamed('teacherCourses');
+              }
             case Error(error: final error):
               CustomSnackBar.showError(context, message: error);
             default:
@@ -107,18 +119,12 @@ class _LoginPageState extends State<LoginPage> {
                         title: AppStrings.comeIn,
                         onTap: () {
                           if (formKey.currentState!.validate()) {
-                            // authBloc.add(
-                            //   AuthBlocEvent.signIn(
-                            //     organizationId: organizationId!,
-                            //     email: username!,
-                            //     password: password!,
-                            //   ),
-                            // );
-
-                            context.goNamed('courses');
-                            CustomSnackBar.showSuccessful(
-                              context,
-                              message: 'Успешная авторизация!',
+                            authBloc.add(
+                              AuthBlocEvent.signIn(
+                                organizationId: organizationId ?? '1',
+                                email: username!,
+                                password: password!,
+                              ),
                             );
                           }
                         },

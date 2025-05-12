@@ -41,8 +41,7 @@ class _EmailPageState extends State<EmailPage> {
     super.initState();
     final deps = DependenciesScope.of(context);
     profileBloc = deps.profileBloc;
-    authBloc = DependenciesScope.of(context).authBloc
-      ..add(const AuthBlocEvent.sendEmailCode());
+    authBloc = DependenciesScope.of(context).authBloc..add(const AuthBlocEvent.sendEmailCode());
     _textControllers = List.generate(6, (index) => TextEditingController());
     _focusNodes = List.generate(6, (index) => FocusNode());
   }
@@ -71,8 +70,10 @@ class _EmailPageState extends State<EmailPage> {
               );
               if (profileBloc.state.profileInfo.role == UserRole.admin) {
                 context.goNamed('adminCourses');
-              } else {
+              } else if (profileBloc.state.profileInfo.role == UserRole.student) {
                 context.goNamed('courses');
+              } else {
+                context.goNamed('teacherCourses');
               }
             case Error(error: final error):
               CustomSnackBar.showError(context, message: error);
@@ -111,8 +112,7 @@ class _EmailPageState extends State<EmailPage> {
                             counterText: '',
                           ),
                           onChanged: (value) {
-                            if (value.length == 1 &&
-                                index < _textControllers.length - 1) {
+                            if (value.length == 1 && index < _textControllers.length - 1) {
                               _focusNodes[index + 1].requestFocus();
                             } else if (value.isEmpty && index > 0) {
                               _focusNodes[index - 1].requestFocus();

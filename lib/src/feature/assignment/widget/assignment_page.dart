@@ -153,7 +153,7 @@ class _State extends State<AssignmentsPage> {
                           onTap: () {
                             if (isTeacher) {
                               context.pushNamed(
-                                'tasks',
+                                'teacherTasks',
                                 pathParameters: {
                                   'courseId': widget.courseId,
                                   'assignmentId': assignment.id,

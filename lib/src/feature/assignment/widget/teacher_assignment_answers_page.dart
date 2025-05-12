@@ -135,7 +135,7 @@ class _AnswersList extends StatelessWidget {
               for (final s in answer.students)
                 GestureDetector(
                   onTap: () => context.pushNamed(
-                    'evaluateAnswers',
+                    'teacherEvaluateAnswers',
                     pathParameters: {
                       'answerId': s.answerId,
                       'courseId': courseId,

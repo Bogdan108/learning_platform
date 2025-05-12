@@ -6,12 +6,10 @@ import 'package:learning_platform/src/common/widget/text_fields/custom_text_fiel
 import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
-import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/auth_button.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/change_auth_type_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
-import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -46,17 +44,6 @@ class _RegisterPageState extends State<RegisterPage> {
         bloc: authBloc,
         listener: (context, state) {
           switch (state) {
-            case Idle(status: AuthenticationStatus.authenticated):
-            case Success():
-              CustomSnackBar.showSuccessful(
-                context,
-                message: 'Успешная авторизация!',
-              );
-              if (profileBloc.state.profileInfo.role == UserRole.admin) {
-                context.goNamed('adminCourses');
-              } else {
-                context.goNamed('courses');
-              }
             case Error(error: final error):
               CustomSnackBar.showError(context, message: error);
             default:

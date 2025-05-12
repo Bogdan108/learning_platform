@@ -4,12 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
-import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
-class UserRootScreen extends StatelessWidget {
+class TeacherRootScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  const UserRootScreen({
+  const TeacherRootScreen({
     required this.navigationShell,
     super.key,
   });
@@ -22,29 +21,20 @@ class UserRootScreen extends StatelessWidget {
     return BlocBuilder<ProfileBloc, ProfileBlocState>(
       bloc: profileBloc,
       builder: (context, state) {
-        final userRole = state.profileInfo.role;
-        final isStudent = userRole == UserRole.student;
-
         return Scaffold(
           body: navigationShell,
           bottomNavigationBar: BottomNavigationBar(
-            items: <BottomNavigationBarItem>[
-              if (isStudent)
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.done_outline_sharp),
-                  label: 'Задания',
-                ),
-              const BottomNavigationBarItem(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
                 icon: Icon(Icons.book),
                 label: 'Курсы',
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 label: 'Профиль',
               ),
             ],
-            currentIndex:
-                isStudent ? navigationShell.currentIndex : navigationShell.currentIndex - 1,
+            currentIndex: navigationShell.currentIndex,
             onTap: navigationShell.goBranch,
           ),
         );

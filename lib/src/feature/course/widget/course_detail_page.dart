@@ -35,6 +35,7 @@ class CourseDetailPage extends StatefulWidget {
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
   late final CourseBloc _courseBloc;
+  late final ProfileBloc _profileBloc;
   late final CourseRepository _courseRepository;
 
   @override
@@ -42,6 +43,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     super.initState();
 
     final depsScope = DependenciesScope.of(context);
+    _profileBloc = depsScope.profileBloc;
     _courseRepository = CourseRepository(
       dataSource: CourseDataSource(dio: depsScope.dio),
       tokenStorage: depsScope.tokenStorage,
@@ -305,13 +307,16 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => context.goNamed(
-                          'assignments',
-                          pathParameters: {
-                            'courseId': widget.courseDetails.id,
-                          },
-                          extra: widget.courseDetails,
-                        ),
+                        onTap: () {
+                          final profileRole = _profileBloc.state.profileInfo.role;
+                          context.goNamed(
+                            profileRole == UserRole.student ? 'assignments' : 'teacherAssignments',
+                            pathParameters: {
+                              'courseId': widget.courseDetails.id,
+                            },
+                            extra: widget.courseDetails,
+                          );
+                        },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -337,7 +342,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         ),
                         GestureDetector(
                           onTap: () => context.goNamed(
-                            'answers',
+                            'teacherAnswers',
                             pathParameters: {
                               'courseId': widget.courseDetails.id,
                             },

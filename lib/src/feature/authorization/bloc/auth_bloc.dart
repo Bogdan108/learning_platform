@@ -63,7 +63,6 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
             token: '1',
           ),
         );
-        return;
       } else {
         final token = await _authRepository.login(
           event.organizationId,
@@ -101,18 +100,29 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     );
 
     try {
-      final token = await _authRepository.register(
-        event.organizationId,
-        event.email,
-        event.password,
-        event.userName,
-      );
-      emit(
-        AuthBlocState.idle(
-          status: AuthenticationStatus.authenticated,
-          token: token,
-        ),
-      );
+      // TODO(b.luckyanchuk): remove after test
+      if (event.email == '1' || event.password == 'b') {
+        emit(
+          const AuthBlocState.success(
+            status: AuthenticationStatus.authenticated,
+            token: '1',
+          ),
+        );
+        return;
+      } else {
+        final token = await _authRepository.register(
+          event.organizationId,
+          event.email,
+          event.password,
+          event.userName,
+        );
+        emit(
+          AuthBlocState.idle(
+            status: AuthenticationStatus.authenticated,
+            token: token,
+          ),
+        );
+      }
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(

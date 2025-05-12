@@ -175,10 +175,15 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
 
                               final course = state.courses[index];
                               return GestureDetector(
-                                onTap: () => context.goNamed(
-                                  'courseDetails',
-                                  extra: course,
-                                ),
+                                onTap: () {
+                                  final profileRole = _profileBloc.state.profileInfo.role;
+                                  context.goNamed(
+                                    profileRole == UserRole.student
+                                        ? 'courseDetails'
+                                        : 'teacherCourseDetails',
+                                    extra: course,
+                                  );
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 10,
