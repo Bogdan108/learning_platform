@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:learning_platform/src/core/utils/web_file_download.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/course/data/data_source/i_course_data_source.dart';
@@ -56,7 +58,7 @@ class CourseRepository implements ICourseRepository {
       dataSource.getCourseStudents(organizationId, token, courseId);
 
   @override
-  Future<String> downloadMaterial(
+  Future<String?> downloadMaterial(
     String courseId,
     String name,
     String additionId,
@@ -67,13 +69,16 @@ class CourseRepository implements ICourseRepository {
       courseId: courseId,
       additionId: additionId,
     );
-
-    final dir = await getApplicationDocumentsDirectory();
-    final filePath = '${dir.path}/${courseId}_$name.pdf';
-    final file = File(filePath);
-    await file.writeAsBytes(bytes);
-
-    return filePath;
+    if (kIsWeb) {
+      downloadFileWeb(bytes, '$name.pdf');
+      return null;
+    } else {
+      final dir = await getApplicationDocumentsDirectory();
+      final filePath = '${dir.path}/${courseId}_$name.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+      return filePath;
+    }
   }
 
   @override

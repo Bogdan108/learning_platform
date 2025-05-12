@@ -22,7 +22,7 @@ abstract class ICourseRepository {
     String courseId,
   );
 
-  Future<String> downloadMaterial(
+  Future<String?> downloadMaterial(
     String courseId,
     String name,
     String additionId,

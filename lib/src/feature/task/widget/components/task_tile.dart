@@ -81,16 +81,17 @@ class TaskTile extends StatelessWidget {
                               );
 
                               try {
-                                final filePath =
-                                    await tasksRepository.downloadQuestionFile(
+                                final filePath = await tasksRepository.downloadQuestionFile(
                                   task.id,
                                 );
-                                final params = ShareParams(
-                                  title: task.questionFile,
-                                  files: [XFile(filePath)],
-                                );
+                                if (filePath != null) {
+                                  final params = ShareParams(
+                                    title: task.questionFile,
+                                    files: [XFile(filePath)],
+                                  );
 
-                                await SharePlus.instance.share(params);
+                                  await SharePlus.instance.share(params);
+                                }
                               } catch (e) {
                                 CustomSnackBar.showError(
                                   context,

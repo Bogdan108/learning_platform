@@ -168,12 +168,14 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                               material.id,
                                             );
 
-                                            final params = ShareParams(
-                                              title: material.name,
-                                              files: [XFile(filePath)],
-                                            );
+                                            if (filePath != null) {
+                                              final params = ShareParams(
+                                                title: material.name,
+                                                files: [XFile(filePath)],
+                                              );
 
-                                            await SharePlus.instance.share(params);
+                                              await SharePlus.instance.share(params);
+                                            }
                                           } catch (e) {
                                             CustomSnackBar.showError(
                                               context,

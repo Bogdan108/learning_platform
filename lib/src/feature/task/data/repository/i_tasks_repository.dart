@@ -10,7 +10,7 @@ abstract interface class ITasksRepository {
 
   Future<void> deleteTask(String taskId);
 
-  Future<String> downloadQuestionFile(String taskId);
+  Future<String?> downloadQuestionFile(String taskId);
 
   Future<void> addQuestionFile(String taskId, File file);
 

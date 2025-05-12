@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:learning_platform/src/core/utils/web_file_download.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
@@ -39,15 +41,20 @@ class TasksRepository implements ITasksRepository {
   Future<void> deleteTask(String taskId) => _ds.deleteTask(_org, _tokS, taskId);
 
   @override
-  Future<String> downloadQuestionFile(String taskId) async {
+  Future<String?> downloadQuestionFile(String taskId) async {
     final bytes = await _ds.downloadQuestionFile(_org, _tokS, taskId);
 
-    final dir = await getApplicationDocumentsDirectory();
-    final filePath = '${dir.path}/$taskId.pdf';
-    final file = File(filePath);
-    await file.writeAsBytes(bytes);
+    if (kIsWeb) {
+      downloadFileWeb(bytes, '$taskId.pdf');
+      return null;
+    } else {
+      final dir = await getApplicationDocumentsDirectory();
+      final filePath = '${dir.path}/$taskId.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
 
-    return filePath;
+      return filePath;
+    }
   }
 
   @override
