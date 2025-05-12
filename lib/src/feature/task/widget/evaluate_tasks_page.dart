@@ -13,11 +13,13 @@ class EvaluateTasksPage extends StatefulWidget {
   final String answerId;
   final String assignmentId;
   final String title;
+  final String? userId;
 
   const EvaluateTasksPage({
     required this.answerId,
     required this.assignmentId,
     required this.title,
+    this.userId,
     super.key,
   });
 
@@ -38,13 +40,18 @@ class _EvaluateTasksPageState extends State<EvaluateTasksPage> {
       tokenStorage: deps.tokenStorage,
       orgIdStorage: deps.organizationIdStorage,
     );
+
     _bloc = EvaluateTasksBloc(
       tasksRepository: tasksRepository,
     )..add(
-        EvaluateTasksEvent.fetch(
-          answerId: widget.answerId,
-          assignmentId: widget.assignmentId,
-        ),
+        widget.userId == null
+            ? EvaluateTasksEvent.studentFetch(
+                assignmentId: widget.assignmentId,
+              )
+            : EvaluateTasksEvent.teacherFetch(
+                userId: widget.userId!,
+                assignmentId: widget.assignmentId,
+              ),
       );
   }
 
