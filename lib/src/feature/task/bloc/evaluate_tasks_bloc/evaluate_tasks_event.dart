@@ -4,10 +4,14 @@ part 'evaluate_tasks_event.freezed.dart';
 
 @freezed
 sealed class EvaluateTasksEvent with _$EvaluateTasksEvent {
-  const factory EvaluateTasksEvent.fetch({
-    required String answerId,
+  const factory EvaluateTasksEvent.teacherFetch({
+    required String userId,
     required String assignmentId,
-  }) = EvaluateTasksEvent$FetchEvaluateTasks;
+  }) = EvaluateTasksEvent$TeacherFetchEvaluateTasks;
+
+  const factory EvaluateTasksEvent.studentFetch({
+    required String assignmentId,
+  }) = EvaluateTasksEvent$StudentFetchEvaluateTasks;
 
   const factory EvaluateTasksEvent.evaluate({
     required String answerId,

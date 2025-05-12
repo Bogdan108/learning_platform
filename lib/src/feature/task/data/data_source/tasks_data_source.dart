@@ -396,10 +396,70 @@ class TasksDataSource implements ITasksDataSource {
       );
 
   @override
-  Future<EvaluateAnswers> fetchEvaluateAnswers(
+  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers(
     String orgId,
     String token,
-    String courseId,
+    String userId,
+    String assignmentId,
+  ) async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+
+    return const EvaluateAnswers(
+      id: 'assgn1',
+      name: 'Лексическое значение слов (задание 2)',
+      evaluateTasks: [
+        EvaluateTask(
+          id: 'task1',
+          questionType: QuestionType.text,
+          answerType: AnswerType.text,
+          questionText:
+              'Укажите варианты ответов, в которых во всех словах одного ряда пропущена одна и та же буква. Запишите номера ответов.',
+          answerText: '124',
+          evaluate: '6',
+          feedback: 'Правильный ответ: 124',
+        ),
+        EvaluateTask(
+          id: 'task2',
+          questionType: QuestionType.file,
+          answerType: AnswerType.file,
+          questionFile: 'Структура_сочинения.pdf',
+          answerFile: 'ответ_Голубева_КА.pdf',
+          evaluate: '7',
+        ),
+        EvaluateTask(
+          id: 'task3',
+          questionType: QuestionType.text,
+          answerType: AnswerType.variants,
+          questionText:
+              'Выберите варианты ответов, в которых верно выделена буква, обозначающая ударный гласный звук.',
+          answerVariants: [
+            '1) туфлЯ',
+            '2) понЯв',
+            '3) дОнельзя',
+            '4) карыстЬ',
+            '5) Оптовый',
+          ],
+          answerVariant: 2,
+          evaluate: '5',
+          feedback: 'Правильный ответ: 1',
+        ),
+        EvaluateTask(
+          id: 'task4',
+          questionType: QuestionType.text,
+          answerType: AnswerType.text,
+          questionText: 'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
+          answerText: 'Это было очень симп.тичное решение задачи.',
+          evaluate: '10',
+          feedback: 'Отлично молодец!',
+        ),
+      ],
+    );
+  }
+
+  @override
+  Future<EvaluateAnswers> fetchStudentEvaluateAnswers(
+    String orgId,
+    String token,
     String assignmentId,
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));

@@ -28,8 +28,12 @@ abstract interface class ITasksRepository {
     String feedback,
   );
 
-  Future<EvaluateAnswers> getEvaluateAnswers(
-    String answerId,
+  Future<EvaluateAnswers> getStudentEvaluateAnswers(
+    String assignmentId,
+  );
+
+  Future<EvaluateAnswers> getTeacherEvaluateAnswers(
+    String userId,
     String assignmentId,
   );
 }

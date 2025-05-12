@@ -17,14 +17,15 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
         ) {
     on<EvaluateTasksEvent>(
       (event, emit) => switch (event) {
-        EvaluateTasksEvent$FetchEvaluateTasks() => _onFetch(event, emit),
+        EvaluateTasksEvent$TeacherFetchEvaluateTasks() => _onTeacherFetch(event, emit),
+        EvaluateTasksEvent$StudentFetchEvaluateTasks() => _onStudentFetch(event, emit),
         EvaluateTasksEvent$EvaluateTask() => _onEvaluate(event, emit),
       },
     );
   }
 
-  Future<void> _onFetch(
-    EvaluateTasksEvent$FetchEvaluateTasks event,
+  Future<void> _onTeacherFetch(
+    EvaluateTasksEvent$TeacherFetchEvaluateTasks event,
     Emitter<EvaluateTasksState> emit,
   ) async {
     emit(
@@ -33,15 +34,41 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
       ),
     );
     try {
-      final list = await _tasksRepository.getEvaluateAnswers(
-        event.answerId,
+      final list = await _tasksRepository.getTeacherEvaluateAnswers(
+        event.userId,
         event.assignmentId,
       );
       emit(EvaluateTasksState.idle(evaluateAnswers: list));
     } catch (err, st) {
       emit(
         EvaluateTasksState.error(
-          message: 'Ошибка загрузки заданий',
+          message: 'Ошибка загрузки информации по задачам для учителя',
+          evaluateAnswers: state.evaluateAnswers,
+          event: event,
+        ),
+      );
+      onError(err, st);
+    }
+  }
+
+  Future<void> _onStudentFetch(
+    EvaluateTasksEvent$StudentFetchEvaluateTasks event,
+    Emitter<EvaluateTasksState> emit,
+  ) async {
+    emit(
+      EvaluateTasksState.loading(
+        evaluateAnswers: state.evaluateAnswers,
+      ),
+    );
+    try {
+      final list = await _tasksRepository.getStudentEvaluateAnswers(
+        event.assignmentId,
+      );
+      emit(EvaluateTasksState.idle(evaluateAnswers: list));
+    } catch (err, st) {
+      emit(
+        EvaluateTasksState.error(
+          message: 'Ошибка загрузки информации по задачам для ученика',
           evaluateAnswers: state.evaluateAnswers,
           event: event,
         ),

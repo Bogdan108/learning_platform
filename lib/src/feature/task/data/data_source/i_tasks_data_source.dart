@@ -55,10 +55,16 @@ abstract interface class ITasksDataSource {
     String feedback,
   );
 
-  Future<EvaluateAnswers> fetchEvaluateAnswers(
-    String orgId,
+  Future<EvaluateAnswers> fetchStudentEvaluateAnswers(
+    String org,
     String token,
-    String courseId,
+    String assignmentId,
+  );
+
+  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers(
+    String org,
+    String token,
+    String userId,
     String assignmentId,
   );
 }
