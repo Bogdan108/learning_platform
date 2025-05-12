@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:learning_platform/src/core/utils/web_file_download.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
@@ -8,7 +7,6 @@ import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repos
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
-import 'package:path_provider/path_provider.dart';
 
 class TasksRepository implements ITasksRepository {
   final ITasksDataSource _ds;
@@ -44,17 +42,11 @@ class TasksRepository implements ITasksRepository {
   Future<String?> downloadQuestionFile(String taskId) async {
     final bytes = await _ds.downloadQuestionFile(_org, _tokS, taskId);
 
-    if (kIsWeb) {
-      downloadFileWeb(bytes, '$taskId.pdf');
-      return null;
-    } else {
-      final dir = await getApplicationDocumentsDirectory();
-      final filePath = '${dir.path}/$taskId.pdf';
-      final file = File(filePath);
-      await file.writeAsBytes(bytes);
-
-      return filePath;
-    }
+    final path = await FileSaver.instance.saveFile(
+      name: '$taskId.pdf',
+      bytes: bytes,
+    );
+    return path;
   }
 
   @override

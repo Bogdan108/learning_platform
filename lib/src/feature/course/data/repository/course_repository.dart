@@ -1,14 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:learning_platform/src/core/utils/web_file_download.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/course/data/data_source/i_course_data_source.dart';
 import 'package:learning_platform/src/feature/course/data/repository/i_course_repository.dart';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CourseRepository implements ICourseRepository {
   final ICourseDataSource dataSource;
@@ -69,16 +67,12 @@ class CourseRepository implements ICourseRepository {
       courseId: courseId,
       additionId: additionId,
     );
-    if (kIsWeb) {
-      downloadFileWeb(bytes, '$name.pdf');
-      return null;
-    } else {
-      final dir = await getApplicationDocumentsDirectory();
-      final filePath = '${dir.path}/${courseId}_$name.pdf';
-      final file = File(filePath);
-      await file.writeAsBytes(bytes);
-      return filePath;
-    }
+
+    final path = await FileSaver.instance.saveFile(
+      name: '${courseId}_$name.pdf',
+      bytes: bytes,
+    );
+    return path;
   }
 
   @override
