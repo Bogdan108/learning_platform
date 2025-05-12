@@ -14,6 +14,7 @@ class AppStrings {
   static const noInternetConnection = 'Нет интернет соединения';
   static const cancel = 'Отменить';
   static const organizationId = 'Код организации';
+  static const baseUrl = 'http://127.0.0.1:8000';
 
   // Settings
   static const settings = 'Настройки';

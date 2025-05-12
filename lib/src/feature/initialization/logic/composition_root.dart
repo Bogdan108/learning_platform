@@ -1,5 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
+import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/core/constant/application_config.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/error_reporter/sentry_error_reporter.dart';
@@ -142,6 +143,8 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   @override
   Future<DependenciesContainer> create() async {
     final dio = Dio();
+    dio.options.baseUrl = AppStrings.baseUrl;
+
     final sharedPreferences = await SharedPreferences.getInstance();
 
     final packageInfo = await PackageInfo.fromPlatform();
