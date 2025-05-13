@@ -22,18 +22,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late final TextEditingController _firstNameController;
   late final TextEditingController _secondNameController;
   late final TextEditingController _middleNameController;
-  late final TextEditingController _emailController;
 
   @override
   void initState() {
     super.initState();
-    _firstNameController =
-        TextEditingController(text: widget.user.fullName.firstName);
-    _secondNameController =
-        TextEditingController(text: widget.user.fullName.secondName);
-    _middleNameController =
-        TextEditingController(text: widget.user.fullName.middleName);
-    _emailController = TextEditingController(text: widget.user.email);
+    _firstNameController = TextEditingController(text: widget.user.fullName.firstName);
+    _secondNameController = TextEditingController(text: widget.user.fullName.secondName);
+    _middleNameController = TextEditingController(text: widget.user.fullName.middleName);
   }
 
   @override
@@ -41,15 +36,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _secondNameController.dispose();
     _firstNameController.dispose();
     _middleNameController.dispose();
-    _emailController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title:
-              const Text('Редактирование данных', textAlign: TextAlign.center),
+          title: const Text('Редактирование данных', textAlign: TextAlign.center),
           centerTitle: true,
         ),
         body: Padding(
@@ -67,10 +60,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               CustomTextField(
                 label: 'Отчество',
                 controller: _middleNameController,
-              ),
-              CustomTextField(
-                label: 'Почта',
-                controller: _emailController,
               ),
               const SizedBox(
                 height: 15,

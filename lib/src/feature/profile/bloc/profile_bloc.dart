@@ -40,14 +40,17 @@ class ProfileBloc extends Bloc<ProfileBlocEvent, ProfileBlocState> with SetState
     }
   }
 
-  // TODO(b.luckyanchuk): Implement _editUserInfo after backend will be ready
   Future<void> _editUserInfo(
     EditUserInfoEvent event,
     Emitter<ProfileBlocState> emit,
   ) async {
     emit(ProfileBlocState.loading(profileInfo: state.profileInfo));
     try {
-      await _profileRepository.editUserInfo();
+      await _profileRepository.editUserInfo(
+        password: event.password,
+        fullName: event.fullName,
+      );
+
       final profileInfo = await _profileRepository.getUserInfo();
       emit(ProfileBlocState.idle(profileInfo: profileInfo));
     } catch (ex, stackTrace) {

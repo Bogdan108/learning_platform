@@ -49,7 +49,7 @@ class ProfileDataSource implements IProfileDataSource {
             secondName: 'Luckyanchuk',
             middleName: 'Sergeevich',
           ),
-          role: UserRole.teacher,
+          role: UserRole.student,
           email: 'ibogdan533@gmail.com',
         ),
       );
