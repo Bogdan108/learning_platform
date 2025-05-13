@@ -184,6 +184,40 @@ class EvaluateTaskTile extends StatelessWidget {
                       size: 20,
                     ),
                     Text(task.answerFile ?? ''),
+                    const Spacer(),
+                    // Скачивание файла
+                    GestureDetector(
+                      child: const Icon(Icons.download),
+                      onTap: () async {
+                        CustomSnackBar.showSuccessful(
+                          context,
+                          title: 'Скачиваем ...',
+                        );
+
+                        try {
+                          final filePath = await tasksRepository.downloadAnswerFile(
+                            assignmentId: assignmentId,
+                            taskId: task.id,
+                            userId: userId ?? '-1',
+                            name: task.answerFile,
+                          );
+
+                          if (filePath != null) {
+                            final params = ShareParams(
+                              title: task.questionFile,
+                              files: [XFile(filePath)],
+                            );
+
+                            await SharePlus.instance.share(params);
+                          }
+                        } catch (e) {
+                          CustomSnackBar.showError(
+                            context,
+                            title: 'Ошибка: $e',
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
