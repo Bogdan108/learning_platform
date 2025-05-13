@@ -10,7 +10,7 @@ abstract class Assignment with _$Assignment {
     required String id,
     required String name,
     @JsonKey(name: 'started_at') required DateTime startedAt,
-    @JsonKey(name: 'assignment_status') AssignmentStatus? status,
+    @JsonKey(name: 'status') AssignmentStatus? status,
     @JsonKey(name: 'ended_at') DateTime? endedAt,
   }) = _Assignment;
 

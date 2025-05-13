@@ -4,15 +4,27 @@ import 'package:learning_platform/src/feature/assignment/model/assignment_course
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 
 abstract interface class IAssignmentRepository {
-  Future<List<Assignment>> fetchCourseAssignments(String courseId);
+  Future<List<Assignment>> fetchCourseAssignments(
+    String courseId,
+  );
 
-  Future<String> createAssignment(String courseId, AssignmentRequest request);
+  Future<String> createAssignment(
+    String courseId,
+    AssignmentRequest request,
+  );
 
-  Future<void> editAssignment(String assignmentId, AssignmentRequest request);
+  Future<void> editAssignment(
+    String assignmentId,
+    AssignmentRequest request,
+  );
 
-  Future<void> deleteAssignment(String assignmentId);
+  Future<void> deleteAssignment(
+    String assignmentId,
+  );
 
   Future<List<AssignmentCourses>> fetchAssignments();
 
-  Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId);
+  Future<List<AssignmentAnswers>> getAnswersByCourse(
+    String courseId,
+  );
 }

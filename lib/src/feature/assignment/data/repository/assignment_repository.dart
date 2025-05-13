@@ -25,22 +25,42 @@ class AssignmentRepository implements IAssignmentRepository {
 
   @override
   Future<List<Assignment>> fetchCourseAssignments(String courseId) =>
-      _dataSource.getCourseAssignments(_org, _token, courseId);
+      _dataSource.getCourseAssignments(
+        _org,
+        _token,
+        courseId,
+      );
 
   @override
   Future<String> createAssignment(String courseId, AssignmentRequest request) =>
-      _dataSource.createAssignment(_org, _token, courseId, request);
+      _dataSource.createAssignment(
+        _org,
+        _token,
+        courseId,
+        request,
+      );
 
   @override
   Future<void> editAssignment(String assignmentId, AssignmentRequest request) =>
-      _dataSource.editAssignment(_org, _token, assignmentId, request);
+      _dataSource.editAssignment(
+        _org,
+        _token,
+        assignmentId,
+        request,
+      );
 
   @override
-  Future<void> deleteAssignment(String assignmentId) =>
-      _dataSource.deleteAssignment(_org, _token, assignmentId);
+  Future<void> deleteAssignment(String assignmentId) => _dataSource.deleteAssignment(
+        _org,
+        _token,
+        assignmentId,
+      );
 
   @override
-  Future<List<AssignmentCourses>> fetchAssignments() => _dataSource.getAssignments(_org, _token);
+  Future<List<AssignmentCourses>> fetchAssignments() => _dataSource.getAssignments(
+        _org,
+        _token,
+      );
 
   @override
   Future<List<AssignmentAnswers>> getAnswersByCourse(String courseId) =>
