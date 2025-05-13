@@ -121,11 +121,12 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                     link: link,
                                   ),
                                 ),
-                                onFileSave: ({required type, file}) {
+                                onFileSave: ({required type, required file, required name}) {
                                   _courseBloc.add(
                                     CourseEvent.uploadMaterial(
                                       courseId: widget.courseDetails.id,
                                       file: file,
+                                      fileName: name,
                                     ),
                                   );
                                 },

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
@@ -42,7 +41,8 @@ abstract class ICourseDataSource {
     required String organizationId,
     required String token,
     required String courseId,
-    required File file,
+    required Uint8List file,
+    required String fileName,
   });
 
   Future<void> leaveCourse({

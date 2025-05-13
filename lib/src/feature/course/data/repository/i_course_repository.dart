@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:learning_platform/src/feature/course/model/course_additions.dart';
 import 'package:learning_platform/src/feature/course/model/student.dart';
 
@@ -28,7 +28,11 @@ abstract class ICourseRepository {
     String additionId,
   );
 
-  Future<void> uploadMaterial(String courseId, File file);
+  Future<void> uploadMaterial(
+    String courseId,
+    Uint8List file,
+    String fileName,
+  );
 
   Future<void> leaveCourse(String courseId);
 }

@@ -1,9 +1,9 @@
-import 'dart:io';
+import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
-enum AdditionType { link, file }
+import 'package:learning_platform/src/feature/course/model/addition_type.dart';
 
 class AddAdditionDialog extends StatefulWidget {
   final void Function({
@@ -13,7 +13,8 @@ class AddAdditionDialog extends StatefulWidget {
 
   final void Function({
     required AdditionType type,
-    File? file,
+    required Uint8List file,
+    required String name,
   }) onFileSave;
 
   const AddAdditionDialog({
@@ -35,7 +36,7 @@ class AddAdditionDialog extends StatefulWidget {
 class _AddCourseAdditionDialogState extends State<AddAdditionDialog> {
   AdditionType _type = AdditionType.link;
   final TextEditingController _linkController = TextEditingController();
-  File? _pickedFile;
+  PlatformFile? _pickedFile;
 
   @override
   void dispose() {
@@ -44,11 +45,17 @@ class _AddCourseAdditionDialogState extends State<AddAdditionDialog> {
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        _pickedFile = File(result.files.single.path!);
-      });
+    try {
+      final result = await FilePicker.platform.pickFiles(withData: true);
+      if (result != null && result.files.single.path != null) {
+        setState(() {
+          _pickedFile = result.files.first;
+        });
+      }
+    } catch (error) {
+      log(
+        error.toString(),
+      );
     }
   }
 
@@ -130,12 +137,9 @@ class _AddCourseAdditionDialogState extends State<AddAdditionDialog> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      _pickedFile?.path.split(Platform.pathSeparator).last ??
-                          'Выберите файл',
+                      _pickedFile?.name ?? 'Выберите файл',
                       style: TextStyle(
-                        color: _pickedFile == null
-                            ? Colors.grey[600]
-                            : Colors.black,
+                        color: _pickedFile == null ? Colors.grey[600] : Colors.black,
                       ),
                     ),
                   ),
@@ -162,16 +166,19 @@ class _AddCourseAdditionDialogState extends State<AddAdditionDialog> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_type == AdditionType.link &&
-                            _linkController.text.trim().isNotEmpty) {
+                        log('${_pickedFile?.bytes}');
+                        if (_type == AdditionType.link && _linkController.text.trim().isNotEmpty) {
                           widget.onLinkSave(
                             type: _type,
                             link: _linkController.text.trim(),
                           );
                           Navigator.of(context).pop(true);
-                        } else if (_type == AdditionType.file &&
-                            _pickedFile != null) {
-                          widget.onFileSave(type: _type, file: _pickedFile);
+                        } else if (_type == AdditionType.file && _pickedFile?.bytes != null) {
+                          widget.onFileSave(
+                            type: _type,
+                            file: _pickedFile!.bytes!,
+                            name: _pickedFile?.name ?? 'course.pdf',
+                          );
                           Navigator.of(context).pop(true);
                         }
                       },

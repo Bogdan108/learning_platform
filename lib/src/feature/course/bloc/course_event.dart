@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 part 'course_event.freezed.dart';
 
 @freezed
@@ -23,7 +22,8 @@ sealed class CourseEvent with _$CourseEvent {
 
   const factory CourseEvent.uploadMaterial({
     required String courseId,
-    required File? file,
+    required Uint8List file,
+    required String fileName,
   }) = CourseEvent$UploadMaterial;
 
   /// Student

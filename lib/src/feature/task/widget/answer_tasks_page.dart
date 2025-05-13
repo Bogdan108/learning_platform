@@ -130,7 +130,7 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
 
   Future<void> _pickFile(int idx, Task task) async {
     try {
-      final res = await FilePicker.platform.pickFiles();
+      final res = await FilePicker.platform.pickFiles(withData: true);
       if (res != null && res.files.single.path != null) {
         final file = res.files.first;
         if (_fileAnswers[idx] != file) {

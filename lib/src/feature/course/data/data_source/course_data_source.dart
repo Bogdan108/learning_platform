@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -71,27 +71,27 @@ import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 //     );
 //   }
 
-// @override
-// Future<Uint8List> downloadMaterial({
-//   required String organizationId,
-//   required String token,
-//   required String courseId,
-//   required String additionId,
-// }) async {
-//   final response = await _dio.get<Uint8List>(
-//     '/course/additions/material',
-//     queryParameters: {
-//       'organization_id': organizationId,
-//       'token': token,
-//       'course_id': courseId,
-//       'addition_id': additionId,
-//     },
-//     options: Options(
-//       responseType: ResponseType.bytes,
-//     ),
-//   );
-//   return response.data!;
-// }
+//   @override
+//   Future<Uint8List> downloadMaterial({
+//     required String organizationId,
+//     required String token,
+//     required String courseId,
+//     required String additionId,
+//   }) async {
+//     final response = await _dio.get<Uint8List>(
+//       '/course/additions/material',
+//       queryParameters: {
+//         'organization_id': organizationId,
+//         'token': token,
+//         'course_id': courseId,
+//         'addition_id': additionId,
+//       },
+//       options: Options(
+//         responseType: ResponseType.bytes,
+//       ),
+//     );
+//     return response.data ?? Uint8List.fromList([]);
+//   }
 
 //   @override
 //   Future<List<Student>> getCourseStudents(
@@ -108,23 +108,24 @@ import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 //       },
 //     );
 
-//     return response.data!.map(Student.fromJson).toList();
+//     return response.data?.map(Student.fromJson).toList() ?? [];
 //   }
-// }
 
-// @override
+//   @override
 //   Future<void> uploadMaterial({
 //     required String organizationId,
 //     required String token,
 //     required String courseId,
-//     required File file,
+//     required Uint8List file,
+//     required String fileName,
 //   }) async {
 //     final form = FormData.fromMap({
-//       'file': await MultipartFile.fromFile(
-//         file.path,
-//         filename: basename(file.path),
+//       'file': MultipartFile.fromBytes(
+//         file,
+//         filename: fileName,
 //       ),
 //     });
+
 //     await _dio.post<void>(
 //       '/course/teacher/additions/material',
 //       queryParameters: {
@@ -138,6 +139,23 @@ import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 //       ),
 //     );
 //   }
+
+//   @override
+//   Future<void> leaveCourse({
+//     required String organizationId,
+//     required String token,
+//     required String courseId,
+//   }) async {
+//     await _dio.post<void>(
+//       '/course/student/leave',
+//       queryParameters: {
+//         'organization_id': organizationId,
+//         'token': token,
+//         'course_id': courseId,
+//       },
+//     );
+//   }
+// }
 
 /// Мок реализации источника данных для работы с дополнениями и списком студентов курса
 class CourseDataSource implements ICourseDataSource {
@@ -240,9 +258,10 @@ class CourseDataSource implements ICourseDataSource {
     required String organizationId,
     required String token,
     required String courseId,
-    required File file,
+    required Uint8List file,
+    required String fileName,
   }) async {
-    Future.delayed(_delay, () => {});
+    Future.delayed(_delay, () => {log(file.toString())});
   }
 
   @override

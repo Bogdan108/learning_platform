@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
@@ -76,11 +76,17 @@ class CourseRepository implements ICourseRepository {
   }
 
   @override
-  Future<void> uploadMaterial(String courseId, File file) => dataSource.uploadMaterial(
+  Future<void> uploadMaterial(
+    String courseId,
+    Uint8List file,
+    String fileName,
+  ) =>
+      dataSource.uploadMaterial(
         organizationId: organizationId,
         token: token,
         courseId: courseId,
         file: file,
+        fileName: fileName,
       );
 
   @override

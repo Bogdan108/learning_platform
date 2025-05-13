@@ -156,12 +156,11 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> with SetStateMixin {
       ),
     );
 
-    if (event.file == null) return;
-
     try {
       await _courseRepository.uploadMaterial(
         event.courseId,
-        event.file!,
+        event.file,
+        event.fileName,
       );
 
       final additions = await _courseRepository.getCourseAdditions(

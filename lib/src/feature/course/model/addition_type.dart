@@ -1,0 +1,1 @@
+enum AdditionType { link, file }
