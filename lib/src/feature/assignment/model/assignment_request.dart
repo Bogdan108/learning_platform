@@ -7,8 +7,8 @@ part 'assignment_request.g.dart';
 abstract class AssignmentRequest with _$AssignmentRequest {
   const factory AssignmentRequest({
     required String name,
-    @JsonKey(name: 'started_at') required DateTime startedAt,
-    @JsonKey(name: 'ended_at') DateTime? endedAt,
+    @JsonKey(name: 'started_at') required String startedAt,
+    @JsonKey(name: 'ended_at') String? endedAt,
   }) = _AssignmentRequest;
 
   factory AssignmentRequest.fromJson(Map<String, dynamic> json) =>

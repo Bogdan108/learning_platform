@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/utils/date_formatter.dart';
 import 'package:learning_platform/src/feature/assignment/model/assignment_request.dart';
 
 typedef OnSave = void Function(AssignmentRequest req);
@@ -71,8 +72,7 @@ class _State extends State<CreateEditAssignmentDialog> {
             children: [
               Text(
                 widget.title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 16),
               TextField(
@@ -81,8 +81,7 @@ class _State extends State<CreateEditAssignmentDialog> {
                   hintText: 'Название',
                   filled: true,
                   fillColor: Colors.grey.shade200,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
@@ -105,9 +104,7 @@ class _State extends State<CreateEditAssignmentDialog> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide.none,
                       ),
-                      hintText: _start != null
-                          ? DateFormat.yMd().format(_start!)
-                          : 'Дата открытия',
+                      hintText: _start != null ? DateFormat.yMd().format(_start!) : 'Дата открытия',
                       suffixIcon: const Icon(Icons.calendar_month_sharp),
                     ),
                   ),
@@ -129,9 +126,7 @@ class _State extends State<CreateEditAssignmentDialog> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide.none,
                       ),
-                      hintText: _end != null
-                          ? DateFormat.yMd().format(_end!)
-                          : 'Дата закрытия',
+                      hintText: _end != null ? DateFormat.yMd().format(_end!) : 'Дата закрытия',
                       suffixIcon: const Icon(Icons.calendar_month_sharp),
                     ),
                   ),
@@ -160,12 +155,13 @@ class _State extends State<CreateEditAssignmentDialog> {
                     child: CustomElevatedButton(
                       onPressed: () {
                         final name = _nameC.text.trim();
-                        if (name.isNotEmpty && _start != null) {
+                        final start = _start;
+                        if (name.isNotEmpty && start != null) {
                           widget.onSave(
                             AssignmentRequest(
                               name: name,
-                              startedAt: _start!,
-                              endedAt: _end,
+                              startedAt: formatDate(start),
+                              endedAt: _end != null ? formatDate(_end!) : null,
                             ),
                           );
                           Navigator.pop(c, true);
