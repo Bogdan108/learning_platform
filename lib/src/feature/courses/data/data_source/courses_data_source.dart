@@ -1,7 +1,7 @@
-import 'package:dio/dio.dart';
-import 'package:learning_platform/src/feature/courses/data/data_source/i_courses_data_source.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+// import 'package:dio/dio.dart';
+// import 'package:learning_platform/src/feature/courses/data/data_source/i_courses_data_source.dart';
+// import 'package:learning_platform/src/feature/courses/model/course.dart';
+// import 'package:learning_platform/src/feature/courses/model/course_request.dart';
 
 // class CoursesDataSource implements ICoursesDataSource {
 //   final Dio _dio;
@@ -66,20 +66,18 @@ import 'package:learning_platform/src/feature/courses/model/course_request.dart'
 //   Future<List<Course>> getTeacherCourses(
 //     String organizationId,
 //     String token,
-//     String searchQuery,
+//     String? searchQuery,
 //   ) async {
 //     final response = await _dio.get<List<dynamic>>(
 //       '/course/teacher/list',
 //       queryParameters: {
 //         'organization_id': organizationId,
 //         'token': token,
-//         'search_query': searchQuery,
+//         if (searchQuery != null) 'search_query': searchQuery,
 //       },
 //     );
 
-//     return response.data!
-//         .map((json) => Course.fromJson(json as Map<String, dynamic>))
-//         .toList();
+//     return response.data!.map((json) => Course.fromJson(json as Map<String, dynamic>)).toList();
 //   }
 
 //   @override
@@ -102,22 +100,25 @@ import 'package:learning_platform/src/feature/courses/model/course_request.dart'
 //   Future<List<Course>> getStudentCourses(
 //     String organizationId,
 //     String token,
-//     String searchQuery,
+//     String? searchQuery,
 //   ) async {
 //     final response = await _dio.get<List<dynamic>>(
 //       '/course/student/list',
 //       queryParameters: {
 //         'organization_id': organizationId,
 //         'token': token,
-//         'search_query': searchQuery,
+//         if (searchQuery != null) 'search_query': searchQuery,
 //       },
 //     );
 
-//     return response.data!
-//         .map((json) => Course.fromJson(json as Map<String, dynamic>))
-//         .toList();
+//     return response.data!.map((json) => Course.fromJson(json as Map<String, dynamic>)).toList();
 //   }
 // }
+
+import 'package:dio/dio.dart';
+import 'package:learning_platform/src/feature/courses/data/data_source/i_courses_data_source.dart';
+import 'package:learning_platform/src/feature/courses/model/course.dart';
+import 'package:learning_platform/src/feature/courses/model/course_request.dart';
 
 /// Мок реализации источника данных для курсов
 class CoursesDataSource implements ICoursesDataSource {
@@ -158,7 +159,7 @@ class CoursesDataSource implements ICoursesDataSource {
   Future<List<Course>> getTeacherCourses(
     String organizationId,
     String token,
-    String searchQuery,
+    String? searchQuery,
   ) async =>
       Future.delayed(
         _delay,
@@ -190,7 +191,7 @@ class CoursesDataSource implements ICoursesDataSource {
   Future<List<Course>> getStudentCourses(
     String organizationId,
     String token,
-    String searchQuery,
+    String? searchQuery,
   ) async =>
       Future.delayed(
         _delay,

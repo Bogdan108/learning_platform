@@ -7,7 +7,7 @@ part 'courses_event.freezed.dart';
 sealed class CoursesEvent with _$CoursesEvent {
   const factory CoursesEvent.fetchCourses({
     required UserRole role,
-    required String searchQuery,
+    String? searchQuery,
   }) = CoursesEvent$FetchCourses;
 
   /// Teacher

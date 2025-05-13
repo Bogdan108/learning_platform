@@ -46,7 +46,7 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
         tokenStorage: depsScope.tokenStorage,
         orgIdStorage: depsScope.organizationIdStorage,
       ),
-    )..add(CoursesEvent.fetchCourses(role: profileRole, searchQuery: ''));
+    )..add(CoursesEvent.fetchCourses(role: profileRole));
     _searchController = TextEditingController()..addListener(_handleTextEditing);
     _scrollController = ScrollController()..addListener(_handleRefresh);
   }
@@ -64,10 +64,12 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
     if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
         _coursesBloc.state is! CoursesState$Loading) {
       final profileRole = _profileBloc.state.profileInfo.role;
+
+      final text = _searchController.text;
       _coursesBloc.add(
         CoursesEvent.fetchCourses(
           role: profileRole,
-          searchQuery: _searchController.text,
+          searchQuery: text.isNotEmpty ? text : null,
         ),
       );
     }
@@ -75,10 +77,12 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
 
   void _handleTextEditing() {
     final profileRole = _profileBloc.state.profileInfo.role;
+    final text = _searchController.text;
+
     _coursesBloc.add(
       CoursesEvent.fetchCourses(
         role: profileRole,
-        searchQuery: _searchController.text,
+        searchQuery: text.isNotEmpty ? text : null,
       ),
     );
   }
@@ -111,12 +115,6 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                           child: CustomSearchField(
                             hintText: 'Поиск',
                             controller: _searchController,
-                            onChanged: (value) => _coursesBloc.add(
-                              CoursesEvent.fetchCourses(
-                                role: profileState.profileInfo.role,
-                                searchQuery: value,
-                              ),
-                            ),
                           ),
                         ),
                         Expanded(

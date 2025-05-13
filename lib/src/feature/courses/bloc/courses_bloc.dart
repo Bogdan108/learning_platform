@@ -40,9 +40,7 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
       final courseRequest = CourseRequest(name: event.name, description: event.description);
       await _coursesRepository.createCourse(courseRequest);
 
-      final courses = await _coursesRepository.getTeacherCourses(
-        '',
-      );
+      final courses = await _coursesRepository.getTeacherCourses(null);
       emit(
         CoursesState.idle(
           courses: courses,
@@ -76,9 +74,7 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
         courseRequest,
       );
 
-      final courses = await _coursesRepository.getTeacherCourses(
-        '',
-      );
+      final courses = await _coursesRepository.getTeacherCourses(null);
       emit(
         CoursesState.idle(
           courses: courses,
@@ -109,9 +105,7 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
       await _coursesRepository.deleteCourse(
         event.courseId,
       );
-      final courses = await _coursesRepository.getTeacherCourses(
-        '',
-      );
+      final courses = await _coursesRepository.getTeacherCourses(null);
       emit(
         CoursesState.idle(
           courses: courses,

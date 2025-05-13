@@ -40,7 +40,7 @@ class CoursesRepository implements ICoursesRepository {
 
   @override
   Future<List<Course>> getTeacherCourses(
-    String searchQuery,
+    String? searchQuery,
   ) =>
       dataSource.getTeacherCourses(organizationId, token, searchQuery);
 
@@ -52,7 +52,7 @@ class CoursesRepository implements ICoursesRepository {
 
   @override
   Future<List<Course>> getStudentCourses(
-    String searchQuery,
+    String? searchQuery,
   ) =>
       dataSource.getStudentCourses(organizationId, token, searchQuery);
 }

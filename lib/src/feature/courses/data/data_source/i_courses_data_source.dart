@@ -7,30 +7,35 @@ abstract class ICoursesDataSource {
     String token,
     CourseRequest course,
   );
+
   Future<void> editCourse(
     String organizationId,
     String token,
     String courseId,
     CourseRequest course,
   );
+
   Future<void> deleteCourse(
     String organizationId,
     String token,
     String courseId,
   );
+
   Future<List<Course>> getTeacherCourses(
     String organizationId,
     String token,
-    String searchQuery,
+    String? searchQuery,
   );
+
   Future<void> enrollCourse(
     String organizationId,
     String token,
     String courseId,
   );
+
   Future<List<Course>> getStudentCourses(
     String organizationId,
     String token,
-    String searchQuery,
+    String? searchQuery,
   );
 }
