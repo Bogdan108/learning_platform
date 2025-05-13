@@ -83,8 +83,7 @@ class _EvaluateTaskDialogState extends State<EvaluateTaskDialog> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.grey.shade200,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
@@ -117,8 +116,7 @@ class _EvaluateTaskDialogState extends State<EvaluateTaskDialog> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.grey.shade200,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,

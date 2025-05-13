@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/task/data/repository/tasks_repository.dart';
