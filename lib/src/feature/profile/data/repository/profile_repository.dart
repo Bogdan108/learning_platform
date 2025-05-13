@@ -3,28 +3,36 @@ import 'package:learning_platform/src/feature/authorization/data/storage/token_s
 import 'package:learning_platform/src/feature/profile/data/data_source/i_profile_data_source.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/i_profile_repository.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
+import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 class ProfileRepository implements IProfileRepository {
   final IProfileDataSource _dataSource;
-  final TokenStorage tokenStorage;
+  final TokenStorage _tokenStorage;
   final IStorage<String> _orgIdStorage;
 
   ProfileRepository({
     required IProfileDataSource dataSource,
-    required this.tokenStorage,
+    required TokenStorage tokenStorage,
     required IStorage<String> orgIdStorage,
   })  : _dataSource = dataSource,
-        _orgIdStorage = orgIdStorage;
+        _orgIdStorage = orgIdStorage,
+        _tokenStorage = tokenStorage;
 
-  String get token => tokenStorage.load() ?? '';
+  String get token => _tokenStorage.load() ?? '';
+  String get organizationId => _orgIdStorage.load() ?? '';
 
   @override
-  Future<User> getUserInfo() {
-    final organizationId = _orgIdStorage.load();
-    return _dataSource.getUserInfo(organizationId ?? '', token);
-  }
+  Future<User> getUserInfo() => _dataSource.getUserInfo(organizationId, token);
 
-  // TODO(b.luckyanchuk): Implement editUserInfo after backend will be ready
   @override
-  Future<void> editUserInfo() async => {};
+  Future<void> editUserInfo({
+    String? password,
+    UserName? fullName,
+  }) async =>
+      _dataSource.editUserInfo(
+        organizationId,
+        token,
+        password,
+        fullName,
+      );
 }
