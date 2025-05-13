@@ -89,33 +89,31 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
 
     try {
       await _tasksRepository.evaluateTask(
-        event.answerId,
-        event.score,
+        assignmentId: event.assignmentId,
+        taskId: event.taskId,
+        userId: event.userId,
+        score: event.score,
       );
 
       if (event.feedback != null) {
         await _tasksRepository.feedbackTask(
-          event.answerId,
-          event.feedback!,
+          assignmentId: event.assignmentId,
+          taskId: event.taskId,
+          userId: event.userId,
+          feedback: event.feedback!,
         );
       }
-      // TODO(b.luckyanchuk): Add updating of the list after backend will be ready
-      // final list = await _tasksRepository.getEvaluateAnswers(
-      //   event.answerId,
-      //   event.assignmentId,
-      // );
-      // emit(
-      //   EvaluateAnswersBlocState.idle(evaluateAnswers: list),
-      // );
+      final list = await _tasksRepository.getTeacherEvaluateAnswers(
+        event.userId,
+        event.assignmentId,
+      );
       emit(
-        EvaluateTasksState.idle(
-          evaluateAnswers: state.evaluateAnswers,
-        ),
+        EvaluateTasksState.idle(evaluateAnswers: list),
       );
     } catch (err, st) {
       emit(
         EvaluateTasksState.error(
-          message: 'Ошибка оценки задания ${event.answerId}',
+          message: 'Ошибка оценки задания ${event.taskId}',
           evaluateAnswers: state.evaluateAnswers,
           event: event,
         ),

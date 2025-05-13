@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'answer_tasks_event.freezed.dart';
@@ -22,7 +22,8 @@ sealed class AnswerTasksEvent with _$AnswerTasksEvent {
   const factory AnswerTasksEvent.answerFile({
     required String assignmentId,
     required String taskId,
-    required File file,
+    required Uint8List file,
+    required String fileName,
     void Function()? onSuccess,
     void Function()? onError,
   }) = AnswerTasksEvent$AnswerFile;

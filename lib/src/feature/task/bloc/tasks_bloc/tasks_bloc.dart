@@ -49,13 +49,17 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin 
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
       final taskId = await _tasksRepository.createTask(
-        event.assignmentId,
-        event.req,
+        assignmentId: event.assignmentId,
+        task: event.req,
       );
 
       final taskFile = event.file;
       if (taskFile != null) {
-        await _tasksRepository.addQuestionFile(taskId, taskFile);
+        await _tasksRepository.addQuestionFile(
+          taskId: taskId,
+          file: taskFile,
+          fileName: event.name ?? '${event.assignmentId}.pdf',
+        );
       }
 
       final list = await _tasksRepository.listTasks(
@@ -100,8 +104,9 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin 
     emit(TasksBlocState.loading(tasks: state.tasks));
     try {
       await _tasksRepository.addQuestionFile(
-        event.taskId,
-        event.file,
+        taskId: event.taskId,
+        file: event.file,
+        fileName: event.name,
       );
       emit(TasksBlocState.idle(tasks: state.tasks));
     } catch (err, st) {
@@ -120,9 +125,9 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin 
   ) async {
     try {
       await _tasksRepository.answerText(
-        event.assignmentId,
-        event.taskId,
-        event.text,
+        assignmentId: event.assignmentId,
+        taskId: event.taskId,
+        text: event.text,
       );
     } catch (err) {
       emit(
@@ -141,9 +146,10 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin 
   ) async {
     try {
       await _tasksRepository.answerFile(
-        event.assignmentId,
-        event.taskId,
-        event.file,
+        assignmentId: event.assignmentId,
+        taskId: event.taskId,
+        file: event.file,
+        fileName: event.name,
       );
     } catch (err) {
       emit(

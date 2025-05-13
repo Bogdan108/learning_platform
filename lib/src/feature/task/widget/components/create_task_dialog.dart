@@ -1,5 +1,4 @@
-import 'dart:developer';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,8 @@ class CreateTaskDialog extends StatefulWidget {
     required AnswerType answerType,
     String? questionText,
     List<String>? answerVariants,
-    File? questionFile,
+    Uint8List? questionFile,
+    String? filename,
   }) onSave;
 
   const CreateTaskDialog({
@@ -37,7 +37,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
   AnswerType _answerType = AnswerType.text;
 
   final TextEditingController _questionTextController = TextEditingController();
-  File? _questionFile;
+  PlatformFile? _questionFile;
 
   final List<TextEditingController> _answersControllers = [];
 
@@ -51,14 +51,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
     final result = await FilePicker.platform.pickFiles();
     if (result != null && result.files.single.path != null) {
       setState(() {
-        _questionFile = File(result.files.single.path!);
+        _questionFile = result.files.first;
       });
-      final list = await _questionFile!.readAsBytes();
-      final sb = StringBuffer();
-      for (final byte in list) {
-        sb.write(', $byte');
-      }
-      log(sb.toString());
     }
   }
 
@@ -126,8 +120,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Вопрос',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -153,8 +146,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Файл вопроса',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -171,14 +163,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _questionFile?.path
-                                .split(Platform.pathSeparator)
-                                .last ??
-                            'Выберите файл',
+                        _questionFile?.name ?? 'Выберите файл',
                         style: TextStyle(
-                          color: _questionFile == null
-                              ? Colors.grey[600]
-                              : Colors.black,
+                          color: _questionFile == null ? Colors.grey[600] : Colors.black,
                         ),
                       ),
                     ),
@@ -232,8 +219,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Варианты ответов',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -297,9 +283,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                             questionType: _questionType,
                             questionText: qText,
                             answerType: _answerType,
-                            answerVariants:
-                                _answersControllers.map((e) => e.text).toList(),
-                            questionFile: _questionFile,
+                            answerVariants: _answersControllers.map((e) => e.text).toList(),
+                            questionFile: _questionFile?.bytes,
+                            filename: _questionFile?.name,
                           );
                           context.pop();
                         },

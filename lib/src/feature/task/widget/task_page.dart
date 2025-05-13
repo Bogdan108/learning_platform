@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
@@ -90,7 +90,8 @@ class _TasksPageState extends State<TasksPage> {
                                         required AnswerType answerType,
                                         String? questionText,
                                         List<String>? answerVariants,
-                                        File? questionFile,
+                                        Uint8List? questionFile,
+                                        String? filename,
                                       }) {
                                         final req = TaskRequest(
                                           questionType: questionType,
@@ -102,6 +103,8 @@ class _TasksPageState extends State<TasksPage> {
                                           TasksBlocEvent.create(
                                             assignmentId: widget.assignmentId,
                                             req: req,
+                                            file: questionFile,
+                                            name: filename,
                                           ),
                                         );
                                       },

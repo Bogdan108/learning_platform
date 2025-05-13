@@ -83,7 +83,8 @@ class _EvaluateTasksPageState extends State<EvaluateTasksPage> {
                           number: index + 1,
                           task: task,
                           tasksRepository: tasksRepository,
-                          onDeleteTask: () => {},
+                          userId: widget.userId,
+                          assignmentId: widget.assignmentId,
                         );
                       },
                     ),

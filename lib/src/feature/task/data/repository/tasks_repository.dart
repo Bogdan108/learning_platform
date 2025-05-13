@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_saver/file_saver.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
@@ -9,90 +9,177 @@ import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
 class TasksRepository implements ITasksRepository {
-  final ITasksDataSource _tasksDataSource;
+  final ITasksDataSource _dataSource;
   final TokenStorage _tokenStorage;
-  final IStorage<String> _orgId;
+  final IStorage<String> _orgIdStorage;
 
   TasksRepository({
     required ITasksDataSource dataSource,
     required TokenStorage tokenStorage,
     required IStorage<String> orgIdStorage,
-  })  : _tasksDataSource = dataSource,
+  })  : _dataSource = dataSource,
         _tokenStorage = tokenStorage,
-        _orgId = orgIdStorage;
+        _orgIdStorage = orgIdStorage;
 
   String get _token => _tokenStorage.load() ?? '';
-  String get _org => _orgId.load() ?? '';
+  String get _orgId => _orgIdStorage.load() ?? '';
 
   @override
-  Future<List<Task>> listTasks(String assignmentId) => _tasksDataSource.listTasks(
-        _org,
-        _token,
-        assignmentId,
+  Future<String> createTask({
+    required String assignmentId,
+    required TaskRequest task,
+  }) =>
+      _dataSource.createTask(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
+        task: task,
       );
 
   @override
-  Future<String> createTask(String assignmentId, TaskRequest req) =>
-      _tasksDataSource.createTask(_org, _token, assignmentId, req);
+  Future<void> deleteTask(String taskId) => _dataSource.deleteTask(
+        organizationId: _orgId,
+        token: _token,
+        taskId: taskId,
+      );
 
   @override
-  Future<void> deleteTask(String taskId) => _tasksDataSource.deleteTask(_org, _token, taskId);
+  Future<void> addQuestionFile({
+    required String taskId,
+    required Uint8List file,
+    required String fileName,
+  }) =>
+      _dataSource.addFileToTask(
+        organizationId: _orgId,
+        token: _token,
+        taskId: taskId,
+        fileBytes: file,
+        filename: fileName,
+      );
 
   @override
-  Future<String?> downloadQuestionFile(String taskId) async {
-    final bytes = await _tasksDataSource.downloadQuestionFile(_org, _token, taskId);
+  Future<List<Task>> listTasks(String assignmentId) => _dataSource.getTasks(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
+      );
 
+  @override
+  Future<String?> downloadQuestionFile(String taskId, String? name) async {
+    final bytes = await _dataSource.downloadQuestionFile(
+      organizationId: _orgId,
+      token: _token,
+      taskId: taskId,
+    );
     final path = await FileSaver.instance.saveFile(
-      name: '$taskId.pdf',
+      name: '${taskId}_$name.pdf',
       bytes: bytes,
     );
     return path;
   }
 
   @override
-  Future<void> addQuestionFile(String taskId, File file) =>
-      _tasksDataSource.addQuestionFile(_org, _token, taskId, file);
+  Future<void> answerText({
+    required String assignmentId,
+    required String taskId,
+    required String text,
+  }) =>
+      _dataSource.answerText(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
+        taskId: taskId,
+        answer: text,
+      );
 
   @override
-  Future<void> answerText(String assignmentId, String taskId, String text) =>
-      _tasksDataSource.answerText(_org, _token, assignmentId, taskId, text);
+  Future<void> answerFile({
+    required String assignmentId,
+    required String taskId,
+    required Uint8List file,
+    required String fileName,
+  }) =>
+      _dataSource.answerFile(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
+        taskId: taskId,
+        fileBytes: file,
+        filename: fileName,
+      );
 
   @override
-  Future<void> answerFile(String assignmentId, String taskId, File file) =>
-      _tasksDataSource.answerFile(_org, _token, assignmentId, taskId, file);
+  Future<void> evaluateTask({
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    required int score,
+  }) =>
+      _dataSource.evaluateTask(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
+        taskId: taskId,
+        userId: userId,
+        evaluation: score,
+      );
 
   @override
-  Future<void> evaluateTask(
-    String answerId,
-    int score,
-  ) =>
-      _tasksDataSource.evaluateTask(_org, _token, answerId, score);
+  Future<void> feedbackTask({
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    required String feedback,
+  }) =>
+      _dataSource.feedbackTask(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
+        taskId: taskId,
+        userId: userId,
+        feedback: feedback,
+      );
 
   @override
-  Future<void> feedbackTask(
-    String answerId,
-    String fb,
-  ) =>
-      _tasksDataSource.feedbackTask(_org, _token, answerId, fb);
+  Future<String?> downloadAnswerFile({
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    String? name,
+  }) async {
+    final bytes = await _dataSource.downloadAnswerFile(
+      organizationId: _orgId,
+      token: _token,
+      assignmentId: assignmentId,
+      taskId: taskId,
+      userId: userId,
+    );
+
+    final path = await FileSaver.instance.saveFile(
+      name: '${taskId}_$name.pdf',
+      bytes: bytes,
+    );
+    return path;
+  }
 
   @override
   Future<EvaluateAnswers> getStudentEvaluateAnswers(
     String assignmentId,
   ) =>
-      _tasksDataSource.fetchStudentEvaluateAnswers(
-        _org,
-        _token,
-        assignmentId,
+      _dataSource.fetchStudentEvaluateAnswers(
+        organizationId: _orgId,
+        token: _token,
+        assignmentId: assignmentId,
       );
   @override
   Future<EvaluateAnswers> getTeacherEvaluateAnswers(
     String userId,
     String assignmentId,
   ) =>
-      _tasksDataSource.fetchTeacherEvaluateAnswers(
-        _org,
-        _token,
-        userId,
-        assignmentId,
+      _dataSource.fetchTeacherEvaluateAnswers(
+        organizationId: _orgId,
+        token: _token,
+        userId: userId,
+        assignmentId: assignmentId,
       );
 }

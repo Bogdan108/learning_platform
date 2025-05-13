@@ -51,9 +51,9 @@ class AnswerTasksBloc extends Bloc<AnswerTasksEvent, AnswerTasksState> with SetS
       emit(AnswerTasksState.loading(tasks: state.tasks));
 
       await _tasksRepository.answerText(
-        event.assignmentId,
-        event.taskId,
-        event.text,
+        assignmentId: event.assignmentId,
+        taskId: event.taskId,
+        text: event.text,
       );
 
       emit(AnswerTasksState.idle(
@@ -79,9 +79,10 @@ class AnswerTasksBloc extends Bloc<AnswerTasksEvent, AnswerTasksState> with SetS
       emit(AnswerTasksState.loading(tasks: state.tasks));
 
       await _tasksRepository.answerFile(
-        event.assignmentId,
-        event.taskId,
-        event.file,
+        assignmentId: event.assignmentId,
+        taskId: event.taskId,
+        file: event.file,
+        fileName: event.fileName,
       );
       emit(
         AnswerTasksState.idle(

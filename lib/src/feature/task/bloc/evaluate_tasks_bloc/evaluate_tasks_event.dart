@@ -14,7 +14,9 @@ sealed class EvaluateTasksEvent with _$EvaluateTasksEvent {
   }) = EvaluateTasksEvent$StudentFetchEvaluateTasks;
 
   const factory EvaluateTasksEvent.evaluate({
-    required String answerId,
+    required String taskId,
+    required String assignmentId,
+    required String userId,
     required int score,
     String? feedback,
   }) = EvaluateTasksEvent$EvaluateTask;

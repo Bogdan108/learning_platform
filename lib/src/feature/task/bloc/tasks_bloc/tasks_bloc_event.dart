@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -11,15 +11,16 @@ sealed class TasksBlocEvent with _$TasksBlocEvent {
   const factory TasksBlocEvent.create({
     required String assignmentId,
     required TaskRequest req,
-    File? file,
+    required Uint8List? file,
+    required String? name,
   }) = CreateTask;
 
-  const factory TasksBlocEvent.delete(String taskId, String assignmentId) =
-      DeleteTask;
+  const factory TasksBlocEvent.delete(String taskId, String assignmentId) = DeleteTask;
 
   const factory TasksBlocEvent.addFile({
     required String taskId,
-    required File file,
+    required Uint8List file,
+    required String name,
   }) = AddFileToTask;
 
   const factory TasksBlocEvent.answerText({
@@ -31,6 +32,7 @@ sealed class TasksBlocEvent with _$TasksBlocEvent {
   const factory TasksBlocEvent.answerFile({
     required String assignmentId,
     required String taskId,
-    required File file,
+    required Uint8List file,
+    required String name,
   }) = AnswerFile;
 }

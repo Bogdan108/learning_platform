@@ -1,6 +1,9 @@
-// import 'dart:io';
+// ignore_for_file: inference_failure_on_function_invocation
+
+// import 'dart:typed_data';
 // import 'package:dio/dio.dart';
 // import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
+// import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 // import 'package:learning_platform/src/feature/task/model/task.dart';
 // import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -9,224 +12,250 @@
 //   TasksDataSource({required Dio dio}) : _dio = dio;
 
 //   @override
-//   Future<List<Task>> listTasks(
-//     String org,
-//     String tok,
-//     String assignmentId,
-//   ) async {
-//     final resp = await _dio.get<List<dynamic>>(
+//   Future<List<Task>> getTasks({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//   }) async {
+//     final response = await _dio.get<List<dynamic>>(
 //       '/task/list',
 //       queryParameters: {
-//         'organization_id': org,
-//         'token': tok,
+//         'organization_id': organizationId,
+//         'token': token,
 //         'assignment_id': assignmentId,
 //       },
 //     );
-//     return resp.data!
-//         .map((j) => Task.fromJson(j as Map<String, dynamic>))
-//         .toList();
+//     return response.data?.map((e) => Task.fromJson(e as Map<String, dynamic>)).toList() ?? [];
 //   }
 
 //   @override
-//   Future<String> createTask(
-//     String org,
-//     String tok,
-//     String assignmentId,
-//     TaskRequest req,
-//   ) async {
-//     final resp = await _dio.post<Map<String, dynamic>>(
+//   Future<String> createTask({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//     required TaskRequest task,
+//   }) async {
+//     final response = await _dio.post<Map<String, dynamic>>(
 //       '/task/teacher',
 //       queryParameters: {
-//         'organization_id': org,
-//         'token': tok,
+//         'organization_id': organizationId,
+//         'token': token,
 //         'assignment_id': assignmentId,
 //       },
-//       data: req.toJson(),
+//       data: task.toJson(),
 //     );
-//     return resp.data!['task_id'] as String;
+//     final data = response.data;
+//     if (data != null && data.containsKey('task_id')) {
+//       return data['task_id'] as String;
+//     }
+//     throw Exception('Failed to create task');
 //   }
 
 //   @override
-//   Future<void> deleteTask(String org, String tok, String taskId) =>
-//       _dio.delete<void>(
+//   Future<void> deleteTask({
+//     required String organizationId,
+//     required String token,
+//     required String taskId,
+//   }) =>
+//       _dio.delete(
 //         '/task/teacher',
 //         queryParameters: {
-//           'organization_id': org,
-//           'token': tok,
+//           'organization_id': organizationId,
+//           'token': token,
 //           'task_id': taskId,
 //         },
 //       );
 
 //   @override
-//   Future<void> addQuestionFile(
-//     String org,
-//     String tok,
-//     String taskId,
-//     File file,
-//   ) =>
-//       _dio.post<void>(
-//         '/task/teacher/add-file',
-//         queryParameters: {
-//           'organization_id': org,
-//           'token': tok,
-//           'task_id': taskId,
-//         },
-//         data: FormData.fromMap({
-//           'file': await MultipartFile.fromFile(
-//             file.path,
-//             filename: file.path.split('/').last,
-//           ),
-//         }),
-//       );
-
-//   // @override
-//   // Future<File> downloadQuestionFile(
-//   //   String org,
-//   //   String tok,
-//   //   String taskId,
-//   // ) async {
-//   //   final resp = await _dio.get<Uint8List>(
-//   //     '/task/question/file',
-//   //     queryParameters: {
-//   //       'organization_id': org,
-//   //       'token': tok,
-//   //       'task_id': taskId,
-//   //     },
-//   //     options: Options(responseType: ResponseType.bytes),
-//   //   );
-//   //   //
-//  final dir = await getApplicationDocumentsDirectory();
-//     final filePath = '${dir.path}/${taskId}_$name.pdf';
-//     final file = File(filePath);
-//     await file.writeAsBytes(bytes);
-
-//     return filePath;
-//   // }
+//   Future<void> addFileToTask({
+//     required String organizationId,
+//     required String token,
+//     required String taskId,
+//     required Uint8List fileBytes,
+//     required String filename,
+//   }) async {
+//     final form = FormData.fromMap({
+//       'file': MultipartFile.fromBytes(
+//         fileBytes,
+//         filename: filename,
+//       ),
+//     });
+//     await _dio.post(
+//       '/task/teacher/add-file',
+//       queryParameters: {
+//         'organization_id': organizationId,
+//         'token': token,
+//         'task_id': taskId,
+//       },
+//       data: form,
+//     );
+//   }
 
 //   @override
-//   Future<void> answerText(
-//     String org,
-//     String tok,
-//     String assignmentId,
-//     String taskId,
-//     String text,
-//   ) =>
-//       _dio.post<void>(
+//   Future<Uint8List> downloadQuestionFile({
+//     required String organizationId,
+//     required String token,
+//     required String taskId,
+//   }) async {
+//     final resp = await _dio.get<Uint8List>(
+//       '/task/question/file',
+//       options: Options(responseType: ResponseType.bytes),
+//       queryParameters: {
+//         'organization_id': organizationId,
+//         'token': token,
+//         'task_id': taskId,
+//       },
+//     );
+//     return resp.data ?? Uint8List.fromList([]);
+//   }
+
+//   @override
+//   Future<void> answerText({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//     required String taskId,
+//     required String answer,
+//   }) =>
+//       _dio.post(
 //         '/task/student/answer/text',
 //         queryParameters: {
-//           'organization_id': org,
-//           'token': tok,
+//           'organization_id': organizationId,
+//           'token': token,
 //           'assignment_id': assignmentId,
 //           'task_id': taskId,
 //         },
-//         data: {'text': text},
+//         data: {'text': answer},
 //       );
 
 //   @override
-//   Future<void> answerFile(
-//     String org,
-//     String tok,
-//     String assignmentId,
-//     String taskId,
-//     File file,
-//   ) =>
-//       _dio.post<void>(
-//         '/task/student/answer/file',
-//         queryParameters: {
-//           'organization_id': org,
-//           'token': tok,
-//           'assignment_id': assignmentId,
-//           'task_id': taskId,
-//         },
-//         data: FormData.fromMap({
-//           'file': await MultipartFile.fromFile(
-//             file.path,
-//             filename: file.path.split('/').last,
-//           ),
-//         }),
-//       );
+//   Future<void> answerFile({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//     required String taskId,
+//     required Uint8List fileBytes,
+//     required String filename,
+//   }) async {
+//     final form = FormData.fromMap({
+//       'file': MultipartFile.fromBytes(
+//         fileBytes,
+//         filename: filename,
+//       ),
+//     });
+//     await _dio.post(
+//       '/task/student/answer/file',
+//       queryParameters: {
+//         'organization_id': organizationId,
+//         'token': token,
+//         'assignment_id': assignmentId,
+//         'task_id': taskId,
+//       },
+//       data: form,
+//     );
+//   }
 
 //   @override
-//   Future<void> evaluateTask(
-//     String org,
-//     String tok,
-//     String assignmentId,
-//     String taskId,
-//     String userId,
-//     int score,
-//   ) =>
-//       _dio.post<void>(
+//   Future<void> evaluateTask({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//     required String taskId,
+//     required String userId,
+//     required int evaluation,
+//   }) =>
+//       _dio.post(
 //         '/task/teacher/evaluate',
 //         queryParameters: {
-//           'organization_id': org,
-//           'token': tok,
+//           'organization_id': organizationId,
+//           'token': token,
 //           'assignment_id': assignmentId,
 //           'task_id': taskId,
 //           'user_id': userId,
 //         },
-//         data: {'assessment': score},
+//         data: {'assessment': evaluation},
 //       );
 
 //   @override
-//   Future<void> feedbackTask(
-//     String org,
-//     String tok,
-//     String assignmentId,
-//     String taskId,
-//     String userId,
-//     String feedback,
-//   ) =>
-//       _dio.post<void>(
+//   Future<void> feedbackTask({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//     required String taskId,
+//     required String userId,
+//     required String feedback,
+//   }) =>
+//       _dio.post(
 //         '/task/teacher/feedback',
 //         queryParameters: {
-//           'organization_id': org,
-//           'token': tok,
+//           'organization_id': organizationId,
+//           'token': token,
 //           'assignment_id': assignmentId,
 //           'task_id': taskId,
 //           'user_id': userId,
 //         },
 //         data: {'feedback': feedback},
 //       );
-@override
-//   Future<List<AssignmentAnswers>> fetchAnswers(
-//     String orgId,
-//     String token,
-//     String courseId,
-//   ) async {
-//     final resp = await _dio.get<List<dynamic>>(
-//       '/assignment/answers',
+
+//   @override
+//   Future<Uint8List> downloadAnswerFile({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//     required String taskId,
+//     required String userId,
+//   }) async {
+//     final resp = await _dio.get<Uint8List>(
+//       '/task/answer/file',
+//       options: Options(responseType: ResponseType.bytes),
 //       queryParameters: {
-//         'organization_id': orgId,
+//         'organization_id': organizationId,
 //         'token': token,
-//         'course_id': courseId,
+//         'assignment_id': assignmentId,
+//         'task_id': taskId,
+//         'user_id': userId,
 //       },
 //     );
-
-//     return resp.data
-//             ?.map((e) => AssignmentAnswers.fromJson(e as Map<String, dynamic>))
-//             .toList() ??
-//         [];
+//     return resp.data!;
 //   }
-// }
-// @override
-//   Future<List<EvaluateAnswers>> fetchEvaluateAnswers(String courseId) async {
-//     final org = _orgIdStorage.load() ?? '';
-//     final token = _tokenStorage.load() ?? '';
-//     final resp = await _dio.get<List<dynamic>>(
-//       '/evaluate-answers',
+
+//   @override
+//   Future<EvaluateAnswers> fetchStudentEvaluateAnswers({
+//     required String organizationId,
+//     required String token,
+//     required String assignmentId,
+//   }) async {
+//     final resp = await _dio.get<Map<String, dynamic>>(
+//       '/assignment/student/info',
 //       queryParameters: {
-//         'organization_id': org,
+//         'organization_id': organizationId,
 //         'token': token,
-//         'course_id': courseId,
 //         'assignment_id': assignmentId,
 //       },
 //     );
-//     return resp.data!
-//         .map((json) => EvaluateAnswers.fromJson(json as Map<String, dynamic>))
-//         .toList();
+//     return EvaluateAnswers.fromJson(resp as Map<String, dynamic>);
 //   }
 
-import 'dart:io';
+//   @override
+//   Future<EvaluateAnswers> fetchTeacherEvaluateAnswers({
+//     required String organizationId,
+//     required String token,
+//     required String userId,
+//     required String assignmentId,
+//   }) async {
+//     final resp = await _dio.get<Map<String, dynamic>>(
+//       '/assignment/teacher/info',
+//       queryParameters: {
+//         'organization_id': organizationId,
+//         'token': token,
+//         'assignment_id': assignmentId,
+//         'user_id': userId,
+//       },
+//     );
+//     return EvaluateAnswers.fromJson(resp as Map<String, dynamic>);
+//   }
+// }
+
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
@@ -290,123 +319,127 @@ class TasksDataSource implements ITasksDataSource {
   ];
 
   @override
-  Future<List<Task>> listTasks(
-    String org,
-    String tok,
-    String assignmentId,
-  ) async =>
+  Future<List<Task>> getTasks({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+  }) async =>
       Future.delayed(
         const Duration(milliseconds: 500),
         () => _tasks,
       );
 
   @override
-  Future<String> createTask(
-    String org,
-    String tok,
-    String assignmentId,
-    TaskRequest req,
-  ) async {
+  Future<String> createTask({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required TaskRequest task,
+  }) async {
     final newId = (_tasks.length + 1).toString();
     final newTask = Task(
       id: newId,
-      questionType: req.questionType,
-      questionText: req.questionText ?? '',
+      questionType: task.questionType,
+      questionText: task.questionText ?? '',
       questionFile: '',
-      answerType: req.answerType,
-      answerVariants: req.answerVariants ?? [],
+      answerType: task.answerType,
+      answerVariants: task.answerVariants ?? [],
     );
     _tasks.add(newTask);
     return Future.value(newId);
   }
 
   @override
-  Future<void> deleteTask(String org, String tok, String taskId) async {
+  Future<void> deleteTask({
+    required String organizationId,
+    required String token,
+    required String taskId,
+  }) async {
     _tasks.removeWhere((t) => t.id == taskId);
     return Future.value();
   }
 
   @override
-  Future<void> addQuestionFile(
-    String org,
-    String tok,
-    String taskId,
-    File file,
-  ) async {
-    final idx = _tasks.indexWhere((t) => t.id == taskId);
-    if (idx != -1) {
-      _tasks[idx] = _tasks[idx].copyWith(questionFile: file.path.split('/').last);
-    }
+  Future<void> addFileToTask({
+    required String organizationId,
+    required String token,
+    required String taskId,
+    required Uint8List fileBytes,
+    required String filename,
+  }) async {
     return Future.delayed(
       const Duration(seconds: 1),
     );
   }
 
   @override
-  Future<void> answerText(
-    String org,
-    String tok,
-    String assignmentId,
-    String taskId,
-    String text,
-  ) async =>
+  Future<void> answerText({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String answer,
+  }) async =>
       Future.delayed(
         const Duration(seconds: 1),
       );
 
   @override
-  Future<void> answerFile(
-    String org,
-    String tok,
-    String assignmentId,
-    String taskId,
-    File file,
-  ) async =>
+  Future<void> answerFile({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required Uint8List fileBytes,
+    required String filename,
+  }) async =>
       Future.delayed(
         const Duration(seconds: 1),
       );
 
   @override
-  Future<void> evaluateTask(
-    String org,
-    String tok,
-    String answerId,
-    int score,
-  ) async =>
+  Future<void> evaluateTask({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    required int evaluation,
+  }) async =>
       Future.delayed(const Duration(seconds: 1));
 
   @override
-  Future<void> feedbackTask(
-    String org,
-    String tok,
-    String answerId,
-    String feedback,
-  ) async =>
+  Future<void> feedbackTask({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    required String feedback,
+  }) async =>
       Future.delayed(const Duration(seconds: 1));
 
   @override
-  Future<Uint8List> downloadQuestionFile(
-    String org,
-    String tok,
-    String taskId,
-  ) async =>
+  Future<Uint8List> downloadQuestionFile({
+    required String organizationId,
+    required String token,
+    required String taskId,
+  }) async =>
       Future.delayed(
         const Duration(milliseconds: 500),
         () => fileList,
       );
 
   @override
-  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers(
-    String orgId,
-    String token,
-    String userId,
-    String assignmentId,
-  ) async {
+  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers({
+    required String organizationId,
+    required String token,
+    required String userId,
+    required String assignmentId,
+  }) async {
     await Future<void>.delayed(const Duration(seconds: 1));
 
     return const EvaluateAnswers(
-      id: 'assgn1',
-      name: 'Лексическое значение слов (задание 2)',
       evaluateTasks: [
         EvaluateTask(
           id: 'task1',
@@ -457,16 +490,14 @@ class TasksDataSource implements ITasksDataSource {
   }
 
   @override
-  Future<EvaluateAnswers> fetchStudentEvaluateAnswers(
-    String orgId,
-    String token,
-    String assignmentId,
-  ) async {
+  Future<EvaluateAnswers> fetchStudentEvaluateAnswers({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+  }) async {
     await Future<void>.delayed(const Duration(seconds: 1));
 
     return const EvaluateAnswers(
-      id: 'assgn1',
-      name: 'Лексическое значение слов (задание 2)',
       evaluateTasks: [
         EvaluateTask(
           id: 'task1',
@@ -515,4 +546,16 @@ class TasksDataSource implements ITasksDataSource {
       ],
     );
   }
+
+  @override
+  Future<Uint8List> downloadAnswerFile(
+          {required String organizationId,
+          required String token,
+          required String assignmentId,
+          required String taskId,
+          required String userId}) async =>
+      Future.delayed(
+        const Duration(milliseconds: 500),
+        () => fileList,
+      );
 }

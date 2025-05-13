@@ -17,14 +17,16 @@ import 'package:share_plus/share_plus.dart';
 class EvaluateTaskTile extends StatelessWidget {
   final int number;
   final EvaluateTask task;
-  final VoidCallback onDeleteTask;
+  final String assignmentId;
   final TasksRepository tasksRepository;
+  final String? userId;
 
   const EvaluateTaskTile({
     required this.number,
     required this.task,
-    required this.onDeleteTask,
+    required this.assignmentId,
     required this.tasksRepository,
+    this.userId,
     super.key,
   });
 
@@ -96,7 +98,9 @@ class EvaluateTaskTile extends StatelessWidget {
                             try {
                               final filePath = await tasksRepository.downloadQuestionFile(
                                 task.id,
+                                task.questionFile,
                               );
+
                               if (filePath != null) {
                                 final params = ShareParams(
                                   title: task.questionFile,
@@ -128,7 +132,9 @@ class EvaluateTaskTile extends StatelessWidget {
                   onTap: () => EvaluateTaskDialog(
                     onSaveCallback: (score, feedback) => evaluateBloc.add(
                       EvaluateTasksEvent.evaluate(
-                        answerId: task.id,
+                        taskId: task.id,
+                        assignmentId: assignmentId,
+                        userId: userId ?? '-1',
                         score: score,
                         feedback: feedback,
                       ),

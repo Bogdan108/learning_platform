@@ -1,70 +1,95 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
-abstract interface class ITasksDataSource {
-  Future<List<Task>> listTasks(String org, String tok, String assignmentId);
+abstract class ITasksDataSource {
+  Future<String> createTask({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required TaskRequest task,
+  });
 
-  Future<String> createTask(
-    String org,
-    String tok,
-    String assignmentId,
-    TaskRequest req,
-  );
+  Future<void> deleteTask({
+    required String organizationId,
+    required String token,
+    required String taskId,
+  });
 
-  Future<void> deleteTask(String org, String tok, String taskId);
+  Future<void> addFileToTask({
+    required String organizationId,
+    required String token,
+    required String taskId,
+    required Uint8List fileBytes,
+    required String filename,
+  });
 
-  Future<void> addQuestionFile(
-    String org,
-    String tok,
-    String taskId,
-    File file,
-  );
+  Future<List<Task>> getTasks({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+  });
 
-  Future<Uint8List> downloadQuestionFile(String org, String tok, String taskId);
+  Future<Uint8List> downloadQuestionFile({
+    required String organizationId,
+    required String token,
+    required String taskId,
+  });
 
-  Future<void> answerText(
-    String org,
-    String tok,
-    String assignmentId,
-    String taskId,
-    String text,
-  );
+  Future<void> answerText({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String answer,
+  });
 
-  Future<void> answerFile(
-    String org,
-    String tok,
-    String assignmentId,
-    String taskId,
-    File file,
-  );
+  Future<void> answerFile({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required Uint8List fileBytes,
+    required String filename,
+  });
 
-  Future<void> evaluateTask(
-    String org,
-    String tok,
-    String answerId,
-    int score,
-  );
+  Future<void> evaluateTask({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    required int evaluation,
+  });
 
-  Future<void> feedbackTask(
-    String org,
-    String tok,
-    String answerId,
-    String feedback,
-  );
+  Future<void> feedbackTask({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+    required String feedback,
+  });
 
-  Future<EvaluateAnswers> fetchStudentEvaluateAnswers(
-    String org,
-    String token,
-    String assignmentId,
-  );
+  Future<Uint8List> downloadAnswerFile({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+    required String taskId,
+    required String userId,
+  });
 
-  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers(
-    String org,
-    String token,
-    String userId,
-    String assignmentId,
-  );
+  Future<EvaluateAnswers> fetchStudentEvaluateAnswers({
+    required String organizationId,
+    required String token,
+    required String assignmentId,
+  });
+
+  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers({
+    required String organizationId,
+    required String token,
+    required String userId,
+    required String assignmentId,
+  });
 }

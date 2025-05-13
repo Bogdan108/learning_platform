@@ -83,6 +83,7 @@ class TaskTile extends StatelessWidget {
                               try {
                                 final filePath = await tasksRepository.downloadQuestionFile(
                                   task.id,
+                                  task.questionFile,
                                 );
                                 if (filePath != null) {
                                   final params = ShareParams(

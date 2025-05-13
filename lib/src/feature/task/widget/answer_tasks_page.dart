@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
+import 'dart:developer';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,7 +45,7 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
 
   final Map<int, String> _textAnswers = {};
   final Map<int, int?> _variantAnswers = {};
-  final Map<int, File?> _fileAnswers = {};
+  final Map<int, PlatformFile?> _fileAnswers = {};
 
   @override
   void initState() {
@@ -96,12 +96,14 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
           }
         case AnswerType.file:
           final f = _fileAnswers[_currentIndex];
-          if (f != null) {
+          final bytes = f?.bytes;
+          if (bytes != null) {
             _bloc.add(
               AnswerTasksEvent.answerFile(
                 assignmentId: aid,
                 taskId: tid,
-                file: f,
+                file: bytes,
+                fileName: f?.name ?? 'answer',
                 onSuccess: onSuccess,
                 onError: onError,
               ),
@@ -127,15 +129,19 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
   }
 
   Future<void> _pickFile(int idx, Task task) async {
-    final res = await FilePicker.platform.pickFiles();
-    if (res != null && res.files.single.path != null) {
-      final file = File(res.files.single.path!);
-      if (_fileAnswers[idx] != file) {
-        setState(
-          () => _fileAnswers[idx] = file,
-        );
-        needUpdate = true;
+    try {
+      final res = await FilePicker.platform.pickFiles();
+      if (res != null && res.files.single.path != null) {
+        final file = res.files.first;
+        if (_fileAnswers[idx] != file) {
+          setState(
+            () => _fileAnswers[idx] = file,
+          );
+          needUpdate = true;
+        }
       }
+    } catch (error) {
+      log(error.toString());
     }
   }
 
@@ -251,6 +257,7 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                                       final filePath = await tasksRepository
                                                           .downloadQuestionFile(
                                                         task.id,
+                                                        task.questionFile,
                                                       );
                                                       if (filePath != null) {
                                                         final params = ShareParams(
@@ -279,7 +286,7 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                   ignoring: isFinished,
                                   child: AnswerTypeWidget(
                                     task: task,
-                                    fileName: _fileAnswers[idx]?.path.split('/').last,
+                                    fileName: _fileAnswers[idx]?.name,
                                     onTextAnswer: (txt) {
                                       if (_textAnswers[idx] != txt) {
                                         _textAnswers[idx] = txt;
