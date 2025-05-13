@@ -178,138 +178,139 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
               children: [
                 Column(
                   children: [
-                    Expanded(
-                      child: PageView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: _pageController,
-                        itemCount: tasks.length + 1,
-                        onPageChanged: (newIdx) {
-                          if (newIdx == tasks.length) {
-                            isFinished = true;
-                          }
+                    if (tasks.isNotEmpty)
+                      Expanded(
+                        child: PageView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _pageController,
+                          itemCount: tasks.length + 1,
+                          onPageChanged: (newIdx) {
+                            if (newIdx == tasks.length) {
+                              isFinished = true;
+                            }
 
-                          needUpdate = false;
-                          setState(() => _currentIndex = newIdx);
-                        },
-                        itemBuilder: (_, idx) {
-                          if (idx == tasks.length) {
-                            return FinishAnswerCard(
-                              onViewAnswers: () => _pageController.animateTo(
-                                0,
-                                duration: const Duration(seconds: 1),
-                                curve: animation,
+                            needUpdate = false;
+                            setState(() => _currentIndex = newIdx);
+                          },
+                          itemBuilder: (_, idx) {
+                            if (idx == tasks.length) {
+                              return FinishAnswerCard(
+                                onViewAnswers: () => _pageController.animateTo(
+                                  0,
+                                  duration: const Duration(seconds: 1),
+                                  curve: animation,
+                                ),
+                              );
+                            }
+                            final task = tasks[idx];
+                            return Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: ListView(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 24,
+                                        height: 24,
+                                        alignment: Alignment.center,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          '${idx + 1}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: task.questionType == QuestionType.text
+                                            ? Text(
+                                                task.questionText ?? '',
+                                                style: const TextStyle(fontSize: 16),
+                                              )
+                                            : Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.insert_drive_file,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      task.questionFile ?? 'Файл задания',
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    child: const Icon(Icons.download),
+                                                    onTap: () async {
+                                                      CustomSnackBar.showSuccessful(
+                                                        context,
+                                                        title: 'Скачиваем ...',
+                                                      );
+
+                                                      try {
+                                                        final filePath = await tasksRepository
+                                                            .downloadQuestionFile(
+                                                          task.id,
+                                                          task.questionFile,
+                                                        );
+                                                        if (filePath != null) {
+                                                          final params = ShareParams(
+                                                            title: task.questionFile,
+                                                            files: [XFile(filePath)],
+                                                          );
+
+                                                          await SharePlus.instance.share(params);
+                                                        }
+                                                      } catch (e) {
+                                                        CustomSnackBar.showError(
+                                                          context,
+                                                          title: 'Ошибка: $e',
+                                                        );
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 24),
+                                  // ── Ответ ─────────────────────────────
+                                  IgnorePointer(
+                                    ignoring: isFinished,
+                                    child: AnswerTypeWidget(
+                                      task: task,
+                                      fileName: _fileAnswers[idx]?.name,
+                                      onTextAnswer: (txt) {
+                                        if (_textAnswers[idx] != txt) {
+                                          _textAnswers[idx] = txt;
+                                          needUpdate = true;
+                                        }
+                                      },
+                                      onFileChangeAnswer: () => _pickFile(idx, task),
+                                      onVariantChangeAnswer: (index) {
+                                        setState(
+                                          () => _variantAnswers[idx] = index,
+                                        );
+                                        needUpdate = true;
+                                      },
+                                      varinalAnswerIndex: _variantAnswers[idx],
+                                      initialText: _textAnswers[idx],
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
-                          }
-                          final task = tasks[idx];
-                          return Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: ListView(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 24,
-                                      height: 24,
-                                      alignment: Alignment.center,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(8),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        '${idx + 1}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: task.questionType == QuestionType.text
-                                          ? Text(
-                                              task.questionText ?? '',
-                                              style: const TextStyle(fontSize: 16),
-                                            )
-                                          : Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.insert_drive_file,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    task.questionFile ?? 'Файл задания',
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  child: const Icon(Icons.download),
-                                                  onTap: () async {
-                                                    CustomSnackBar.showSuccessful(
-                                                      context,
-                                                      title: 'Скачиваем ...',
-                                                    );
-
-                                                    try {
-                                                      final filePath = await tasksRepository
-                                                          .downloadQuestionFile(
-                                                        task.id,
-                                                        task.questionFile,
-                                                      );
-                                                      if (filePath != null) {
-                                                        final params = ShareParams(
-                                                          title: task.questionFile,
-                                                          files: [XFile(filePath)],
-                                                        );
-
-                                                        await SharePlus.instance.share(params);
-                                                      }
-                                                    } catch (e) {
-                                                      CustomSnackBar.showError(
-                                                        context,
-                                                        title: 'Ошибка: $e',
-                                                      );
-                                                    }
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 24),
-                                // ── Ответ ─────────────────────────────
-                                IgnorePointer(
-                                  ignoring: isFinished,
-                                  child: AnswerTypeWidget(
-                                    task: task,
-                                    fileName: _fileAnswers[idx]?.name,
-                                    onTextAnswer: (txt) {
-                                      if (_textAnswers[idx] != txt) {
-                                        _textAnswers[idx] = txt;
-                                        needUpdate = true;
-                                      }
-                                    },
-                                    onFileChangeAnswer: () => _pickFile(idx, task),
-                                    onVariantChangeAnswer: (index) {
-                                      setState(
-                                        () => _variantAnswers[idx] = index,
-                                      );
-                                      needUpdate = true;
-                                    },
-                                    varinalAnswerIndex: _variantAnswers[idx],
-                                    initialText: _textAnswers[idx],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                          },
+                        ),
                       ),
-                    ),
                     // ── Управление ────────────────────────────
                     if (_currentIndex != tasks.length)
                       Padding(
