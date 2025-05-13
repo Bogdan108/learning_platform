@@ -13,14 +13,14 @@
 //   Future<List<AdminUser>> getUsers({
 //     required String organizationId,
 //     required String token,
-//     required String searchQuery,
+//     required String? searchQuery,
 //   }) async {
 //     final response = await _dio.get<List<dynamic>>(
 //       '/admin/user/list',
 //       queryParameters: {
 //         'organization_id': organizationId,
 //         'token': token,
-//         'search_query': searchQuery,
+//          if(searchQuery != null)'search_query': searchQuery,
 //       },
 //     );
 //     return response.data!
@@ -64,14 +64,14 @@
 //   Future<List<Course>> getAllCourses({
 //     required String organizationId,
 //     required String token,
-//     required String searchQuery,
+//     required String? searchQuery,
 //   }) async {
 //     final response = await _dio.get<List<dynamic>>(
 //       '/admin/course/list',
 //       queryParameters: {
 //         'organization_id': organizationId,
 //         'token': token,
-//         'search_query': searchQuery,
+//         if(searchQuery != null)'search_query': searchQuery,
 //       },
 //     );
 //     return response.data!
@@ -133,7 +133,7 @@ class AdminDataSource implements IAdminDataSource {
   Future<List<AdminUser>> getUsers({
     required String organizationId,
     required String token,
-    required String searchQuery,
+    required String? searchQuery,
   }) async =>
       Future.delayed(
         _delay,
@@ -191,7 +191,7 @@ class AdminDataSource implements IAdminDataSource {
   Future<List<Course>> getAllCourses({
     required String organizationId,
     required String token,
-    required String searchQuery,
+    required String? searchQuery,
   }) async =>
       Future.delayed(
         _delay,

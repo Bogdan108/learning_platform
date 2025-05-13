@@ -22,7 +22,7 @@ class TasksRepository implements ITasksRepository {
         _orgIdStorage = orgIdStorage;
 
   String get _token => _tokenStorage.load() ?? '';
-  String get _orgId => _orgIdStorage.load() ?? '';
+  String get _organizationId => _orgIdStorage.load() ?? '';
 
   @override
   Future<String> createTask({
@@ -30,7 +30,7 @@ class TasksRepository implements ITasksRepository {
     required TaskRequest task,
   }) =>
       _dataSource.createTask(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
         task: task,
@@ -38,7 +38,7 @@ class TasksRepository implements ITasksRepository {
 
   @override
   Future<void> deleteTask(String taskId) => _dataSource.deleteTask(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         taskId: taskId,
       );
@@ -50,7 +50,7 @@ class TasksRepository implements ITasksRepository {
     required String fileName,
   }) =>
       _dataSource.addFileToTask(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         taskId: taskId,
         fileBytes: file,
@@ -59,7 +59,7 @@ class TasksRepository implements ITasksRepository {
 
   @override
   Future<List<Task>> listTasks(String assignmentId) => _dataSource.getTasks(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
       );
@@ -67,7 +67,7 @@ class TasksRepository implements ITasksRepository {
   @override
   Future<String?> downloadQuestionFile(String taskId, String? name) async {
     final bytes = await _dataSource.downloadQuestionFile(
-      organizationId: _orgId,
+      organizationId: _organizationId,
       token: _token,
       taskId: taskId,
     );
@@ -85,7 +85,7 @@ class TasksRepository implements ITasksRepository {
     required String text,
   }) =>
       _dataSource.answerText(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
         taskId: taskId,
@@ -100,7 +100,7 @@ class TasksRepository implements ITasksRepository {
     required String fileName,
   }) =>
       _dataSource.answerFile(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
         taskId: taskId,
@@ -116,7 +116,7 @@ class TasksRepository implements ITasksRepository {
     required int score,
   }) =>
       _dataSource.evaluateTask(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
         taskId: taskId,
@@ -132,7 +132,7 @@ class TasksRepository implements ITasksRepository {
     required String feedback,
   }) =>
       _dataSource.feedbackTask(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
         taskId: taskId,
@@ -148,7 +148,7 @@ class TasksRepository implements ITasksRepository {
     String? name,
   }) async {
     final bytes = await _dataSource.downloadAnswerFile(
-      organizationId: _orgId,
+      organizationId: _organizationId,
       token: _token,
       assignmentId: assignmentId,
       taskId: taskId,
@@ -167,7 +167,7 @@ class TasksRepository implements ITasksRepository {
     String assignmentId,
   ) =>
       _dataSource.fetchStudentEvaluateAnswers(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         assignmentId: assignmentId,
       );
@@ -177,7 +177,7 @@ class TasksRepository implements ITasksRepository {
     String assignmentId,
   ) =>
       _dataSource.fetchTeacherEvaluateAnswers(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         userId: userId,
         assignmentId: assignmentId,

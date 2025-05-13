@@ -21,42 +21,39 @@ class AdminRepository implements IAdminRepository {
         _orgIdStorage = orgIdStorage;
 
   String get _token => _tokenStorage.load() ?? '';
-  String get _orgId => _orgIdStorage.load() ?? '';
+  String get _organizationId => _orgIdStorage.load() ?? '';
 
   @override
-  Future<List<AdminUser>> getUsers(String searchQuery) => _dataSource.getUsers(
-        organizationId: _orgId,
+  Future<List<AdminUser>> getUsers(String? searchQuery) => _dataSource.getUsers(
+        organizationId: _organizationId,
         token: _token,
         searchQuery: searchQuery,
       );
 
   @override
-  Future<void> changeUserRole(UserRoleRequest payload) =>
-      _dataSource.changeUserRole(
-        organizationId: _orgId,
+  Future<void> changeUserRole(UserRoleRequest payload) => _dataSource.changeUserRole(
+        organizationId: _organizationId,
         token: _token,
         payload: payload,
       );
 
   @override
   Future<void> deleteUser(String userId) => _dataSource.deleteUser(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         userId: userId,
       );
 
   @override
-  Future<List<Course>> getAllCourses(String searchQuery) =>
-      _dataSource.getAllCourses(
-        organizationId: _orgId,
+  Future<List<Course>> getAllCourses(String? searchQuery) => _dataSource.getAllCourses(
+        organizationId: _organizationId,
         token: _token,
         searchQuery: searchQuery,
       );
 
   @override
-  Future<void> editCourse(String courseId, CourseRequest course) =>
-      _dataSource.editCourse(
-        organizationId: _orgId,
+  Future<void> editCourse(String courseId, CourseRequest course) => _dataSource.editCourse(
+        organizationId: _organizationId,
         token: _token,
         courseId: courseId,
         course: course,
@@ -64,7 +61,7 @@ class AdminRepository implements IAdminRepository {
 
   @override
   Future<void> deleteCourse(String courseId) => _dataSource.deleteCourse(
-        organizationId: _orgId,
+        organizationId: _organizationId,
         token: _token,
         courseId: courseId,
       );

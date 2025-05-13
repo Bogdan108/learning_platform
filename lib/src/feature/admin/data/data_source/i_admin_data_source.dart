@@ -7,7 +7,7 @@ abstract interface class IAdminDataSource {
   Future<List<AdminUser>> getUsers({
     required String organizationId,
     required String token,
-    required String searchQuery,
+    required String? searchQuery,
   });
 
   Future<void> changeUserRole({
@@ -25,7 +25,7 @@ abstract interface class IAdminDataSource {
   Future<List<Course>> getAllCourses({
     required String organizationId,
     required String token,
-    required String searchQuery,
+    required String? searchQuery,
   });
 
   Future<void> editCourse({

@@ -5,7 +5,7 @@ part 'admin_courses_event.freezed.dart';
 @freezed
 sealed class AdminCoursesEvent with _$AdminCoursesEvent {
   const factory AdminCoursesEvent.fetchCourses({
-    required String searchQuery,
+    String? searchQuery,
   }) = AdminCoursesEvent$FetchCourses;
 
   const factory AdminCoursesEvent.editCourse({

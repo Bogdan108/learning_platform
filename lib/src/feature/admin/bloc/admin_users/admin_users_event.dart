@@ -6,7 +6,7 @@ part 'admin_users_event.freezed.dart';
 @freezed
 sealed class AdminUsersEvent with _$AdminUsersEvent {
   const factory AdminUsersEvent.fetchUsers({
-    required String searchQuery,
+    String? searchQuery,
   }) = AdminUsersEvent$FetchUsers;
 
   const factory AdminUsersEvent.changeUserRole({

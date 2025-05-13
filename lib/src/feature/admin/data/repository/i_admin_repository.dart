@@ -5,7 +5,7 @@ import 'package:learning_platform/src/feature/courses/model/course_request.dart'
 
 abstract interface class IAdminRepository {
   Future<List<AdminUser>> getUsers(
-    String searchQuery,
+    String? searchQuery,
   );
 
   Future<void> changeUserRole(
@@ -15,7 +15,7 @@ abstract interface class IAdminRepository {
   Future<void> deleteUser(String userId);
 
   Future<List<Course>> getAllCourses(
-    String searchQuery,
+    String? searchQuery,
   );
 
   Future<void> editCourse(

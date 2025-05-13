@@ -51,18 +51,20 @@ class _UsersManagePageState extends State<UsersManagePage> {
     final pos = _scrollController.position;
     if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
         _adminBloc.state is! AdminUsersState$Loading) {
+      final text = _searchController.text;
       _adminBloc.add(
         AdminUsersEvent.fetchUsers(
-          searchQuery: _searchController.text,
+          searchQuery: text.isNotEmpty ? text : null,
         ),
       );
     }
   }
 
   void _handleTextEditing() {
+    final text = _searchController.text;
     _adminBloc.add(
       AdminUsersEvent.fetchUsers(
-        searchQuery: _searchController.text,
+        searchQuery: text.isNotEmpty ? text : null,
       ),
     );
   }
