@@ -4,7 +4,7 @@ analyzer:
   errors:
     public_member_api_docs: ignore
     invalid_annotation_target: ignore
-    type_annotate_public_apis: ignore ignore
+    type_annotate_public_apis: ignore 
   exclude:
     - "lib/src/core/localization/generated/**"
 
