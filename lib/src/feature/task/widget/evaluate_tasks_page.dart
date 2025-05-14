@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_assignment_bloc.dart';
 import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_tasks_event.dart';
@@ -65,7 +65,9 @@ class _EvaluateTasksPageState extends State<EvaluateTasksPage> {
             builder: (_, state) => switch (state) {
               EvaluateTasksState$Error() => CustomErrorWidget(
                   errorMessage: state.message,
-                  onRetry: state.event != null ? () => _bloc.add(state.event!) : null,
+                  onRetry: state.event != null
+                      ? () => _bloc.add(state.event!)
+                      : null,
                 ),
               _ => Stack(
                   children: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment_answers_bloc/teacher_assignment_answers_bloc.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment_answers_bloc/teacher_assignment_answers_event.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment_answers_bloc/teacher_assignment_answers_state.dart';
@@ -51,7 +51,8 @@ class _AssignmentAnswersPageState extends State<AssignmentAnswersPage> {
   void _handleRefresh() {
     final pos = _scrollController.position;
     if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
-        _teacherAssignmentAnswersBloc.state is! TeacherAssignmentAnswersState$Loading) {
+        _teacherAssignmentAnswersBloc.state
+            is! TeacherAssignmentAnswersState$Loading) {
       _teacherAssignmentAnswersBloc.add(
         TeacherAssignmentAnswersEvent.fetch(
           courseId: widget.courseId,
@@ -63,7 +64,8 @@ class _AssignmentAnswersPageState extends State<AssignmentAnswersPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Ответы учеников')),
-        body: BlocBuilder<TeacherAssignmentAnswersBloc, TeacherAssignmentAnswersState>(
+        body: BlocBuilder<TeacherAssignmentAnswersBloc,
+            TeacherAssignmentAnswersState>(
           bloc: _teacherAssignmentAnswersBloc,
           builder: (context, state) => switch (state) {
             TeacherAssignmentAnswersState$Error() => CustomErrorWidget(
@@ -116,7 +118,8 @@ class _AnswersList extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(8),
@@ -140,7 +143,8 @@ class _AnswersList extends StatelessWidget {
                       'answerId': s.answerId,
                       'courseId': courseId,
                     },
-                    extra: '${s.name.secondName} ${s.name.firstName}. ${s.name.middleName}.',
+                    extra:
+                        '${s.name.secondName} ${s.name.firstName}. ${s.name.middleName}.',
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -152,7 +156,9 @@ class _AnswersList extends StatelessWidget {
                           ),
                         ),
                         Icon(
-                          s.evaluated ? Icons.check_circle : Icons.hourglass_top,
+                          s.evaluated
+                              ? Icons.check_circle
+                              : Icons.hourglass_top,
                           color: s.evaluated ? Colors.green : Colors.grey,
                           size: 20,
                         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
-import 'package:learning_platform/src/common/widget/custom_search_field.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_search_field.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_bloc.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_event.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_state.dart';
@@ -35,7 +35,8 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
         orgIdStorage: deps.organizationIdStorage,
       ),
     )..add(const AdminCoursesEvent.fetchCourses(searchQuery: ''));
-    _searchController = TextEditingController()..addListener(_handleTextEditing);
+    _searchController = TextEditingController()
+      ..addListener(_handleTextEditing);
     _scrollController = ScrollController()..addListener(_handleRefresh);
   }
 
@@ -63,7 +64,8 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
   void _handleTextEditing() {
     final text = _searchController.text;
     _adminBloc.add(
-      AdminCoursesEvent.fetchCourses(searchQuery: text.isNotEmpty ? text : null),
+      AdminCoursesEvent.fetchCourses(
+          searchQuery: text.isNotEmpty ? text : null),
     );
   }
 
@@ -88,7 +90,9 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                 builder: (context, state) => switch (state) {
                   AdminCoursesState$Error() => CustomErrorWidget(
                       errorMessage: state.error,
-                      onRetry: state.event != null ? () => _adminBloc.add(state.event!) : null,
+                      onRetry: state.event != null
+                          ? () => _adminBloc.add(state.event!)
+                          : null,
                     ),
                   _ => Stack(children: [
                       ListView.separated(
@@ -111,7 +115,8 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       course.name,
@@ -130,7 +135,8 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       TextButton(
@@ -149,7 +155,8 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                                       IconButton(
                                         icon: const Icon(Icons.edit, size: 16),
                                         onPressed: () => EditCourseDialog(
-                                          onSaveCallback: (name, desc) => _adminBloc.add(
+                                          onSaveCallback: (name, desc) =>
+                                              _adminBloc.add(
                                             AdminCoursesEvent.editCourse(
                                               courseId: course.id,
                                               name: name,
@@ -157,7 +164,8 @@ class _CoursesManagePageState extends State<CoursesManagePage> {
                                             ),
                                           ),
                                           initialName: course.name,
-                                          initialDescription: course.description,
+                                          initialDescription:
+                                              course.description,
                                         ).show(context),
                                       ),
                                     ],

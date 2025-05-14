@@ -142,8 +142,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
 
   @override
   Future<DependenciesContainer> create() async {
-    final dio = Dio();
-    dio.options.baseUrl = AppStrings.baseUrl;
+    final dio = const DioFactory().create();
 
     final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -194,6 +193,25 @@ class AppLoggerFactory extends Factory<AppLogger> {
 
   @override
   AppLogger create() => AppLogger(observers: observers);
+}
+
+/// {@template app_logger_factory}
+/// Factory that creates an instance of [Dio].
+/// {@endtemplate}
+class DioFactory extends Factory<Dio> {
+  /// {@macro dio_factory}
+  const DioFactory({this.observers = const []});
+
+  /// List of observers that will be notified when a log message is received.
+  final List<LogObserver> observers;
+
+  @override
+  Dio create() {
+    /// Interceptor that logs requests and responses
+    final dio = Dio()..interceptors.add(LogInterceptor());
+    dio.options.baseUrl = AppStrings.baseUrl;
+    return dio;
+  }
 }
 
 /// {@template error_reporter_factory}

@@ -3,7 +3,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
+import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/evaluate_assignment_bloc.dart';
@@ -35,7 +35,8 @@ class EvaluateTaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final evaluateBloc = context.read<EvaluateTasksBloc>();
-    final role = DependenciesScope.of(context).profileBloc.state.profileInfo.role;
+    final role =
+        DependenciesScope.of(context).profileBloc.state.profileInfo.role;
     final isTeacher = role == UserRole.teacher;
 
     return Padding(
@@ -98,7 +99,8 @@ class EvaluateTaskTile extends StatelessWidget {
                             );
 
                             try {
-                              final filePath = await tasksRepository.downloadQuestionFile(
+                              final filePath =
+                                  await tasksRepository.downloadQuestionFile(
                                 task.id,
                                 task.questionFile,
                               );
@@ -197,7 +199,8 @@ class EvaluateTaskTile extends StatelessWidget {
                         );
 
                         try {
-                          final filePath = await tasksRepository.downloadAnswerFile(
+                          final filePath =
+                              await tasksRepository.downloadAnswerFile(
                             assignmentId: assignmentId,
                             taskId: task.id,
                             userId: userId ?? '-1',

@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
-import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/task/bloc/answer_tasks_bloc/answer_tasks_bloc.dart';
 import 'package:learning_platform/src/feature/task/bloc/answer_tasks_bloc/answer_tasks_event.dart';
@@ -169,7 +169,8 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
             if (state is AnswerTasksState$Error) {
               return CustomErrorWidget(
                 errorMessage: state.error,
-                onRetry: state.event != null ? () => _bloc.add(state.event!) : null,
+                onRetry:
+                    state.event != null ? () => _bloc.add(state.event!) : null,
               );
             }
 
@@ -208,7 +209,8 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                               child: ListView(
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         width: 24,
@@ -230,10 +232,12 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                       ),
                                       const SizedBox(width: 12),
                                       Expanded(
-                                        child: task.questionType == QuestionType.text
+                                        child: task.questionType ==
+                                                QuestionType.text
                                             ? Text(
                                                 task.questionText ?? '',
-                                                style: const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                    fontSize: 16),
                                               )
                                             : Row(
                                                 children: [
@@ -243,33 +247,44 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                                   const SizedBox(width: 8),
                                                   Expanded(
                                                     child: Text(
-                                                      task.questionFile ?? 'Файл задания',
+                                                      task.questionFile ??
+                                                          'Файл задания',
                                                     ),
                                                   ),
                                                   GestureDetector(
-                                                    child: const Icon(Icons.download),
+                                                    child: const Icon(
+                                                        Icons.download),
                                                     onTap: () async {
-                                                      CustomSnackBar.showSuccessful(
+                                                      CustomSnackBar
+                                                          .showSuccessful(
                                                         context,
                                                         title: 'Скачиваем ...',
                                                       );
 
                                                       try {
-                                                        final filePath = await tasksRepository
-                                                            .downloadQuestionFile(
+                                                        final filePath =
+                                                            await tasksRepository
+                                                                .downloadQuestionFile(
                                                           task.id,
                                                           task.questionFile,
                                                         );
                                                         if (filePath != null) {
-                                                          final params = ShareParams(
-                                                            title: task.questionFile,
-                                                            files: [XFile(filePath)],
+                                                          final params =
+                                                              ShareParams(
+                                                            title: task
+                                                                .questionFile,
+                                                            files: [
+                                                              XFile(filePath)
+                                                            ],
                                                           );
 
-                                                          await SharePlus.instance.share(params);
+                                                          await SharePlus
+                                                              .instance
+                                                              .share(params);
                                                         }
                                                       } catch (e) {
-                                                        CustomSnackBar.showError(
+                                                        CustomSnackBar
+                                                            .showError(
                                                           context,
                                                           title: 'Ошибка: $e',
                                                         );
@@ -294,7 +309,8 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                           needUpdate = true;
                                         }
                                       },
-                                      onFileChangeAnswer: () => _pickFile(idx, task),
+                                      onFileChangeAnswer: () =>
+                                          _pickFile(idx, task),
                                       onVariantChangeAnswer: (index) {
                                         setState(
                                           () => _variantAnswers[idx] = index,
@@ -327,7 +343,8 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                         if (needUpdate) {
                                           _sendAnswer(
                                             tasks[_currentIndex],
-                                            onSuccess: () => _pageController.previousPage(
+                                            onSuccess: () =>
+                                                _pageController.previousPage(
                                               duration: duration,
                                               curve: animation,
                                             ),
@@ -341,7 +358,8 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                       }
                                     : null,
                                 style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -366,9 +384,12 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                       final t = tasks[i];
                                       final answered = switch (t.answerType) {
                                         AnswerType.text =>
-                                          _textAnswers[i]?.trim().isNotEmpty ?? false,
-                                        AnswerType.file => _fileAnswers[i] != null,
-                                        AnswerType.variants => _variantAnswers[i] != null,
+                                          _textAnswers[i]?.trim().isNotEmpty ??
+                                              false,
+                                        AnswerType.file =>
+                                          _fileAnswers[i] != null,
+                                        AnswerType.variants =>
+                                          _variantAnswers[i] != null,
                                       };
                                       if (!answered) missing.add(i + 1);
                                     }
@@ -377,7 +398,8 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                       final nums = missing.join(', ');
                                       CustomSnackBar.showError(
                                         context,
-                                        title: 'Пожалуйста, ответьте на задания №$nums',
+                                        title:
+                                            'Пожалуйста, ответьте на задания №$nums',
                                       );
                                       return;
                                     }
@@ -397,7 +419,9 @@ class _AnswerTasksPageState extends State<AnswerTasksPage> {
                                     );
                                   }
                                 },
-                                title: _currentIndex < tasks.length - 1 ? 'Далее' : 'Завершить',
+                                title: _currentIndex < tasks.length - 1
+                                    ? 'Далее'
+                                    : 'Завершить',
                               ),
                             ),
                           ],

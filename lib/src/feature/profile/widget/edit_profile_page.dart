@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/common/widget/custom_text_field.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_text_field.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
@@ -26,9 +26,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController(text: widget.user.fullName.firstName);
-    _secondNameController = TextEditingController(text: widget.user.fullName.secondName);
-    _middleNameController = TextEditingController(text: widget.user.fullName.middleName);
+    _firstNameController =
+        TextEditingController(text: widget.user.fullName.firstName);
+    _secondNameController =
+        TextEditingController(text: widget.user.fullName.secondName);
+    _middleNameController =
+        TextEditingController(text: widget.user.fullName.middleName);
   }
 
   @override
@@ -42,7 +45,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Редактирование данных', textAlign: TextAlign.center),
+          title:
+              const Text('Редактирование данных', textAlign: TextAlign.center),
           centerTitle: true,
         ),
         body: Padding(

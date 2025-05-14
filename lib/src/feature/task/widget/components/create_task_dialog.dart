@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
 import 'package:learning_platform/src/feature/task/model/answer_type.dart';
 import 'package:learning_platform/src/feature/task/model/question_type.dart';
 
@@ -120,7 +120,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Вопрос',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -146,7 +147,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Файл вопроса',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -165,7 +167,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                       child: Text(
                         _questionFile?.name ?? 'Выберите файл',
                         style: TextStyle(
-                          color: _questionFile == null ? Colors.grey[600] : Colors.black,
+                          color: _questionFile == null
+                              ? Colors.grey[600]
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -219,7 +223,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Варианты ответов',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -283,7 +288,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                             questionType: _questionType,
                             questionText: qText,
                             answerType: _answerType,
-                            answerVariants: _answersControllers.map((e) => e.text).toList(),
+                            answerVariants:
+                                _answersControllers.map((e) => e.text).toList(),
                             questionFile: _questionFile?.bytes,
                             filename: _questionFile?.name,
                           );

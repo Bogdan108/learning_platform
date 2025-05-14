@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learning_platform/src/common/widget/rounded_back_button.dart';
+import 'package:learning_platform/src/core/widget/rounded_back_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar(

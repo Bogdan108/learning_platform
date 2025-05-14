@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc.dart';
 import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_event.dart';
@@ -47,7 +47,8 @@ class _TasksPageState extends State<TasksPage> {
 
   void _handleRefresh() {
     final pos = _scrollController.position;
-    if (pos.pixels < pos.minScrollExtent - _scrollThreshold && _tasksBloc.state is! Loading) {
+    if (pos.pixels < pos.minScrollExtent - _scrollThreshold &&
+        _tasksBloc.state is! Loading) {
       _tasksBloc.add(
         TasksBlocEvent.fetch(
           widget.assignmentId,
@@ -64,7 +65,9 @@ class _TasksPageState extends State<TasksPage> {
             builder: (_, state) => switch (state) {
                   Error() => CustomErrorWidget(
                       errorMessage: state.error,
-                      onRetry: state.event != null ? () => _tasksBloc.add(state.event!) : null,
+                      onRetry: state.event != null
+                          ? () => _tasksBloc.add(state.event!)
+                          : null,
                     ),
                   _ => Stack(children: [
                       ListView.separated(
@@ -122,7 +125,8 @@ class _TasksPageState extends State<TasksPage> {
                             tasksRepository: tasksRepository,
                             onDeleteTask: () => DeleteTaskDialog(
                               onTapCallback: () => _tasksBloc.add(
-                                TasksBlocEvent.delete(task.id, widget.assignmentId),
+                                TasksBlocEvent.delete(
+                                    task.id, widget.assignmentId),
                               ),
                             ).show(context),
                           );

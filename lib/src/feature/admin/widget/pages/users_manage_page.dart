@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
-import 'package:learning_platform/src/common/widget/custom_search_field.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_search_field.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_bloc.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_event.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_users/admin_users_state.dart';
@@ -35,7 +35,8 @@ class _UsersManagePageState extends State<UsersManagePage> {
         orgIdStorage: deps.organizationIdStorage,
       ),
     )..add(const AdminUsersEvent.fetchUsers(searchQuery: ''));
-    _searchController = TextEditingController()..addListener(_handleTextEditing);
+    _searchController = TextEditingController()
+      ..addListener(_handleTextEditing);
     _scrollController = ScrollController()..addListener(_handleRefresh);
   }
 
@@ -90,7 +91,9 @@ class _UsersManagePageState extends State<UsersManagePage> {
                 builder: (context, state) => switch (state) {
                   AdminUsersState$Error() => CustomErrorWidget(
                       errorMessage: state.error,
-                      onRetry: state.event != null ? () => _adminBloc.add(state.event!) : null,
+                      onRetry: state.event != null
+                          ? () => _adminBloc.add(state.event!)
+                          : null,
                     ),
                   _ => Stack(children: [
                       ListView.separated(
@@ -129,11 +132,13 @@ class _UsersManagePageState extends State<UsersManagePage> {
                                   flex: 6,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         u.role.name,
-                                        style: TextStyle(color: Colors.grey[600]),
+                                        style:
+                                            TextStyle(color: Colors.grey[600]),
                                       ),
                                       Text(
                                         u.email,

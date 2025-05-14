@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_bloc.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_event.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_state.dart';
@@ -78,14 +78,17 @@ class _State extends State<AssignmentsPage> {
             builder: (context, state) => switch (state) {
               AssignmentState$Error() => CustomErrorWidget(
                   errorMessage: state.error,
-                  onRetry: state.event != null ? () => _assignmentBloc.add(state.event!) : null,
+                  onRetry: state.event != null
+                      ? () => _assignmentBloc.add(state.event!)
+                      : null,
                 ),
               _ => Stack(children: [
                   ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
                     controller: _scrollController,
                     padding: EdgeInsets.zero,
-                    itemCount: isTeacher ? state.items.length + 1 : state.items.length,
+                    itemCount:
+                        isTeacher ? state.items.length + 1 : state.items.length,
                     itemBuilder: (_, index) {
                       if (index == state.items.length) {
                         return Center(
@@ -133,7 +136,8 @@ class _State extends State<AssignmentsPage> {
                                   ).show(ctx),
                                 ),
                                 GestureDetector(
-                                  child: const Icon(Icons.delete, color: Colors.red),
+                                  child: const Icon(Icons.delete,
+                                      color: Colors.red),
                                   onTap: () => DeleteAssignmentDialog(
                                     onTapCallback: () => _assignmentBloc.add(
                                       AssignmentEvent.delete(
@@ -161,10 +165,13 @@ class _State extends State<AssignmentsPage> {
                               );
                             } else {
                               {
-                                if (assignment.status == AssignmentStatus.pending) {
+                                if (assignment.status ==
+                                    AssignmentStatus.pending) {
                                   context.pushNamed(
                                     'answerAssignment',
-                                    pathParameters: {'assignmentId': assignment.id},
+                                    pathParameters: {
+                                      'assignmentId': assignment.id
+                                    },
                                     extra: assignment.name,
                                   );
                                 } else {

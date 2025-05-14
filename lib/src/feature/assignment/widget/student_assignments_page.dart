@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_bloc.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_event.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/student_assignment/student_assignments_state.dart';
@@ -66,8 +66,9 @@ class _StudentAssignmentsPageState extends State<StudentAssignmentsPage> {
           builder: (context, state) => switch (state) {
             StudentAssignmentsState$Error() => CustomErrorWidget(
                 errorMessage: state.error,
-                onRetry:
-                    state.event != null ? () => _studentAssignmentsBloc.add(state.event!) : null,
+                onRetry: state.event != null
+                    ? () => _studentAssignmentsBloc.add(state.event!)
+                    : null,
               ),
             _ => Stack(children: [
                 ListView(

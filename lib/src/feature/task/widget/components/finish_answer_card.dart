@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
 
 class FinishAnswerCard extends StatelessWidget {
   final String title;

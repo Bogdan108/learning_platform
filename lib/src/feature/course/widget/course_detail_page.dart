@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
-import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_bloc.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_event.dart';
 import 'package:learning_platform/src/feature/course/bloc/course_state.dart';
@@ -115,13 +115,17 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                             IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () => AddAdditionDialog(
-                                onLinkSave: ({required type, required link}) => _courseBloc.add(
+                                onLinkSave: ({required type, required link}) =>
+                                    _courseBloc.add(
                                   CourseEvent.addLinkAddition(
                                     courseId: widget.courseDetails.id,
                                     link: link,
                                   ),
                                 ),
-                                onFileSave: ({required type, required file, required name}) {
+                                onFileSave: (
+                                    {required type,
+                                    required file,
+                                    required name}) {
                                   _courseBloc.add(
                                     CourseEvent.uploadMaterial(
                                       courseId: widget.courseDetails.id,
@@ -146,7 +150,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                             ],
                           _ => [
                               /// Материалы файлы
-                              for (final material in courseState.additions.materials)
+                              for (final material
+                                  in courseState.additions.materials)
                                 Padding(
                                   padding: const EdgeInsets.only(top: 12),
                                   child: Row(
@@ -160,12 +165,14 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                         onTap: () async {
                                           CustomSnackBar.showSuccessful(
                                             context,
-                                            title: 'Скачиваем ${material.name}...',
+                                            title:
+                                                'Скачиваем ${material.name}...',
                                           );
 
                                           try {
                                             final filePath =
-                                                await _courseRepository.downloadMaterial(
+                                                await _courseRepository
+                                                    .downloadMaterial(
                                               widget.courseDetails.id,
                                               material.name,
                                               material.id,
@@ -177,7 +184,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                                 files: [XFile(filePath)],
                                               );
 
-                                              await SharePlus.instance.share(params);
+                                              await SharePlus.instance
+                                                  .share(params);
                                             }
                                           } catch (e) {
                                             CustomSnackBar.showError(
@@ -194,10 +202,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                           ),
                                           child: GestureDetector(
                                             child: const Icon(Icons.delete),
-                                            onTap: () => DeleteCourseAdditionDialog(
-                                              onTapCallback: () => _courseBloc.add(
+                                            onTap: () =>
+                                                DeleteCourseAdditionDialog(
+                                              onTapCallback: () =>
+                                                  _courseBloc.add(
                                                 CourseEvent.deleteAddition(
-                                                  courseId: widget.courseDetails.id,
+                                                  courseId:
+                                                      widget.courseDetails.id,
                                                   additionType: 'material',
                                                   additionId: material.id,
                                                 ),
@@ -246,10 +257,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                           ),
                                           child: GestureDetector(
                                             child: const Icon(Icons.delete),
-                                            onTap: () => DeleteCourseAdditionDialog(
-                                              onTapCallback: () => _courseBloc.add(
+                                            onTap: () =>
+                                                DeleteCourseAdditionDialog(
+                                              onTapCallback: () =>
+                                                  _courseBloc.add(
                                                 CourseEvent.deleteAddition(
-                                                  courseId: widget.courseDetails.id,
+                                                  courseId:
+                                                      widget.courseDetails.id,
                                                   additionType: 'link',
                                                   additionId: link.id,
                                                 ),
@@ -309,9 +323,12 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          final profileRole = _profileBloc.state.profileInfo.role;
+                          final profileRole =
+                              _profileBloc.state.profileInfo.role;
                           context.goNamed(
-                            profileRole == UserRole.student ? 'assignments' : 'teacherAssignments',
+                            profileRole == UserRole.student
+                                ? 'assignments'
+                                : 'teacherAssignments',
                             pathParameters: {
                               'courseId': widget.courseDetails.id,
                             },

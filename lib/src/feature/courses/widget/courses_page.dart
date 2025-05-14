@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_elevated_button.dart';
-import 'package:learning_platform/src/common/widget/custom_error_widget.dart';
-import 'package:learning_platform/src/common/widget/custom_search_field.dart';
+import 'package:learning_platform/src/core/widget/custom_elevated_button.dart';
+import 'package:learning_platform/src/core/widget/custom_error_widget.dart';
+import 'package:learning_platform/src/core/widget/custom_search_field.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_bloc.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_event.dart';
 import 'package:learning_platform/src/feature/courses/bloc/courses_state.dart';
@@ -47,7 +47,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
         orgIdStorage: depsScope.organizationIdStorage,
       ),
     )..add(CoursesEvent.fetchCourses(role: profileRole));
-    _searchController = TextEditingController()..addListener(_handleTextEditing);
+    _searchController = TextEditingController()
+      ..addListener(_handleTextEditing);
     _scrollController = ScrollController()..addListener(_handleRefresh);
   }
 
@@ -88,7 +89,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<ProfileBloc, ProfileBlocState>(
+  Widget build(BuildContext context) =>
+      BlocBuilder<ProfileBloc, ProfileBlocState>(
         bloc: _profileBloc,
         builder: (context, profileState) {
           final role = profileState.profileInfo.role;
@@ -104,7 +106,9 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
               builder: (context, state) => switch (state) {
                 CoursesState$Error() => CustomErrorWidget(
                     errorMessage: state.error,
-                    onRetry: state.event != null ? () => _coursesBloc.add(state.event!) : null,
+                    onRetry: state.event != null
+                        ? () => _coursesBloc.add(state.event!)
+                        : null,
                   ),
                 _ => Stack(children: [
                     Column(
@@ -138,8 +142,9 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                           child: CustomElevatedButton(
                                             title: 'Добавить курс',
                                             onPressed: () => CreateCourseDialog(
-                                              onCreateCallBack: (name, description) =>
-                                                  _coursesBloc.add(
+                                              onCreateCallBack:
+                                                  (name, description) =>
+                                                      _coursesBloc.add(
                                                 CoursesEvent.createCourse(
                                                   name: name,
                                                   description: description,
@@ -174,7 +179,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                               final course = state.courses[index];
                               return GestureDetector(
                                 onTap: () {
-                                  final profileRole = _profileBloc.state.profileInfo.role;
+                                  final profileRole =
+                                      _profileBloc.state.profileInfo.role;
                                   context.goNamed(
                                     profileRole == UserRole.student
                                         ? 'courseDetails'
@@ -188,10 +194,12 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                     horizontal: 16,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             course.name,
@@ -221,8 +229,10 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               TextButton(
-                                                onPressed: () => DeleteCourseDialog(
-                                                  onTapCallback: () => _coursesBloc.add(
+                                                onPressed: () =>
+                                                    DeleteCourseDialog(
+                                                  onTapCallback: () =>
+                                                      _coursesBloc.add(
                                                     CoursesEvent.deleteCourse(
                                                       courseId: course.id,
                                                     ),
@@ -230,15 +240,19 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                                 ).show(context),
                                                 child: const Text(
                                                   'Удалить',
-                                                  style: TextStyle(color: Colors.red),
+                                                  style: TextStyle(
+                                                      color: Colors.red),
                                                 ),
                                               ),
                                               IconButton(
-                                                onPressed: () => EditCourseDialog(
+                                                onPressed: () =>
+                                                    EditCourseDialog(
                                                   initialName: course.name,
-                                                  initialDescription: course.description,
-                                                  onSaveCallback: (name, description) =>
-                                                      _coursesBloc.add(
+                                                  initialDescription:
+                                                      course.description,
+                                                  onSaveCallback:
+                                                      (name, description) =>
+                                                          _coursesBloc.add(
                                                     CoursesEvent.editCourse(
                                                       courseId: course.id,
                                                       name: name,
@@ -246,7 +260,8 @@ class _TeacherCoursesPageState extends State<CoursesPage> {
                                                     ),
                                                   ),
                                                 ).show(context),
-                                                icon: const Icon(Icons.edit, size: 15),
+                                                icon: const Icon(Icons.edit,
+                                                    size: 15),
                                               ),
                                             ],
                                           ),
