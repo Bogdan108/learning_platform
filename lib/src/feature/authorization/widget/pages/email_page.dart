@@ -10,7 +10,7 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
-import 'package:learning_platform/src/feature/profile/model/user_role.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 
 class EmailPage extends StatefulWidget {
   const EmailPage({
@@ -64,18 +64,12 @@ class _EmailPageState extends State<EmailPage> {
           switch (state) {
             case Idle(status: AuthenticationStatus.authenticated):
             case Success():
+              profileBloc.add(ProfileBlocEvent.fetchUserInfo());
               CustomSnackBar.showSuccessful(
                 context,
-                message: 'Успешная авторизация!',
+                message: 'Успешная регистрация!',
               );
-              if (profileBloc.state.profileInfo.role == UserRole.admin) {
-                context.goNamed('adminCourses');
-              } else if (profileBloc.state.profileInfo.role ==
-                  UserRole.student) {
-                context.goNamed('courses');
-              } else {
-                context.goNamed('teacherCourses');
-              }
+              context.goNamed('courses');
             case Error(error: final error):
               CustomSnackBar.showError(context, message: error);
             default:

@@ -1,4 +1,5 @@
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
+import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 /// Interface for authentication operations.
@@ -15,7 +16,7 @@ abstract interface class IAuthRepository {
   );
 
   /// Log in a user.
-  Future<String> login(
+  Future<UserAuthorized> login(
     String organizationId,
     String email,
     String password,

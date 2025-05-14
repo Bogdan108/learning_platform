@@ -4,6 +4,9 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/data/repository/i_auth_repository.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
+import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
+import 'package:learning_platform/src/feature/profile/model/user_name.dart';
+import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 /// AuthBloc
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
@@ -57,13 +60,19 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
       // TODO(b.luckyanchuk): remove after test
       if (event.email == '1' || event.password == 'b') {
         emit(
-          const AuthBlocState.success(
-            status: AuthenticationStatus.authenticated,
-            token: '1',
-          ),
+          AuthBlocState.success(
+              status: AuthenticationStatus.authenticated,
+              token: '1',
+              data: UserAuthorized(
+                token: '',
+                userId: '1',
+                fullName: UserName.empty(),
+                email: '',
+                role: UserRole.teacher,
+              )),
         );
       } else {
-        final token = await _authRepository.login(
+        final data = await _authRepository.login(
           event.organizationId,
           event.email,
           event.password,
@@ -71,7 +80,8 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
         emit(
           AuthBlocState.success(
             status: AuthenticationStatus.authenticated,
-            token: token,
+            token: data.token,
+            data: data,
           ),
         );
       }

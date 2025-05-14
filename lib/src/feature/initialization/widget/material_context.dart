@@ -27,13 +27,17 @@ class _MaterialContextState extends State<MaterialContext> {
   @override
   void initState() {
     super.initState();
-    final deps = DependenciesScope.of(context).profileBloc;
-    final userRole = deps.state.profileInfo.role;
-    final initialLocation = userRole == UserRole.student
-        ? '/'
-        : userRole == UserRole.admin
-            ? '/admin_courses'
-            : '/teacher_courses';
+    final deps = DependenciesScope.of(context);
+    final profileBloc = deps.profileBloc;
+    final userRole = profileBloc.state.profileInfo.role;
+
+    final initialLocation = userRole == UserRole.unauthorized
+        ? '/login'
+        : userRole == UserRole.student
+            ? '/'
+            : userRole == UserRole.admin
+                ? '/admin_courses'
+                : '/teacher_courses';
     router = AppRouter().initRouter(initialLocation);
   }
 

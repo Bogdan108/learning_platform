@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
+import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 
 part 'auth_bloc_state.freezed.dart';
 
@@ -19,6 +20,7 @@ sealed class AuthBlocState with _$AuthBlocState {
 
   const factory AuthBlocState.success({
     required String token,
+    UserAuthorized? data,
     required AuthenticationStatus status,
   }) = Success;
 

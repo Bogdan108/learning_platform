@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:learning_platform/src/feature/authorization/data/data_source/i_auth_data_source.dart';
+import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 /// Data source implementation for authentication operations using Dio.
@@ -13,7 +14,7 @@ class AuthDataSource implements IAuthDataSource {
   ///
   /// Calls the POST endpoint `/user/authorize` and returns a token string on success.
   @override
-  Future<String> login(
+  Future<UserAuthorized> login(
     String organizationId,
     String email,
     String password,
@@ -27,18 +28,7 @@ class AuthDataSource implements IAuthDataSource {
       },
     );
 
-    // Check if response contains access_token
-    if (body
-        case {
-          'token': final String accessToken,
-        }) {
-      return accessToken;
-    }
-
-    throw FormatException(
-      'Returned response is not understood by the application',
-      body,
-    );
+    return UserAuthorized.fromJson(body.data as Map<String, Object?>);
   }
 
   /// Registers a new user using [organizationId], [email], [password] and [userName].

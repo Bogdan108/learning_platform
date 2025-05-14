@@ -5,6 +5,7 @@ import 'package:learning_platform/src/feature/authorization/data/storage/i_stora
 import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
+import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 /// Implementation [IAuthRepository]  for authentication operations.
@@ -30,17 +31,17 @@ class AuthRepository implements IAuthRepository {
       );
 
   @override
-  Future<String> login(
+  Future<UserAuthorized> login(
     String organizationId,
     String email,
     String password,
   ) async {
-    final token = await _dataSource.login(organizationId, email, password);
+    final data = await _dataSource.login(organizationId, email, password);
 
-    await _storage.save(token);
+    await _storage.save(data.token);
     await _orgIdStorage.save(organizationId);
 
-    return token;
+    return data;
   }
 
   @override

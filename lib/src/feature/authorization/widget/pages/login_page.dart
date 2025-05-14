@@ -12,6 +12,7 @@ import 'package:learning_platform/src/feature/authorization/widget/components/au
 import 'package:learning_platform/src/feature/authorization/widget/components/change_auth_type_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,15 +44,22 @@ class _LoginPageState extends State<LoginPage> {
         bloc: authBloc,
         listener: (context, state) {
           switch (state) {
-            case Success(status: AuthenticationStatus.authenticated):
-              if (profileBloc.state.profileInfo.role == UserRole.admin) {
-                context.goNamed('adminCourses');
-              } else if (profileBloc.state.profileInfo.role ==
-                  UserRole.student) {
-                context.goNamed('courses');
-              } else {
-                context.goNamed('teacherCourses');
+            case Success(
+                status: AuthenticationStatus.authenticated,
+                data: final data
+              ):
+              profileBloc.add(ProfileBlocEvent.fetchUserInfo());
+              final userRole = data?.role;
+              if (userRole != null) {
+                if (userRole == UserRole.admin) {
+                  context.goNamed('adminCourses');
+                } else if (userRole == UserRole.student) {
+                  context.goNamed('courses');
+                } else {
+                  context.goNamed('teacherCourses');
+                }
               }
+
             case Error(error: final error):
               CustomSnackBar.showError(context, message: error);
             default:
