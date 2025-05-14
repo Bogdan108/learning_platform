@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:learning_platform/src/feature/courses/course/model/addition.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/addition.dart';
 
 part 'course_additions.freezed.dart';
 part 'course_additions.g.dart';

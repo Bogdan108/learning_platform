@@ -3,9 +3,10 @@ import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_event.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_state.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/i_admin_repository.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+import 'package:learning_platform/src/feature/course/model/course_request.dart';
 
-class AdminCoursesBloc extends Bloc<AdminCoursesEvent, AdminCoursesState> with SetStateMixin {
+class AdminCoursesBloc extends Bloc<AdminCoursesEvent, AdminCoursesState>
+    with SetStateMixin {
   final IAdminRepository _repo;
 
   AdminCoursesBloc({
@@ -50,7 +51,8 @@ class AdminCoursesBloc extends Bloc<AdminCoursesEvent, AdminCoursesState> with S
   ) async {
     emit(AdminCoursesState.loading(courses: state.courses));
     try {
-      final courseRequest = CourseRequest(name: event.name, description: event.description);
+      final courseRequest =
+          CourseRequest(name: event.name, description: event.description);
       await _repo.editCourse(event.courseId, courseRequest);
       final list = await _repo.getAllCourses('');
       emit(AdminCoursesState.idle(courses: list));

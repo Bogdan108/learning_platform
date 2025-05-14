@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/courses/bloc/courses_event.dart';
-import 'package:learning_platform/src/feature/courses/bloc/courses_state.dart';
-import 'package:learning_platform/src/feature/courses/data/repository/courses_repository.dart';
-import 'package:learning_platform/src/feature/courses/data/repository/i_courses_repository.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+import 'package:learning_platform/src/feature/course/bloc/courses_event.dart';
+import 'package:learning_platform/src/feature/course/bloc/courses_state.dart';
+import 'package:learning_platform/src/feature/course/data/repository/courses_repository.dart';
+import 'package:learning_platform/src/feature/course/data/repository/i_courses_repository.dart';
+import 'package:learning_platform/src/feature/course/model/course_request.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
@@ -37,7 +37,8 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
     );
 
     try {
-      final courseRequest = CourseRequest(name: event.name, description: event.description);
+      final courseRequest =
+          CourseRequest(name: event.name, description: event.description);
       await _coursesRepository.createCourse(courseRequest);
 
       final courses = await _coursesRepository.getTeacherCourses(null);
@@ -68,7 +69,8 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
     );
 
     try {
-      final courseRequest = CourseRequest(name: event.name, description: event.description);
+      final courseRequest =
+          CourseRequest(name: event.name, description: event.description);
       await _coursesRepository.editCourse(
         event.courseId,
         courseRequest,

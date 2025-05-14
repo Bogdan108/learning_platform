@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:learning_platform/src/feature/courses/course/bloc/course_event.dart';
-import 'package:learning_platform/src/feature/courses/course/model/course_additions.dart';
-import 'package:learning_platform/src/feature/courses/course/model/student.dart';
+import 'package:learning_platform/src/feature/course/course_details/bloc/course_event.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/course_additions.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/student.dart';
 
 part 'course_state.freezed.dart';
 

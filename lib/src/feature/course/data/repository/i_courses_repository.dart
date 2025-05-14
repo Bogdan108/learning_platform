@@ -1,5 +1,5 @@
-import 'package:learning_platform/src/feature/courses/model/course.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+import 'package:learning_platform/src/feature/course/model/course.dart';
+import 'package:learning_platform/src/feature/course/model/course_request.dart';
 
 abstract class ICoursesRepository {
   Future<String> createCourse(

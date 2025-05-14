@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:learning_platform/src/feature/courses/course/model/addition_type.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/addition_type.dart';
 
 class AddAdditionDialog extends StatefulWidget {
   final void Function({

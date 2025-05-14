@@ -7,8 +7,8 @@ import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_cou
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_state.dart';
 import 'package:learning_platform/src/feature/admin/data/data_source/admin_data_source.dart';
 import 'package:learning_platform/src/feature/admin/data/repository/admin_repository.dart';
-import 'package:learning_platform/src/feature/courses/widget/components/delete_course_dialog.dart';
-import 'package:learning_platform/src/feature/courses/widget/components/edit_course_dialog.dart';
+import 'package:learning_platform/src/feature/course/widget/components/delete_course_dialog.dart';
+import 'package:learning_platform/src/feature/course/widget/components/edit_course_dialog.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 
 class CoursesManagePage extends StatefulWidget {

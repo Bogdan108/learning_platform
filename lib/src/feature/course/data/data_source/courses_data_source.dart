@@ -116,9 +116,9 @@
 // }
 
 import 'package:dio/dio.dart';
-import 'package:learning_platform/src/feature/courses/data/data_source/i_courses_data_source.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+import 'package:learning_platform/src/feature/course/data/data_source/i_courses_data_source.dart';
+import 'package:learning_platform/src/feature/course/model/course.dart';
+import 'package:learning_platform/src/feature/course/model/course_request.dart';
 
 /// Мок реализации источника данных для курсов
 class CoursesDataSource implements ICoursesDataSource {

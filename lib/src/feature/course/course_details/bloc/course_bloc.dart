@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/utils/set_state_mixin.dart';
-import 'package:learning_platform/src/feature/courses/course/bloc/course_event.dart';
-import 'package:learning_platform/src/feature/courses/course/bloc/course_state.dart';
-import 'package:learning_platform/src/feature/courses/course/data/repository/course_repository.dart';
-import 'package:learning_platform/src/feature/courses/course/data/repository/i_course_repository.dart';
-import 'package:learning_platform/src/feature/courses/course/model/course_additions.dart';
+import 'package:learning_platform/src/feature/course/course_details/bloc/course_event.dart';
+import 'package:learning_platform/src/feature/course/course_details/bloc/course_state.dart';
+import 'package:learning_platform/src/feature/course/course_details/data/repository/course_repository.dart';
+import 'package:learning_platform/src/feature/course/course_details/data/repository/i_course_repository.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/course_additions.dart';
 
 class CourseBloc extends Bloc<CourseEvent, CourseState> with SetStateMixin {
   final ICourseRepository _courseRepository;

@@ -4,8 +4,8 @@ import 'package:learning_platform/src/feature/admin/model/admin_user.dart';
 import 'package:learning_platform/src/feature/admin/model/user_role_request.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+import 'package:learning_platform/src/feature/course/model/course.dart';
+import 'package:learning_platform/src/feature/course/model/course_request.dart';
 
 class AdminRepository implements IAdminRepository {
   final IAdminDataSource _dataSource;
@@ -31,7 +31,8 @@ class AdminRepository implements IAdminRepository {
       );
 
   @override
-  Future<void> changeUserRole(UserRoleRequest payload) => _dataSource.changeUserRole(
+  Future<void> changeUserRole(UserRoleRequest payload) =>
+      _dataSource.changeUserRole(
         organizationId: _organizationId,
         token: _token,
         payload: payload,
@@ -45,14 +46,16 @@ class AdminRepository implements IAdminRepository {
       );
 
   @override
-  Future<List<Course>> getAllCourses(String? searchQuery) => _dataSource.getAllCourses(
+  Future<List<Course>> getAllCourses(String? searchQuery) =>
+      _dataSource.getAllCourses(
         organizationId: _organizationId,
         token: _token,
         searchQuery: searchQuery,
       );
 
   @override
-  Future<void> editCourse(String courseId, CourseRequest course) => _dataSource.editCourse(
+  Future<void> editCourse(String courseId, CourseRequest course) =>
+      _dataSource.editCourse(
         organizationId: _organizationId,
         token: _token,
         courseId: courseId,

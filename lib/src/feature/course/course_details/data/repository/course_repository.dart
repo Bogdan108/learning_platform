@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:file_saver/file_saver.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/i_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
-import 'package:learning_platform/src/feature/courses/course/data/data_source/i_course_data_source.dart';
-import 'package:learning_platform/src/feature/courses/course/data/repository/i_course_repository.dart';
-import 'package:learning_platform/src/feature/courses/course/model/course_additions.dart';
-import 'package:learning_platform/src/feature/courses/course/model/student.dart';
+import 'package:learning_platform/src/feature/course/course_details/data/data_source/i_course_data_source.dart';
+import 'package:learning_platform/src/feature/course/course_details/data/repository/i_course_repository.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/course_additions.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/student.dart';
 
 class CourseRepository implements ICourseRepository {
   final ICourseDataSource dataSource;

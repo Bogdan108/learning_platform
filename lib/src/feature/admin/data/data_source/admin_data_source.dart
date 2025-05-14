@@ -118,8 +118,8 @@ import 'package:dio/dio.dart';
 import 'package:learning_platform/src/feature/admin/data/data_source/i_admin_data_source.dart';
 import 'package:learning_platform/src/feature/admin/model/admin_user.dart';
 import 'package:learning_platform/src/feature/admin/model/user_role_request.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
-import 'package:learning_platform/src/feature/courses/model/course_request.dart';
+import 'package:learning_platform/src/feature/course/model/course.dart';
+import 'package:learning_platform/src/feature/course/model/course_request.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 

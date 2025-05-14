@@ -12,9 +12,9 @@ import 'package:learning_platform/src/feature/assignment/widget/teacher_assignme
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
-import 'package:learning_platform/src/feature/courses/course/widget/course_detail_page.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
-import 'package:learning_platform/src/feature/courses/widget/courses_page.dart';
+import 'package:learning_platform/src/feature/course/course_details/widget/course_detail_page.dart';
+import 'package:learning_platform/src/feature/course/model/course.dart';
+import 'package:learning_platform/src/feature/course/widget/courses_page.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 import 'package:learning_platform/src/feature/profile/widget/edit_profile_page.dart';
 import 'package:learning_platform/src/feature/profile/widget/profile_page.dart';

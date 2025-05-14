@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:learning_platform/src/feature/admin/bloc/admin_courses/admin_courses_event.dart';
-import 'package:learning_platform/src/feature/courses/model/course.dart';
+import 'package:learning_platform/src/feature/course/model/course.dart';
 
 part 'admin_courses_state.freezed.dart';
 

@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:learning_platform/src/feature/courses/course/data/data_source/i_course_data_source.dart';
-import 'package:learning_platform/src/feature/courses/course/model/addition.dart';
-import 'package:learning_platform/src/feature/courses/course/model/course_additions.dart';
-import 'package:learning_platform/src/feature/courses/course/model/student.dart';
+import 'package:learning_platform/src/feature/course/course_details/data/data_source/i_course_data_source.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/addition.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/course_additions.dart';
+import 'package:learning_platform/src/feature/course/course_details/model/student.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
