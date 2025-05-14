@@ -72,11 +72,12 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<void> verifyEmail(String code) async {
-    await _dataSource.verifyEmail(code);
+    final token = await _storage.load() ?? '';
+    await _dataSource.verifyEmail(code, token);
   }
 
   @override
-  Future<void> sendCodeToEmail() async {
-    await _dataSource.sendCodeToEmail();
+  Future<void> sendCodeToEmail(String token) async {
+    await _dataSource.sendCodeToEmail(token);
   }
 }

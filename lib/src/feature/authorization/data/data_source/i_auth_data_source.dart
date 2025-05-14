@@ -19,8 +19,13 @@ abstract interface class IAuthDataSource {
   );
 
   /// Send code to user email
-  Future<void> sendCodeToEmail();
+  Future<void> sendCodeToEmail(
+    String token,
+  );
 
   /// Validate an email address.
-  Future<void> verifyEmail(String code);
+  Future<void> verifyEmail(
+    String code,
+    String token,
+  );
 }

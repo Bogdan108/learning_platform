@@ -52,7 +52,7 @@ class AuthDataSource implements IAuthDataSource {
     );
 
     // Check if response contains access_token
-    if (body
+    if (body.data
         case {
           'token': final String accessToken,
         }) {
@@ -69,18 +69,23 @@ class AuthDataSource implements IAuthDataSource {
   ///
   /// Calls the POST endpoint `/user/email/send_verification_code`.
   @override
-  Future<void> sendCodeToEmail() => _dio.post<Map<String, Object?>>(
+  Future<void> sendCodeToEmail(String token) => _dio.post<Map<String, Object?>>(
         '/user/email/send_verification_code',
+        queryParameters: {
+          'token': token,
+          'organization_id': '1',
+        },
       );
 
   /// Verifies the email using [code].
   ///
   /// Calls the POST endpoint `/user/email/verify` with a JSON body.
   @override
-  Future<void> verifyEmail(String code) => _dio.post<Map<String, Object?>>(
-        '/user/email/verify',
-        data: {
-          'code': code,
-        },
-      );
+  Future<void> verifyEmail(String code, String token) =>
+      _dio.post<Map<String, Object?>>('/user/email/verify', queryParameters: {
+        'organization_id': '1',
+      }, data: {
+        'code': code,
+        'token': token,
+      });
 }

@@ -125,10 +125,10 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
           event.password,
           event.userName,
         );
-        await _authRepository.sendCodeToEmail();
+        await _authRepository.sendCodeToEmail(token);
 
         emit(
-          AuthBlocState.idle(
+          AuthBlocState.success(
             status: AuthenticationStatus.authenticated,
             token: token,
           ),

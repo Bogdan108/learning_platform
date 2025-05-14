@@ -26,7 +26,7 @@ abstract interface class IAuthRepository {
   Future<void> verifyEmail(String code);
 
   /// Validate an email address.
-  Future<void> sendCodeToEmail();
+  Future<void> sendCodeToEmail(String token);
 
   /// Log out the current user.
   Future<void> logout();
