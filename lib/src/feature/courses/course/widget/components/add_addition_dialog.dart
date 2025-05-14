@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:learning_platform/src/feature/course/model/addition_type.dart';
+import 'package:learning_platform/src/feature/courses/course/model/addition_type.dart';
 
 class AddAdditionDialog extends StatefulWidget {
   final void Function({
@@ -139,7 +139,9 @@ class _AddCourseAdditionDialogState extends State<AddAdditionDialog> {
                     child: Text(
                       _pickedFile?.name ?? 'Выберите файл',
                       style: TextStyle(
-                        color: _pickedFile == null ? Colors.grey[600] : Colors.black,
+                        color: _pickedFile == null
+                            ? Colors.grey[600]
+                            : Colors.black,
                       ),
                     ),
                   ),
@@ -167,13 +169,15 @@ class _AddCourseAdditionDialogState extends State<AddAdditionDialog> {
                     child: ElevatedButton(
                       onPressed: () {
                         log('${_pickedFile?.bytes}');
-                        if (_type == AdditionType.link && _linkController.text.trim().isNotEmpty) {
+                        if (_type == AdditionType.link &&
+                            _linkController.text.trim().isNotEmpty) {
                           widget.onLinkSave(
                             type: _type,
                             link: _linkController.text.trim(),
                           );
                           Navigator.of(context).pop(true);
-                        } else if (_type == AdditionType.file && _pickedFile?.bytes != null) {
+                        } else if (_type == AdditionType.file &&
+                            _pickedFile?.bytes != null) {
                           widget.onFileSave(
                             type: _type,
                             file: _pickedFile!.bytes!,

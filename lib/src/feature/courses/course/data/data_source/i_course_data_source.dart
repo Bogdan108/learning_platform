@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:learning_platform/src/feature/course/model/course_additions.dart';
-import 'package:learning_platform/src/feature/course/model/student.dart';
+import 'package:learning_platform/src/feature/courses/course/model/course_additions.dart';
+import 'package:learning_platform/src/feature/courses/course/model/student.dart';
 
 abstract class ICourseDataSource {
   Future<CourseAdditions> getCourseAdditions(
