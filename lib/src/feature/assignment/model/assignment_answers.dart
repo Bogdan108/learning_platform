@@ -12,6 +12,9 @@ abstract class AssignmentAnswers with _$AssignmentAnswers {
     required List<StudentAnswer> students,
   }) = _AssignmentAnswers;
 
+  factory AssignmentAnswers.empty() =>
+      AssignmentAnswers(id: '', name: '', students: []);
+
   factory AssignmentAnswers.fromJson(Map<String, Object?> json) =>
       _$AssignmentAnswersFromJson(json);
 }

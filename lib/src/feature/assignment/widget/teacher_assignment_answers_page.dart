@@ -10,15 +10,21 @@ import 'package:learning_platform/src/feature/assignment/data/repository/assignm
 import 'package:learning_platform/src/feature/assignment/model/assignment_answers.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 
-class AssignmentAnswersPage extends StatefulWidget {
+class TeacherAssignmentAnswersPage extends StatefulWidget {
   final String courseId;
-  const AssignmentAnswersPage({required this.courseId, super.key});
+
+  const TeacherAssignmentAnswersPage({
+    required this.courseId,
+    super.key,
+  });
 
   @override
-  State<AssignmentAnswersPage> createState() => _AssignmentAnswersPageState();
+  State<TeacherAssignmentAnswersPage> createState() =>
+      _TeacherAssignmentAnswersPageState();
 }
 
-class _AssignmentAnswersPageState extends State<AssignmentAnswersPage> {
+class _TeacherAssignmentAnswersPageState
+    extends State<TeacherAssignmentAnswersPage> {
   late final TeacherAssignmentAnswersBloc _teacherAssignmentAnswersBloc;
   late final ScrollController _scrollController;
   final _scrollThreshold = 80.0;
@@ -140,11 +146,10 @@ class _AnswersList extends StatelessWidget {
                   onTap: () => context.pushNamed(
                     'teacherEvaluateAnswers',
                     pathParameters: {
-                      'answerId': s.answerId,
+                      'assignmentId': answer.id,
                       'courseId': courseId,
                     },
-                    extra:
-                        '${s.name.secondName} ${s.name.firstName}. ${s.name.middleName}.',
+                    extra: s,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -156,10 +161,10 @@ class _AnswersList extends StatelessWidget {
                           ),
                         ),
                         Icon(
-                          s.evaluated
+                          s.isEvaluated
                               ? Icons.check_circle
                               : Icons.hourglass_top,
-                          color: s.evaluated ? Colors.green : Colors.grey,
+                          color: s.isEvaluated ? Colors.green : Colors.grey,
                           size: 20,
                         ),
                       ],

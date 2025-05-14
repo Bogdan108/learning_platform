@@ -4,7 +4,8 @@ import 'package:learning_platform/src/feature/assignment/model/assignment_answer
 part 'teacher_assignment_answers_state.freezed.dart';
 
 @freezed
-sealed class TeacherAssignmentAnswersState with _$TeacherAssignmentAnswersState {
+sealed class TeacherAssignmentAnswersState
+    with _$TeacherAssignmentAnswersState {
   const factory TeacherAssignmentAnswersState.idle({
     required List<AssignmentAnswers> data,
   }) = TeacherAssignmentAnswersState$Idle;

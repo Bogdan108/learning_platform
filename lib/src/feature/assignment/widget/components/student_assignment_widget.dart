@@ -65,7 +65,7 @@ class StudentAssignmentWidget extends StatelessWidget {
                 } else {
                   context.pushNamed(
                     'studentEvaluateAnswers',
-                    pathParameters: {'answerId': assignment.id},
+                    pathParameters: {'assignmentId': assignment.id},
                     extra: assignment.name,
                   );
                 }

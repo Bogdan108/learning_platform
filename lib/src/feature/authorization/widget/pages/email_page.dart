@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
+import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event.dart';
@@ -41,7 +41,10 @@ class _EmailPageState extends State<EmailPage> {
     super.initState();
     final deps = DependenciesScope.of(context);
     profileBloc = deps.profileBloc;
-    authBloc = DependenciesScope.of(context).authBloc..add(const AuthBlocEvent.sendEmailCode());
+    authBloc = DependenciesScope.of(context).authBloc
+      ..add(
+        const AuthBlocEvent.sendEmailCode(),
+      );
     _textControllers = List.generate(6, (index) => TextEditingController());
     _focusNodes = List.generate(6, (index) => FocusNode());
   }
@@ -70,7 +73,8 @@ class _EmailPageState extends State<EmailPage> {
               );
               if (profileBloc.state.profileInfo.role == UserRole.admin) {
                 context.goNamed('adminCourses');
-              } else if (profileBloc.state.profileInfo.role == UserRole.student) {
+              } else if (profileBloc.state.profileInfo.role ==
+                  UserRole.student) {
                 context.goNamed('courses');
               } else {
                 context.goNamed('teacherCourses');
@@ -112,7 +116,8 @@ class _EmailPageState extends State<EmailPage> {
                             counterText: '',
                           ),
                           onChanged: (value) {
-                            if (value.length == 1 && index < _textControllers.length - 1) {
+                            if (value.length == 1 &&
+                                index < _textControllers.length - 1) {
                               _focusNodes[index + 1].requestFocus();
                             } else if (value.isEmpty && index > 0) {
                               _focusNodes[index - 1].requestFocus();

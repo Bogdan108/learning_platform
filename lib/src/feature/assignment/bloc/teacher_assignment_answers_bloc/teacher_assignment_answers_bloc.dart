@@ -5,12 +5,13 @@ import 'package:learning_platform/src/feature/assignment/bloc/teacher_assignment
 import 'package:learning_platform/src/feature/assignment/data/repository/i_assignment_repository.dart';
 
 class TeacherAssignmentAnswersBloc
-    extends Bloc<TeacherAssignmentAnswersEvent, TeacherAssignmentAnswersState> with SetStateMixin {
+    extends Bloc<TeacherAssignmentAnswersEvent, TeacherAssignmentAnswersState>
+    with SetStateMixin {
   final IAssignmentRepository _assignmentRepository;
 
   TeacherAssignmentAnswersBloc({required IAssignmentRepository repository})
       : _assignmentRepository = repository,
-        super(const TeacherAssignmentAnswersState.idle(data: [])) {
+        super(TeacherAssignmentAnswersState.idle(data: [])) {
     on<TeacherAssignmentAnswersEvent>(
       (event, emit) => switch (event) {
         TeacherAssignmentAnswersEvent$FetchAnswers() => _onFetch(event, emit),
@@ -25,7 +26,8 @@ class TeacherAssignmentAnswersBloc
     emit(TeacherAssignmentAnswersState.loading(data: state.data));
 
     try {
-      final list = await _assignmentRepository.getAnswersByCourse(event.courseId);
+      final list =
+          await _assignmentRepository.getAnswersByCourse(event.courseId);
       emit(TeacherAssignmentAnswersState.idle(data: list));
     } catch (err, st) {
       emit(

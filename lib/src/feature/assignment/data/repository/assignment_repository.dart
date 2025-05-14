@@ -50,14 +50,16 @@ class AssignmentRepository implements IAssignmentRepository {
       );
 
   @override
-  Future<void> deleteAssignment(String assignmentId) => _dataSource.deleteAssignment(
+  Future<void> deleteAssignment(String assignmentId) =>
+      _dataSource.deleteAssignment(
         _org,
         _token,
         assignmentId,
       );
 
   @override
-  Future<List<AssignmentCourses>> fetchAssignments() => _dataSource.getAssignments(
+  Future<List<AssignmentCourses>> fetchAssignments() =>
+      _dataSource.getAssignments(
         _org,
         _token,
       );

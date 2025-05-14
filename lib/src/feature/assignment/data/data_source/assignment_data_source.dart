@@ -250,58 +250,58 @@ final List<AssignmentAnswers> _answers = [
     name: 'Лексическое значение слов (задание 2)',
     students: [
       StudentAnswer(
-        answerId: 'u-101',
+        userId: 'u-101',
         name: UserName(
           firstName: 'Ксения',
           secondName: 'Голубева',
           middleName: 'А',
         ),
-        evaluated: true,
+        isEvaluated: true,
       ),
       StudentAnswer(
-        answerId: 'u-102',
+        userId: 'u-102',
         name: UserName(
           firstName: 'Адам',
           secondName: 'Бартоломей',
           middleName: 'И',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
       StudentAnswer(
-        answerId: 'u-103',
+        userId: 'u-103',
         name: UserName(
           firstName: 'Татьяна',
           secondName: 'Костюкова',
           middleName: 'П',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
       StudentAnswer(
-        answerId: 'u-104',
+        userId: 'u-104',
         name: UserName(
           firstName: 'Олег',
           secondName: 'Маликов',
           middleName: 'Т',
         ),
-        evaluated: true,
+        isEvaluated: true,
       ),
       StudentAnswer(
-        answerId: 'u-105',
+        userId: 'u-105',
         name: UserName(
           firstName: 'Эдуард',
           secondName: 'Гафанович',
           middleName: 'М',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
       StudentAnswer(
-        answerId: 'u-106',
+        userId: 'u-106',
         name: UserName(
           firstName: 'Илья',
           secondName: 'Пупков',
           middleName: 'А',
         ),
-        evaluated: true,
+        isEvaluated: true,
       ),
     ],
   ),
@@ -310,58 +310,58 @@ final List<AssignmentAnswers> _answers = [
     name: 'Средства связи предложений в тексте (задание 1)',
     students: [
       StudentAnswer(
-        answerId: 'u-101',
+        userId: 'u-101',
         name: UserName(
           firstName: 'Ксения',
           secondName: 'Голубева',
           middleName: '',
         ),
-        evaluated: true,
+        isEvaluated: true,
       ),
       StudentAnswer(
-        answerId: 'u-102',
+        userId: 'u-102',
         name: UserName(
           firstName: 'Адам',
           secondName: 'Бартоломей',
           middleName: 'И',
         ),
-        evaluated: true,
+        isEvaluated: true,
       ),
       StudentAnswer(
-        answerId: 'u-103',
+        userId: 'u-103',
         name: UserName(
           firstName: 'Татьяна',
           secondName: 'Костюкова',
           middleName: 'П',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
       StudentAnswer(
-        answerId: 'u-104',
+        userId: 'u-104',
         name: UserName(
           firstName: 'Олег',
           secondName: 'Маликов',
           middleName: 'Т',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
       StudentAnswer(
-        answerId: 'u-105',
+        userId: 'u-105',
         name: UserName(
           firstName: 'Эдуард',
           secondName: 'Гафанович',
           middleName: 'М',
         ),
-        evaluated: true,
+        isEvaluated: true,
       ),
       StudentAnswer(
-        answerId: 'u-106',
+        userId: 'u-106',
         name: UserName(
           firstName: 'Илья',
           secondName: 'Пупков',
           middleName: 'А',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
     ],
   ),
@@ -370,13 +370,13 @@ final List<AssignmentAnswers> _answers = [
     name: 'Стилистический анализ текста (задание 3)',
     students: [
       StudentAnswer(
-        answerId: 'u-101',
+        userId: 'u-101',
         name: UserName(
           firstName: 'Ксения',
           secondName: 'Голубева',
           middleName: 'А',
         ),
-        evaluated: false,
+        isEvaluated: false,
       ),
     ],
   ),

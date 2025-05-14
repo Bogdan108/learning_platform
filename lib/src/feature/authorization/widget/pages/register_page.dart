@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learning_platform/src/common/widget/custom_snackbar.dart';
-import 'package:learning_platform/src/common/widget/text_fields/custom_text_field.dart';
+import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
+import 'package:learning_platform/src/core/widget/text_fields/custom_text_field.dart';
 import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';

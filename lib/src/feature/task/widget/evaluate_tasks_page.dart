@@ -10,13 +10,11 @@ import 'package:learning_platform/src/feature/task/data/repository/tasks_reposit
 import 'package:learning_platform/src/feature/task/widget/components/evaluate_task_tile.dart';
 
 class EvaluateTasksPage extends StatefulWidget {
-  final String answerId;
   final String assignmentId;
   final String title;
   final String? userId;
 
   const EvaluateTasksPage({
-    required this.answerId,
     required this.assignmentId,
     required this.title,
     this.userId,

@@ -5,6 +5,7 @@ import 'package:learning_platform/src/core/root_screen/student_root_screen.dart'
 import 'package:learning_platform/src/core/root_screen/teacher_root_screen.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
+import 'package:learning_platform/src/feature/assignment/model/student_answer.dart';
 import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/student_assignments_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/teacher_assignment_answers_page.dart';
@@ -36,8 +37,9 @@ class AppRouter {
             pageBuilder: (context, state) => CustomTransitionPage<void>(
               key: state.pageKey,
               child: const LoginPage(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                  FadeTransition(opacity: animation, child: child),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
               transitionDuration: _defaultFadeTransitionDuration,
               reverseTransitionDuration: _defaultFadeTransitionDuration,
             ),
@@ -48,8 +50,9 @@ class AppRouter {
             pageBuilder: (context, state) => CustomTransitionPage<void>(
               key: state.pageKey,
               child: const RegisterPage(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                  FadeTransition(opacity: animation, child: child),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
               transitionDuration: _defaultFadeTransitionDuration,
               reverseTransitionDuration: _defaultFadeTransitionDuration,
             ),
@@ -81,23 +84,23 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const StudentAssignmentsPage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
                     routes: [
                       GoRoute(
                         name: 'studentEvaluateAnswers',
-                        path: 'student_evaluate_answers/:answerId',
+                        path: 'student_evaluate_answers/:assignmentId',
                         builder: (ctx, state) {
-                          final answerId = state.pathParameters['answerId']!;
+                          final assignmentId =
+                              state.pathParameters['assignmentId']!;
                           final title = state.extra! as String;
 
-                          // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                           return EvaluateTasksPage(
-                            answerId: answerId,
-                            assignmentId: '1',
+                            assignmentId: assignmentId,
                             title: title,
                           );
                         },
@@ -106,10 +109,10 @@ class AppRouter {
                         name: 'answerAssignment',
                         path: 'answer_assignment/:assignmentId',
                         builder: (ctx, state) {
-                          final assignmentId = state.pathParameters['assignmentId']!;
+                          final assignmentId =
+                              state.pathParameters['assignmentId']!;
                           final title = state.extra! as String;
 
-                          // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                           return AnswerTasksPage(
                             assignmentId: assignmentId,
                             title: title,
@@ -128,8 +131,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const CoursesPage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
@@ -147,7 +151,8 @@ class AppRouter {
                             name: 'assignments',
                             path: 'assignments/:courseId',
                             builder: (ctx, state) {
-                              final courseId = state.pathParameters['courseId']!;
+                              final courseId =
+                                  state.pathParameters['courseId']!;
 
                               return AssignmentsPage(courseId: courseId);
                             },
@@ -156,7 +161,8 @@ class AppRouter {
                                 name: 'tasks',
                                 path: 'tasks/:assignmentId',
                                 builder: (ctx, state) {
-                                  final assignmentId = state.pathParameters['assignmentId']!;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
 
                                   return TasksPage(
                                     assignmentId: assignmentId,
@@ -165,15 +171,15 @@ class AppRouter {
                               ),
                               GoRoute(
                                 name: 'courseStudentEvaluateAnswers',
-                                path: 'course_student_evaluate_answers/:answerId',
+                                path:
+                                    'course_student_evaluate_answers/:assignmentId',
                                 builder: (ctx, state) {
-                                  final answerId = state.pathParameters['answerId']!;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
                                   final title = state.extra! as String;
 
-                                  // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                                   return EvaluateTasksPage(
-                                    answerId: answerId,
-                                    assignmentId: '1',
+                                    assignmentId: assignmentId,
                                     title: title,
                                   );
                                 },
@@ -182,10 +188,10 @@ class AppRouter {
                                 name: 'courseAnswerAssignment',
                                 path: 'course_answer_assignment/:assignmentId',
                                 builder: (ctx, state) {
-                                  final assignmentId = state.pathParameters['assignmentId']!;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
                                   final title = state.extra! as String;
 
-                                  // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                                   return AnswerTasksPage(
                                     assignmentId: assignmentId,
                                     title: title,
@@ -198,22 +204,23 @@ class AppRouter {
                             name: 'answers',
                             path: 'answers/:courseId',
                             builder: (ctx, state) {
-                              final courseId = state.pathParameters['courseId']!;
+                              final courseId =
+                                  state.pathParameters['courseId']!;
 
-                              return AssignmentAnswersPage(courseId: courseId);
+                              return TeacherAssignmentAnswersPage(
+                                  courseId: courseId);
                             },
                             routes: [
                               GoRoute(
                                 name: 'evaluateAnswers',
-                                path: 'evaluate_answers/:answerId',
+                                path: 'evaluate_answers/:assignmentId',
                                 builder: (ctx, state) {
-                                  final answerId = state.pathParameters['answerId']!;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
                                   final title = state.extra! as String;
 
-                                  // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                                   return EvaluateTasksPage(
-                                    answerId: answerId,
-                                    assignmentId: '1',
+                                    assignmentId: assignmentId,
                                     title: title,
                                   );
                                 },
@@ -234,8 +241,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const ProfilePage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
@@ -268,8 +276,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const CoursesPage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
@@ -287,7 +296,8 @@ class AppRouter {
                             name: 'teacherAssignments',
                             path: 'teacher_assignments/:courseId',
                             builder: (ctx, state) {
-                              final courseId = state.pathParameters['courseId']!;
+                              final courseId =
+                                  state.pathParameters['courseId']!;
 
                               return AssignmentsPage(courseId: courseId);
                             },
@@ -296,7 +306,8 @@ class AppRouter {
                                 name: 'teacherTasks',
                                 path: 'teacher_tasks/:assignmentId',
                                 builder: (ctx, state) {
-                                  final assignmentId = state.pathParameters['assignmentId']!;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
 
                                   return TasksPage(
                                     assignmentId: assignmentId,
@@ -305,27 +316,30 @@ class AppRouter {
                               ),
                               GoRoute(
                                 name: 'teacherCourseStudentEvaluateAnswers',
-                                path: 'teacher_course_student_evaluate_answers/:answerId',
+                                path:
+                                    'teacher_course_student_evaluate_answers/:assignmentId',
                                 builder: (ctx, state) {
-                                  final answerId = state.pathParameters['answerId']!;
-                                  final title = state.extra! as String;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
+                                  final answer = state.extra! as StudentAnswer;
 
-                                  // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                                   return EvaluateTasksPage(
-                                    answerId: answerId,
-                                    assignmentId: '1',
-                                    title: title,
+                                    assignmentId: assignmentId,
+                                    title:
+                                        '${answer.name.secondName} ${answer.name.firstName}. ${answer.name.middleName}.',
+                                    userId: answer.userId,
                                   );
                                 },
                               ),
                               GoRoute(
                                 name: 'teacherCourseAnswerAssignment',
-                                path: 'teacher_course_answer_assignment/:assignmentId',
+                                path:
+                                    'teacher_course_answer_assignment/:assignmentId',
                                 builder: (ctx, state) {
-                                  final assignmentId = state.pathParameters['assignmentId']!;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
                                   final title = state.extra! as String;
 
-                                  // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                                   return AnswerTasksPage(
                                     assignmentId: assignmentId,
                                     title: title,
@@ -338,23 +352,26 @@ class AppRouter {
                             name: 'teacherAnswers',
                             path: 'teacher_answers/:courseId',
                             builder: (ctx, state) {
-                              final courseId = state.pathParameters['courseId']!;
+                              final courseId =
+                                  state.pathParameters['courseId']!;
 
-                              return AssignmentAnswersPage(courseId: courseId);
+                              return TeacherAssignmentAnswersPage(
+                                  courseId: courseId);
                             },
                             routes: [
                               GoRoute(
                                 name: 'teacherEvaluateAnswers',
-                                path: 'teacher_evaluate_answers/:answerId',
+                                path: 'teacher_evaluate_answers/:assignmentId',
                                 builder: (ctx, state) {
-                                  final answerId = state.pathParameters['answerId']!;
-                                  final title = state.extra! as String;
+                                  final assignmentId =
+                                      state.pathParameters['assignmentId']!;
+                                  final answer = state.extra! as StudentAnswer;
 
-                                  // TODO(b.luckyanchuk): Implement assignmentId after backend will be ready
                                   return EvaluateTasksPage(
-                                    answerId: answerId,
-                                    assignmentId: '1',
-                                    title: title,
+                                    assignmentId: assignmentId,
+                                    title:
+                                        '${answer.name.secondName} ${answer.name.firstName}. ${answer.name.middleName}.',
+                                    userId: answer.userId,
                                   );
                                 },
                               ),
@@ -374,8 +391,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const ProfilePage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
@@ -408,8 +426,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const CoursesManagePage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
@@ -424,8 +443,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const UsersManagePage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
@@ -440,8 +460,9 @@ class AppRouter {
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
                       child: const ProfilePage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
                       transitionDuration: _defaultFadeTransitionDuration,
                       reverseTransitionDuration: _defaultFadeTransitionDuration,
                     ),
