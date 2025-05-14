@@ -41,7 +41,8 @@ class ProfileDataSource implements IProfileDataSource {
   // }
 
   @override
-  Future<User> getUserInfo(String organizationId, String token) async => Future.delayed(
+  Future<User> getUserInfo(String organizationId, String token) async =>
+      Future.delayed(
         const Duration(seconds: 1),
         () => const User(
           fullName: UserName(

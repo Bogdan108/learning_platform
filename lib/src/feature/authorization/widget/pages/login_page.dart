@@ -75,20 +75,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                      //   child: CustomTextField(
-                      //     hintText: AppStrings.organizationId,
-                      //     validator: (value) {
-                      //       if (value == null || value.isEmpty) {
-                      //         return AppStrings.pleaseEnterSomething;
-                      //       }
-                      //       organizationId = value;
-                      //       return null;
-                      //     },
-                      //   ),
-                      // ),
-                      // const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: CustomTextField(

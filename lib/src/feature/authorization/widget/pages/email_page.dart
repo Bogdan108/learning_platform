@@ -41,10 +41,7 @@ class _EmailPageState extends State<EmailPage> {
     super.initState();
     final deps = DependenciesScope.of(context);
     profileBloc = deps.profileBloc;
-    authBloc = DependenciesScope.of(context).authBloc
-      ..add(
-        const AuthBlocEvent.sendEmailCode(),
-      );
+    authBloc = DependenciesScope.of(context).authBloc;
     _textControllers = List.generate(6, (index) => TextEditingController());
     _focusNodes = List.generate(6, (index) => FocusNode());
   }

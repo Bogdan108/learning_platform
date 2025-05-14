@@ -5,11 +5,14 @@ import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
 import 'package:learning_platform/src/core/widget/text_fields/custom_text_field.dart';
 import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
+import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/auth_button.dart';
 import 'package:learning_platform/src/feature/authorization/widget/components/change_auth_type_button.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -44,6 +47,16 @@ class _RegisterPageState extends State<RegisterPage> {
         bloc: authBloc,
         listener: (context, state) {
           switch (state) {
+            case Success(status: AuthenticationStatus.authenticated):
+              context.push(
+                '/register/validate_code',
+                extra: {
+                  'firstName': firstName!,
+                  'lastName': lastName!,
+                  'email': email!,
+                  'password': password!,
+                },
+              );
             case Error(error: final error):
               CustomSnackBar.showError(context, message: error);
             default:
@@ -69,20 +82,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                      //   child: CustomTextField(
-                      //     hintText: AppStrings.organizationId,
-                      //     validator: (value) {
-                      //       if (value == null || value.isEmpty) {
-                      //         return AppStrings.pleaseEnterSomething;
-                      //       }
-                      //       organizationId = value;
-                      //       return null;
-                      //     },
-                      //   ),
-                      // ),
-                      // const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: CustomTextField(
@@ -155,19 +154,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       AuthButton(
                         title: AppStrings.register,
                         onTap: () {
-                          // CustomSnackBar.showError(context,
-                          //     message:
-                          //         'Ошибка регистрации! \n попробуйте снова');
                           if (formKey.currentState!.validate()) {
-                            // Переход на страницу верификации email с передачей параметров
-                            context.push(
-                              '/register/validate_code',
-                              extra: {
-                                'firstName': firstName!,
-                                'lastName': lastName!,
-                                'email': email!,
-                                'password': password!,
-                              },
+                            authBloc.add(
+                              AuthBlocEvent.register(
+                                organizationId: organizationId ?? '1',
+                                email: email!,
+                                password: password!,
+                                userName: UserName(
+                                  firstName: firstName ?? '',
+                                  secondName: lastName ?? '',
+                                  middleName: middleName ?? '',
+                                ),
+                              ),
                             );
                           }
                         },

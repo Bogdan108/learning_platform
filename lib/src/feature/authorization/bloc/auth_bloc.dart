@@ -36,7 +36,6 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
       (event, emit) => switch (event) {
         SignInEvent() => _signIn(event, emit),
         RegisterEvent() => _register(event, emit),
-        SendEmailCodeEvent() => _sendCodeToEmail(event, emit),
         VerifyEmailEvent() => _verifyEmail(event, emit),
         SignOutEvent() => _signOut(event, emit),
       },
@@ -116,6 +115,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
           event.password,
           event.userName,
         );
+        await _authRepository.sendCodeToEmail();
         emit(
           AuthBlocState.idle(
             status: AuthenticationStatus.authenticated,
@@ -158,37 +158,6 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
       emit(
         AuthBlocState.error(
           status: AuthenticationStatus.unauthenticated,
-          token: state.token,
-          error: e.toString(),
-        ),
-      );
-      onError(e, stackTrace);
-    }
-  }
-
-  Future<void> _sendCodeToEmail(
-    SendEmailCodeEvent event,
-    Emitter<AuthBlocState> emit,
-  ) async {
-    emit(
-      AuthBlocState.loading(
-        status: state.status,
-        token: state.token,
-      ),
-    );
-
-    try {
-      await _authRepository.sendCodeToEmail();
-      emit(
-        AuthBlocState.idle(
-          status: state.status,
-          token: state.token,
-        ),
-      );
-    } on Object catch (e, stackTrace) {
-      emit(
-        AuthBlocState.error(
-          status: state.status,
           token: state.token,
           error: e.toString(),
         ),

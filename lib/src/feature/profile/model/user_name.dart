@@ -6,6 +6,8 @@ part 'user_name.g.dart';
 /// Represents a user's name with first, second, and middle name.
 @freezed
 abstract class UserName with _$UserName {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+
   /// Creates a new [UserName] instance.
   const factory UserName({
     required String firstName,

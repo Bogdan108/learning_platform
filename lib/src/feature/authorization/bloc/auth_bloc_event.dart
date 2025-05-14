@@ -22,9 +22,6 @@ sealed class AuthBlocEvent with _$AuthBlocEvent {
     required UserName userName,
   }) = RegisterEvent;
 
-  /// Event to send verify code to new user email
-  const factory AuthBlocEvent.sendEmailCode() = SendEmailCodeEvent;
-
   /// Event to verify new user email
   const factory AuthBlocEvent.verifyEmail({
     required String code,

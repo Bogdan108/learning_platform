@@ -208,7 +208,13 @@ class DioFactory extends Factory<Dio> {
   @override
   Dio create() {
     /// Interceptor that logs requests and responses
-    final dio = Dio()..interceptors.add(LogInterceptor());
+    final dio = Dio()
+      ..interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+        ),
+      );
     dio.options.baseUrl = AppStrings.baseUrl;
     return dio;
   }
