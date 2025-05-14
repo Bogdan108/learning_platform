@@ -68,7 +68,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
                 userId: '1',
                 fullName: UserName.empty(),
                 email: '',
-                role: UserRole.teacher,
+                role: UserRole.student,
               )),
         );
       } else {
@@ -126,6 +126,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
           event.userName,
         );
         await _authRepository.sendCodeToEmail();
+
         emit(
           AuthBlocState.idle(
             status: AuthenticationStatus.authenticated,

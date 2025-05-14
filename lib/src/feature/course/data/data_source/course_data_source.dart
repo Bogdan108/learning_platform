@@ -178,8 +178,8 @@ class CourseDataSource implements ICourseDataSource {
             Addition(id: 'm2', name: 'Материал 2: Продвинутые темы.pdf'),
           ],
           links: [
-            Addition(id: 'l1', name: 'https://docs.example.com/guide'),
-            Addition(id: 'l2', name: 'https://video.example.com/lecture'),
+            Addition(id: 'l1', name: 'https://flutter.dev/'),
+            Addition(id: 'l2', name: 'https://plugfox.dev/'),
           ],
         ),
       );
