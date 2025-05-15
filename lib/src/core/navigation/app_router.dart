@@ -3,12 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:learning_platform/src/core/root_screen/admin_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/student_root_screen.dart';
 import 'package:learning_platform/src/core/root_screen/teacher_root_screen.dart';
+import 'package:learning_platform/src/core/utils/go_router_refresh.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/courses_manage_page.dart';
 import 'package:learning_platform/src/feature/admin/widget/pages/users_manage_page.dart';
 import 'package:learning_platform/src/feature/assignment/model/student_answer.dart';
 import 'package:learning_platform/src/feature/assignment/widget/assignment_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/student_assignments_page.dart';
 import 'package:learning_platform/src/feature/assignment/widget/teacher_assignment_answers_page.dart';
+import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
+import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/email_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/login_page.dart';
 import 'package:learning_platform/src/feature/authorization/widget/pages/register_page.dart';
@@ -27,9 +30,17 @@ const _defaultFadeTransitionDuration = Duration(milliseconds: 200);
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-  GoRouter initRouter(String initialLocation) => GoRouter(
+  GoRouter initRouter(String initialLocation, AuthBloc authBloc) => GoRouter(
         navigatorKey: _rootNavigatorKey,
         initialLocation: initialLocation,
+        refreshListenable: GoRouterRefreshStream(authBloc.stream),
+        redirect: (context, state) {
+          final authState = authBloc.state;
+          final loggedOut =
+              authState.status == AuthenticationStatus.unauthenticated;
+          if (loggedOut) return '/login';
+          return null;
+        },
         routes: [
           GoRoute(
             name: 'login',

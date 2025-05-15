@@ -3,7 +3,6 @@ import 'package:learning_platform/src/core/utils/layout/window_size.dart';
 import 'package:learning_platform/src/feature/initialization/logic/composition_root.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/initialization/widget/material_context.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 /// {@template app}
 /// [RootContext] is an entry point to the application.
@@ -21,11 +20,8 @@ class RootContext extends StatelessWidget {
   final CompositionResult compositionResult;
 
   @override
-  Widget build(BuildContext context) => DefaultAssetBundle(
-        bundle: SentryAssetBundle(),
-        child: DependenciesScope(
-          dependencies: compositionResult.dependencies,
-          child: const WindowSizeScope(child: MaterialContext()),
-        ),
+  Widget build(BuildContext context) => DependenciesScope(
+        dependencies: compositionResult.dependencies,
+        child: const WindowSizeScope(child: MaterialContext()),
       );
 }

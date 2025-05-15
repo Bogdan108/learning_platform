@@ -28,6 +28,7 @@ class _MaterialContextState extends State<MaterialContext> {
   void initState() {
     super.initState();
     final deps = DependenciesScope.of(context);
+    final authBloc = deps.authBloc;
     final profileBloc = deps.profileBloc;
     final userRole = profileBloc.state.profileInfo.role;
 
@@ -38,7 +39,7 @@ class _MaterialContextState extends State<MaterialContext> {
             : userRole == UserRole.admin
                 ? '/admin_courses'
                 : '/teacher_courses';
-    router = AppRouter().initRouter(initialLocation);
+    router = AppRouter().initRouter(initialLocation, authBloc);
   }
 
   @override

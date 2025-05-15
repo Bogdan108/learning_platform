@@ -79,7 +79,6 @@ class ProfilePage extends StatelessWidget {
                       DependenciesScope.of(context).authBloc.add(
                             const AuthBlocEvent.signOut(),
                           );
-                      context.goNamed('login');
                     },
                     child: const Text(
                       'Выйти из системы',

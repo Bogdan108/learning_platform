@@ -2,8 +2,6 @@ import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
 import 'package:learning_platform/src/core/constant/app_strings.dart';
 import 'package:learning_platform/src/core/constant/application_config.dart';
-import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
-import 'package:learning_platform/src/core/utils/error_reporter/sentry_error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
@@ -33,7 +31,6 @@ final class CompositionRoot {
   const CompositionRoot({
     required this.config,
     required this.logger,
-    required this.errorReporter,
   });
 
   /// Application configuration
@@ -41,9 +38,6 @@ final class CompositionRoot {
 
   /// Logger used to log information during composition process.
   final Logger logger;
-
-  /// Error tracking manager used to track errors in the application.
-  final ErrorReporter errorReporter;
 
   /// Composes dependencies and returns result of composition.
   Future<CompositionResult> compose() async {
@@ -54,7 +48,6 @@ final class CompositionRoot {
     final dependencies = await DependenciesFactory(
       config: config,
       logger: logger,
-      errorReporter: errorReporter,
     ).create();
 
     stopwatch.stop();
@@ -128,7 +121,6 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   const DependenciesFactory({
     required this.config,
     required this.logger,
-    required this.errorReporter,
   });
 
   /// Application configuration
@@ -136,9 +128,6 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
 
   /// Logger used to log information during composition process.
   final Logger logger;
-
-  /// Error tracking manager used to track errors in the application.
-  final ErrorReporter errorReporter;
 
   @override
   Future<DependenciesContainer> create() async {
@@ -170,7 +159,6 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
       logger: logger,
       config: config,
       dio: dio,
-      errorReporter: errorReporter,
       packageInfo: packageInfo,
       tokenStorage: tokenStorage,
       organizationIdStorage: orgIdStorage,
@@ -217,31 +205,6 @@ class DioFactory extends Factory<Dio> {
       );
     dio.options.baseUrl = AppStrings.baseUrl;
     return dio;
-  }
-}
-
-/// {@template error_reporter_factory}
-/// Factory that creates an instance of [ErrorReporter].
-/// {@endtemplate}
-class ErrorReporterFactory extends AsyncFactory<ErrorReporter> {
-  /// {@macro error_reporter_factory}
-  const ErrorReporterFactory(this.config);
-
-  /// Application configuration
-  final ApplicationConfig config;
-
-  @override
-  Future<ErrorReporter> create() async {
-    final errorReporter = SentryErrorReporter(
-      sentryDsn: config.sentryDsn,
-      environment: config.environment.value,
-    );
-
-    if (config.sentryDsn.isNotEmpty) {
-      await errorReporter.initialize();
-    }
-
-    return errorReporter;
   }
 }
 

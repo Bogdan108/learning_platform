@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/constant/application_config.dart';
 import 'package:learning_platform/src/core/utils/app_bloc_observer.dart';
 import 'package:learning_platform/src/core/utils/bloc_transformer.dart';
-import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
 import 'package:learning_platform/src/core/utils/logger/printing_log_observer.dart';
 import 'package:learning_platform/src/feature/initialization/logic/composition_root.dart';
@@ -23,10 +22,8 @@ sealed class AppRunner {
   /// Initializes dependencies and launches the application within a guarded execution zone.
   static Future<void> startup() async {
     const config = ApplicationConfig();
-    final errorReporter = await const ErrorReporterFactory(config).create();
     final logger = AppLoggerFactory(
       observers: [
-        ErrorReporterLogObserver(errorReporter),
         if (!kReleaseMode) const PrintingLogObserver(logLevel: LogLevel.trace),
       ],
     ).create();
@@ -50,7 +47,6 @@ sealed class AppRunner {
             final compositionResult = await CompositionRoot(
               config: config,
               logger: logger,
-              errorReporter: errorReporter,
             ).compose();
 
             runApp(RootContext(compositionResult: compositionResult));

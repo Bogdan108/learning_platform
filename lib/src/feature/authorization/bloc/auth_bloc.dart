@@ -68,7 +68,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
                 userId: '1',
                 fullName: UserName.empty(),
                 email: '',
-                role: UserRole.student,
+                role: UserRole.teacher,
               )),
         );
       } else {

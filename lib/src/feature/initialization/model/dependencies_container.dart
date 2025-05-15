@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:learning_platform/src/core/constant/application_config.dart';
-import 'package:learning_platform/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:learning_platform/src/core/utils/logger/logger.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
@@ -21,10 +20,8 @@ class DependenciesContainer {
     required this.dio,
     required this.tokenStorage,
     required this.organizationIdStorage,
-    //  required this.appSettingsBloc,
     required this.authBloc,
     required this.profileBloc,
-    required this.errorReporter,
     required this.packageInfo,
   });
 
@@ -48,9 +45,6 @@ class DependenciesContainer {
 
   ///[ProfileBloc] instance, used to get info about user.
   final ProfileBloc profileBloc;
-
-  /// [ErrorReporter] instance, used to report errors.
-  final ErrorReporter errorReporter;
 
   /// [PackageInfo] instance, contains information about the application.
   final PackageInfo packageInfo;
