@@ -6,6 +6,7 @@ part 'assignment_courses.g.dart';
 
 @freezed
 abstract class AssignmentCourses with _$AssignmentCourses {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AssignmentCourses({
     @JsonKey(name: 'course_id') required String courseId,
     @JsonKey(name: 'course_name') required String courseName,

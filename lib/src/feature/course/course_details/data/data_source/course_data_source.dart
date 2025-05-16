@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -37,7 +38,7 @@ class CourseDataSource implements ICourseDataSource {
     String additionId,
   ) async {
     await _dio.delete<Map<String, dynamic>>(
-      '/course/additions',
+      '/course/teacher/additions',
       queryParameters: {
         'organization_id': organizationId,
         'token': token,
@@ -62,7 +63,7 @@ class CourseDataSource implements ICourseDataSource {
         'token': token,
         'course_id': courseId,
       },
-      data: {link: link},
+      data: {'link': link},
     );
   }
 
@@ -74,7 +75,7 @@ class CourseDataSource implements ICourseDataSource {
     required String additionId,
   }) async {
     final response = await _dio.get<Uint8List>(
-      '/course/additions/material',
+      '/course/teacher/additions/material',
       queryParameters: {
         'organization_id': organizationId,
         'token': token,
@@ -94,7 +95,7 @@ class CourseDataSource implements ICourseDataSource {
     String token,
     String courseId,
   ) async {
-    final response = await _dio.get<List<Map<String, dynamic>>>(
+    final response = await _dio.get(
       '/course/teacher/student-list',
       queryParameters: {
         'organization_id': organizationId,
@@ -103,7 +104,10 @@ class CourseDataSource implements ICourseDataSource {
       },
     );
 
-    return response.data?.map(Student.fromJson).toList() ?? [];
+    log("response ${response.data.toString()}");
+    // final raw = response.data as List<dynamic>?;
+
+    return [];
   }
 
   @override

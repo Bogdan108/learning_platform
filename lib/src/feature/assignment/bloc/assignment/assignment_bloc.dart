@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_event.dart';
 import 'package:learning_platform/src/feature/assignment/bloc/assignment/assignment_state.dart';
@@ -28,6 +30,7 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
       final items = await _repo.fetchCourseAssignments(event.courseId);
       emit(AssignmentState.idle(items: items));
     } catch (e) {
+      log(e.toString());
       emit(
         AssignmentState.error(
           error: 'Ошибка загрузки заданий',
@@ -48,6 +51,7 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
       final items = await _repo.fetchCourseAssignments(event.courseId);
       emit(AssignmentState.idle(items: items));
     } catch (e) {
+      log('Error is $e');
       emit(
         AssignmentState.error(
           error: 'Ошибка создания задания',

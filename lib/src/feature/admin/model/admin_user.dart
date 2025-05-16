@@ -7,6 +7,7 @@ part 'admin_user.g.dart';
 
 @freezed
 abstract class AdminUser with _$AdminUser {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AdminUser({
     required String id,
     required UserName fullName,

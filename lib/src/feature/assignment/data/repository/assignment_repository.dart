@@ -32,7 +32,7 @@ class AssignmentRepository implements IAssignmentRepository {
       );
 
   @override
-  Future<String> createAssignment(String courseId, AssignmentRequest request) =>
+  Future<int> createAssignment(String courseId, AssignmentRequest request) =>
       _dataSource.createAssignment(
         _org,
         _token,

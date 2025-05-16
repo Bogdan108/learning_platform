@@ -2,7 +2,7 @@ import 'package:learning_platform/src/feature/course/model/course.dart';
 import 'package:learning_platform/src/feature/course/model/course_request.dart';
 
 abstract class ICoursesRepository {
-  Future<String> createCourse(
+  Future<int> createCourse(
     CourseRequest course,
   );
 

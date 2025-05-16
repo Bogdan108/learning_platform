@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
-import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 part 'auth_bloc_state.freezed.dart';

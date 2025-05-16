@@ -8,7 +8,7 @@ abstract interface class IAssignmentRepository {
     String courseId,
   );
 
-  Future<String> createAssignment(
+  Future<int> createAssignment(
     String courseId,
     AssignmentRequest request,
   );

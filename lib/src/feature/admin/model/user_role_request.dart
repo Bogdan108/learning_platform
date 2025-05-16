@@ -6,6 +6,7 @@ part 'user_role_request.g.dart';
 
 @freezed
 abstract class UserRoleRequest with _$UserRoleRequest {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserRoleRequest({
     required String id,
     required UserRole role,

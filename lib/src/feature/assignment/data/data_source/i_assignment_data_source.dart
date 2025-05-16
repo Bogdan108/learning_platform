@@ -10,7 +10,7 @@ abstract interface class IAssignmentDataSource {
     String courseId,
   );
 
-  Future<String> createAssignment(
+  Future<int> createAssignment(
     String organizationId,
     String token,
     String courseId,

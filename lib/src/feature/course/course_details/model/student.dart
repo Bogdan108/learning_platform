@@ -6,6 +6,7 @@ part 'student.g.dart';
 
 @freezed
 abstract class Student with _$Student {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Student({
     required String id,
     @JsonKey(name: 'full_name') required User fullName,

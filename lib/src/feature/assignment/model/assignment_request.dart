@@ -5,6 +5,7 @@ part 'assignment_request.g.dart';
 
 @freezed
 abstract class AssignmentRequest with _$AssignmentRequest {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AssignmentRequest({
     required String name,
     @JsonKey(name: 'started_at') required String startedAt,

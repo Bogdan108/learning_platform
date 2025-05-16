@@ -9,7 +9,7 @@ class CoursesDataSource implements ICoursesDataSource {
   CoursesDataSource({required Dio dio}) : _dio = dio;
 
   @override
-  Future<String> createCourse(
+  Future<int> createCourse(
     String organizationId,
     String token,
     CourseRequest course,
@@ -23,7 +23,7 @@ class CoursesDataSource implements ICoursesDataSource {
       data: course.toJson(),
     );
     if (response.data != null && response.data!.containsKey('course_id')) {
-      return response.data!['course_id'] as String;
+      return response.data!['course_id'] as int;
     }
     throw Exception('Failed to create course');
   }

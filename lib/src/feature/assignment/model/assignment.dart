@@ -6,13 +6,15 @@ part 'assignment.g.dart';
 
 @freezed
 abstract class Assignment with _$Assignment {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Assignment({
-    required String id,
+    required int id,
     required String name,
     @JsonKey(name: 'started_at') required DateTime startedAt,
     @JsonKey(name: 'status') AssignmentStatus? status,
     @JsonKey(name: 'ended_at') DateTime? endedAt,
   }) = _Assignment;
 
-  factory Assignment.fromJson(Map<String, dynamic> json) => _$AssignmentFromJson(json);
+  factory Assignment.fromJson(Map<String, dynamic> json) =>
+      _$AssignmentFromJson(json);
 }

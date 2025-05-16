@@ -2,7 +2,7 @@ import 'package:learning_platform/src/feature/course/model/course.dart';
 import 'package:learning_platform/src/feature/course/model/course_request.dart';
 
 abstract class ICoursesDataSource {
-  Future<String> createCourse(
+  Future<int> createCourse(
     String organizationId,
     String token,
     CourseRequest course,

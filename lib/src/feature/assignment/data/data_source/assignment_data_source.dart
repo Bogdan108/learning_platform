@@ -32,7 +32,7 @@ class AssignmentDataSource implements IAssignmentDataSource {
   }
 
   @override
-  Future<String> createAssignment(
+  Future<int> createAssignment(
     String organizationId,
     String token,
     String courseId,
@@ -49,7 +49,7 @@ class AssignmentDataSource implements IAssignmentDataSource {
     );
 
     if (response.data != null && response.data!.containsKey('assignment_id')) {
-      return response.data!['assignment_id'] as String;
+      return response.data!['assignment_id'] as int;
     }
     throw Exception('Failed to create assignment');
   }

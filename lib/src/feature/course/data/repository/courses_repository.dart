@@ -20,7 +20,7 @@ class CoursesRepository implements ICoursesRepository {
   String get organizationId => orgIdStorage.load() ?? '';
 
   @override
-  Future<String> createCourse(
+  Future<int> createCourse(
     CourseRequest course,
   ) =>
       dataSource.createCourse(organizationId, token, course);

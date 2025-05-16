@@ -4,10 +4,7 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/data/repository/i_auth_repository.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
-import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/i_profile_repository.dart';
-import 'package:learning_platform/src/feature/profile/model/user_name.dart';
-import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 /// AuthBloc
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
