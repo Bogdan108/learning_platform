@@ -8,7 +8,7 @@ part 'assignment.g.dart';
 abstract class Assignment with _$Assignment {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Assignment({
-    required int id,
+    required String id,
     required String name,
     @JsonKey(name: 'started_at') required DateTime startedAt,
     @JsonKey(name: 'status') AssignmentStatus? status,

@@ -38,7 +38,7 @@ class CourseDataSource implements ICourseDataSource {
     String additionId,
   ) async {
     await _dio.delete<Map<String, dynamic>>(
-      '/course/teacher/additions',
+      '/course/teacher/additions/',
       queryParameters: {
         'organization_id': organizationId,
         'token': token,
@@ -75,7 +75,7 @@ class CourseDataSource implements ICourseDataSource {
     required String additionId,
   }) async {
     final response = await _dio.get<Uint8List>(
-      '/course/teacher/additions/material',
+      '/course/additions/material',
       queryParameters: {
         'organization_id': organizationId,
         'token': token,
@@ -105,9 +105,8 @@ class CourseDataSource implements ICourseDataSource {
     );
 
     log("response ${response.data.toString()}");
-    // final raw = response.data as List<dynamic>?;
 
-    return [];
+    return response.data?.map((e) => Student.fromJson(e)).toList() ?? [];
   }
 
   @override

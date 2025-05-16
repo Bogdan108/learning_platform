@@ -4,7 +4,7 @@ import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
 abstract class ITasksDataSource {
-  Future<String> createTask({
+  Future<int> createTask({
     required String organizationId,
     required String token,
     required String assignmentId,

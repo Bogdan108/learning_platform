@@ -59,13 +59,13 @@ class StudentAssignmentWidget extends StatelessWidget {
                 if (assignment.status == AssignmentStatus.pending) {
                   context.pushNamed(
                     'answerAssignment',
-                    pathParameters: {'assignmentId': assignment.id},
+                    pathParameters: {'assignmentId': assignment.id.toString()},
                     extra: assignment.name,
                   );
                 } else {
                   context.pushNamed(
                     'studentEvaluateAnswers',
-                    pathParameters: {'assignmentId': assignment.id},
+                    pathParameters: {'assignmentId': assignment.id.toString()},
                     extra: assignment.name,
                   );
                 }

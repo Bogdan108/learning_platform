@@ -8,7 +8,7 @@ abstract interface class ITasksRepository {
     String assignmentId,
   );
 
-  Future<String> createTask({
+  Future<int> createTask({
     required String assignmentId,
     required TaskRequest task,
   });

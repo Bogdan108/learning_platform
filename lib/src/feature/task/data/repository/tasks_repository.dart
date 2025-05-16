@@ -25,7 +25,7 @@ class TasksRepository implements ITasksRepository {
   String get _organizationId => _orgIdStorage.load() ?? '';
 
   @override
-  Future<String> createTask({
+  Future<int> createTask({
     required String assignmentId,
     required TaskRequest task,
   }) =>

@@ -4,7 +4,8 @@ import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_ev
 import 'package:learning_platform/src/feature/task/bloc/tasks_bloc/tasks_bloc_state.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 
-class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin {
+class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState>
+    with SetStateMixin {
   final ITasksRepository _tasksRepository;
 
   TasksBloc({required ITasksRepository tasksRepository})
@@ -54,9 +55,10 @@ class TasksBloc extends Bloc<TasksBlocEvent, TasksBlocState> with SetStateMixin 
       );
 
       final taskFile = event.file;
+
       if (taskFile != null) {
         await _tasksRepository.addQuestionFile(
-          taskId: taskId,
+          taskId: taskId.toString(),
           file: taskFile,
           fileName: event.name ?? '${event.assignmentId}.pdf',
         );

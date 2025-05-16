@@ -54,6 +54,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     )..add(
         CourseEvent.fetchCourseAdditions(
           courseId: widget.courseDetails.id,
+          isStudent: _profileBloc.state.profileInfo.role == UserRole.student,
         ),
       );
   }

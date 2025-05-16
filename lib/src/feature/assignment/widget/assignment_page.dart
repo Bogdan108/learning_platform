@@ -128,7 +128,7 @@ class _State extends State<AssignmentsPage> {
                                     initialEnd: assignment.endedAt,
                                     onSave: (req) => _assignmentBloc.add(
                                       AssignmentEvent.edit(
-                                        assignmentId: assignment.id,
+                                        assignmentId: assignment.id.toString(),
                                         courseId: widget.courseId,
                                         request: req,
                                       ),
@@ -141,7 +141,7 @@ class _State extends State<AssignmentsPage> {
                                   onTap: () => DeleteAssignmentDialog(
                                     onTapCallback: () => _assignmentBloc.add(
                                       AssignmentEvent.delete(
-                                        assignmentId: assignment.id,
+                                        assignmentId: assignment.id.toString(),
                                         courseId: widget.courseId,
                                       ),
                                     ),
@@ -160,7 +160,7 @@ class _State extends State<AssignmentsPage> {
                                 'teacherTasks',
                                 pathParameters: {
                                   'courseId': widget.courseId,
-                                  'assignmentId': assignment.id,
+                                  'assignmentId': assignment.id.toString(),
                                 },
                               );
                             } else {
@@ -170,7 +170,7 @@ class _State extends State<AssignmentsPage> {
                                   context.pushNamed(
                                     'answerAssignment',
                                     pathParameters: {
-                                      'assignmentId': assignment.id
+                                      'assignmentId': assignment.id.toString()
                                     },
                                     extra: assignment.name,
                                   );
@@ -178,7 +178,7 @@ class _State extends State<AssignmentsPage> {
                                   context.pushNamed(
                                     'studentEvaluateAnswers',
                                     pathParameters: {
-                                      'assignmentId': assignment.id
+                                      'assignmentId': assignment.id.toString()
                                     },
                                     extra: assignment.name,
                                   );

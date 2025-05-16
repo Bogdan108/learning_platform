@@ -46,12 +46,21 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> with SetStateMixin {
       final additions = await _courseRepository.getCourseAdditions(
         event.courseId,
       );
-      final students = await _courseRepository.getCourseStudents(
-        event.courseId,
-      );
 
+      if (!event.isStudent) {
+        final students = await _courseRepository.getCourseStudents(
+          event.courseId,
+        );
+
+        emit(
+          CourseState.idle(additions: additions, students: students),
+        );
+      }
       emit(
-        CourseState.idle(additions: additions, students: students),
+        CourseState.idle(
+          additions: additions,
+          students: [],
+        ),
       );
     } on Object catch (e, st) {
       emit(

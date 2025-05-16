@@ -16,7 +16,7 @@ class AssignmentDataSource implements IAssignmentDataSource {
     String token,
     String courseId,
   ) async {
-    final response = await _dio.get<List<dynamic>>(
+    final response = await _dio.get(
       '/assignment/list',
       queryParameters: {
         'organization_id': organizationId,
@@ -25,10 +25,14 @@ class AssignmentDataSource implements IAssignmentDataSource {
       },
     );
 
-    return response.data
+    final rawList = response.data as List<dynamic>?;
+
+    final assignments = rawList
             ?.map((e) => Assignment.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [];
+
+    return assignments;
   }
 
   @override

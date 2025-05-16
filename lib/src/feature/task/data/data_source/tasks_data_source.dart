@@ -32,7 +32,7 @@ class TasksDataSource implements ITasksDataSource {
   }
 
   @override
-  Future<String> createTask({
+  Future<int> createTask({
     required String organizationId,
     required String token,
     required String assignmentId,
@@ -49,7 +49,7 @@ class TasksDataSource implements ITasksDataSource {
     );
     final data = response.data;
     if (data != null && data.containsKey('task_id')) {
-      return data['task_id'] as String;
+      return data['task_id'] as int;
     }
     throw Exception('Failed to create task');
   }

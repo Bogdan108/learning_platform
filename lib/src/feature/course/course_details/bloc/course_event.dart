@@ -6,6 +6,7 @@ part 'course_event.freezed.dart';
 @freezed
 sealed class CourseEvent with _$CourseEvent {
   const factory CourseEvent.fetchCourseAdditions({
+    required bool isStudent,
     required String courseId,
   }) = CourseEvent$FetchCourseAddition;
 
