@@ -48,7 +48,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
   }
 
   Future<void> _pickQuestionFile() async {
-    final result = await FilePicker.platform.pickFiles();
+    final result = await FilePicker.platform.pickFiles(withData: true);
     if (result != null && result.files.single.path != null) {
       setState(() {
         _questionFile = result.files.first;
