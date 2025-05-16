@@ -73,7 +73,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           bloc: _courseBloc,
           builder: (context, courseState) => Scaffold(
             appBar: AppBar(
-              title: Text(widget.courseDetails.name),
+              title: Text(
+                widget.courseDetails.name,
+              ),
               centerTitle: true,
             ),
             body: SingleChildScrollView(
@@ -93,6 +95,16 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       Text(
                         widget.courseDetails.description,
                         style: const TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Курс №${widget.courseDetails.id}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(color: Colors.grey[600]),
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),

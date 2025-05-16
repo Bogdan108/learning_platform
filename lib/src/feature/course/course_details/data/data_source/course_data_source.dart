@@ -213,7 +213,7 @@ class CourseDataSource implements ICourseDataSource {
         _delay,
         () => [
           const Student(
-            id: 's1',
+            id: '1',
             fullName: User(
               fullName: UserName(
                 firstName: 'Иван',
@@ -226,7 +226,7 @@ class CourseDataSource implements ICourseDataSource {
             email: 'ivan.ivanov@example.com',
           ),
           const Student(
-            id: 's2',
+            id: '2',
             fullName: User(
               fullName: UserName(
                 firstName: 'Пётр',

@@ -15,7 +15,6 @@ import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 import 'package:learning_platform/src/feature/profile/data/data_source/profile_data_source.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/profile_repository.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template composition_root}
@@ -135,10 +134,6 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
 
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    final packageInfo = await PackageInfo.fromPlatform();
-    // final settingsBloc =
-    //     await AppSettingsBlocFactory(sharedPreferencesAsync).create();
-
     final tokenStorage = TokenStorage(sharedPreferences: sharedPreferences);
     final orgIdStorage = OrganizationIdStorage(
       sharedPreferences: sharedPreferences,
@@ -159,7 +154,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
       logger: logger,
       config: config,
       dio: dio,
-      packageInfo: packageInfo,
+
       tokenStorage: tokenStorage,
       organizationIdStorage: orgIdStorage,
       //appSettingsBloc: settingsBloc,

@@ -165,13 +165,13 @@ class CoursesDataSource implements ICoursesDataSource {
         _delay,
         () => [
           const Course(
-            id: 't1',
+            id: '1',
             name: 'Flutter для начинающих',
             description: 'Введение в Dart и Flutter.',
             isActive: true,
           ),
           const Course(
-            id: 't2',
+            id: '2',
             name: 'Продвинутый Flutter',
             description: 'State management и архитектура.',
             isActive: false,
@@ -197,19 +197,19 @@ class CoursesDataSource implements ICoursesDataSource {
         _delay,
         () => const [
           Course(
-            id: 's1',
+            id: '1',
             name: 'Основы HTML и CSS',
             description: 'Верстка простых страниц.',
             isActive: true,
           ),
           Course(
-            id: 's2',
+            id: '2',
             name: 'JavaScript для веба',
             description: 'Динамика на клиенте.',
             isActive: true,
           ),
           Course(
-            id: 's3',
+            id: '3',
             name: 'Git и GitHub',
             description: 'Контроль версий и совместная работа.',
             isActive: false,

@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_platform/src/core/widget/custom_snackbar.dart';
@@ -229,9 +228,9 @@ class EvaluateTaskTile extends StatelessWidget {
             AnswerType.variants => Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: task.answerVariants?.mapIndexed(
-                        (index, e) {
-                          final isSelected = task.answerVariant == index + 1;
+                  children: task.answerVariants?.map(
+                        (variant) {
+                          final isSelected = task.answerText == variant;
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 4),
@@ -246,7 +245,7 @@ class EvaluateTaskTile extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                Text(e),
+                                Text(variant),
                               ],
                             ),
                           );

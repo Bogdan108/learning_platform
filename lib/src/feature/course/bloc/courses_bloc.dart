@@ -136,7 +136,7 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> with SetStateMixin {
 
     try {
       final courses = switch (event.role) {
-        UserRole.student => await _coursesRepository.getTeacherCourses(
+        UserRole.teacher => await _coursesRepository.getTeacherCourses(
             event.searchQuery,
           ),
         _ => await _coursesRepository.getStudentCourses(

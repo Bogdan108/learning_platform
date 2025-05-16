@@ -5,7 +5,6 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc.dart'
 import 'package:learning_platform/src/feature/authorization/data/storage/organization_id_storage.dart';
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 /// {@template dependencies_container}
 /// Container used to reuse dependencies across the application.
@@ -22,7 +21,6 @@ class DependenciesContainer {
     required this.organizationIdStorage,
     required this.authBloc,
     required this.profileBloc,
-    required this.packageInfo,
   });
 
   /// [Logger] instance, used to log messages.
@@ -45,9 +43,6 @@ class DependenciesContainer {
 
   ///[ProfileBloc] instance, used to get info about user.
   final ProfileBloc profileBloc;
-
-  /// [PackageInfo] instance, contains information about the application.
-  final PackageInfo packageInfo;
 }
 
 /// {@template testing_dependencies_container}

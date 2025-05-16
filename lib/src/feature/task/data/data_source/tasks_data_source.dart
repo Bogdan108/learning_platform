@@ -448,16 +448,12 @@ class TasksDataSource implements ITasksDataSource {
           questionText:
               'Укажите варианты ответов, в которых во всех словах одного ряда пропущена одна и та же буква. Запишите номера ответов.',
           answerText: '124',
-          evaluate: '6',
-          feedback: 'Правильный ответ: 124',
         ),
         EvaluateTask(
           id: 'task2',
           questionType: QuestionType.file,
           answerType: AnswerType.file,
           questionFile: 'Структура_сочинения.pdf',
-          answerFile: 'ответ_Голубева_КА.pdf',
-          evaluate: '7',
         ),
         EvaluateTask(
           id: 'task3',
@@ -472,18 +468,15 @@ class TasksDataSource implements ITasksDataSource {
             '4) карыстЬ',
             '5) Оптовый',
           ],
-          answerVariant: 2,
-          evaluate: '5',
-          feedback: 'Правильный ответ: 1',
+          answerText: '3) дОнельзя',
         ),
         EvaluateTask(
           id: 'task4',
           questionType: QuestionType.text,
           answerType: AnswerType.text,
-          questionText: 'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
+          questionText:
+              'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
           answerText: 'Это было очень симп.тичное решение задачи.',
-          evaluate: '10',
-          feedback: 'Отлично молодец!',
         ),
       ],
     );
@@ -506,7 +499,7 @@ class TasksDataSource implements ITasksDataSource {
           questionText:
               'Укажите варианты ответов, в которых во всех словах одного ряда пропущена одна и та же буква. Запишите номера ответов.',
           answerText: '124',
-          evaluate: '6',
+          evaluate: 6,
           feedback: 'Правильный ответ: 124',
         ),
         EvaluateTask(
@@ -515,7 +508,7 @@ class TasksDataSource implements ITasksDataSource {
           answerType: AnswerType.file,
           questionFile: 'Структура_сочинения.pdf',
           answerFile: 'ответ_Голубева_КА.pdf',
-          evaluate: '7',
+          evaluate: 7,
         ),
         EvaluateTask(
           id: 'task3',
@@ -530,17 +523,18 @@ class TasksDataSource implements ITasksDataSource {
             '4) карыстЬ',
             '5) Оптовый',
           ],
-          answerVariant: 2,
-          evaluate: '5',
+          answerText: '2) понЯв',
+          evaluate: 5,
           feedback: 'Правильный ответ: 1',
         ),
         EvaluateTask(
           id: 'task4',
           questionType: QuestionType.text,
           answerType: AnswerType.text,
-          questionText: 'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
+          questionText:
+              'Составьте собственное предложение со словом «симп.Тичный» и запишите его.',
           answerText: 'Это было очень симп.тичное решение задачи.',
-          evaluate: '10',
+          evaluate: 10,
           feedback: 'Отлично молодец!',
         ),
       ],

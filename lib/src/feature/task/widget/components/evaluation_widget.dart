@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EvaluationWidget extends StatelessWidget {
-  final String score;
+  final int score;
   final String? comment;
 
   const EvaluationWidget({
@@ -52,7 +52,7 @@ class EvaluationWidget extends StatelessWidget {
               children: [
                 const Text('Оценка', style: headerTextStyle),
                 const Spacer(),
-                Text(score, style: scoreTextStyle),
+                Text(score.toString(), style: scoreTextStyle),
               ],
             ),
             const SizedBox(height: 8),
