@@ -105,7 +105,7 @@ class _EditRoleDialogState extends State<EditRoleDialog> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => {
-                        widget.onTapCallback(widget.role),
+                        widget.onTapCallback(role),
                         Navigator.of(context).pop(true),
                       },
                       style: ElevatedButton.styleFrom(
