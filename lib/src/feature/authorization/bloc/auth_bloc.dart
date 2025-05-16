@@ -5,12 +5,14 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state
 import 'package:learning_platform/src/feature/authorization/data/repository/i_auth_repository.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
 import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
+import 'package:learning_platform/src/feature/profile/data/repository/i_profile_repository.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 import 'package:learning_platform/src/feature/profile/model/user_role.dart';
 
 /// AuthBloc
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
   final IAuthRepository _authRepository;
+  final IProfileRepository _profileRepository;
 
   /// Create an [AuthBloc]
   ///
@@ -18,7 +20,9 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
   AuthBloc(
     super.initialState, {
     required IAuthRepository authRepository,
-  }) : _authRepository = authRepository {
+    required IProfileRepository profileRepository,
+  })  : _authRepository = authRepository,
+        _profileRepository = profileRepository {
     // emit new state when the authentication status changes
     authRepository.authStatus
         .map(
@@ -57,34 +61,21 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     );
 
     try {
-      // TODO(b.luckyanchuk): remove after test
-      if (event.email == '1' || event.password == 'b') {
-        emit(
-          AuthBlocState.success(
-              status: AuthenticationStatus.authenticated,
-              token: '1',
-              data: UserAuthorized(
-                token: '',
-                userId: '1',
-                fullName: UserName.empty(),
-                email: '',
-                role: UserRole.teacher,
-              )),
-        );
-      } else {
-        final data = await _authRepository.login(
-          event.organizationId,
-          event.email,
-          event.password,
-        );
-        emit(
-          AuthBlocState.success(
-            status: AuthenticationStatus.authenticated,
-            token: data.token,
-            data: data,
-          ),
-        );
-      }
+      final token = await _authRepository.login(
+        event.organizationId,
+        event.email,
+        event.password,
+      );
+
+      final user = await _profileRepository.getUserInfo();
+
+      emit(
+        AuthBlocState.success(
+          status: AuthenticationStatus.authenticated,
+          token: token,
+          role: user.role,
+        ),
+      );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
@@ -109,31 +100,23 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     );
 
     try {
-      // TODO(b.luckyanchuk): remove after test
-      if (event.email == '1' || event.password == 'b') {
-        emit(
-          const AuthBlocState.success(
-            status: AuthenticationStatus.authenticated,
-            token: '1',
-          ),
-        );
-        return;
-      } else {
-        final token = await _authRepository.register(
-          event.organizationId,
-          event.email,
-          event.password,
-          event.userName,
-        );
-        await _authRepository.sendCodeToEmail(token);
+      final token = await _authRepository.register(
+        event.organizationId,
+        event.email,
+        event.password,
+        event.userName,
+      );
+      await _authRepository.sendCodeToEmail(token);
 
-        emit(
-          AuthBlocState.success(
-            status: AuthenticationStatus.authenticated,
-            token: token,
-          ),
-        );
-      }
+      final user = await _profileRepository.getUserInfo();
+
+      emit(
+        AuthBlocState.success(
+          status: AuthenticationStatus.authenticated,
+          token: token,
+          role: user.role,
+        ),
+      );
     } on Object catch (e, stackTrace) {
       emit(
         AuthBlocState.error(
@@ -190,10 +173,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
 
     try {
       await _authRepository.verifyEmail(event.code);
+      final user = await _profileRepository.getUserInfo();
+
       emit(
         AuthBlocState.success(
-          status: state.status,
+          status: AuthenticationStatus.authenticated,
           token: state.token,
+          role: user.role,
         ),
       );
     } on Object catch (e, stackTrace) {

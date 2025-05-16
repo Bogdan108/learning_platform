@@ -262,6 +262,13 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
   Future<AuthBloc> create() async {
     final authDataSource = AuthDataSource(dio: dio);
 
+    final profileDataSource = ProfileDataSource(dio: dio);
+    final profileRepository = ProfileRepository(
+      dataSource: profileDataSource,
+      tokenStorage: tokenStorage,
+      orgIdStorage: orgIdStorage,
+    );
+
     final authRepository = AuthRepository(
       dataSource: authDataSource,
       storage: tokenStorage,
@@ -277,6 +284,7 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
             : AuthenticationStatus.unauthenticated,
       ),
       authRepository: authRepository,
+      profileRepository: profileRepository,
     );
   }
 }

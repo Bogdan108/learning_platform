@@ -1,4 +1,3 @@
-import 'package:learning_platform/src/feature/authorization/model/user_authorized.dart';
 import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 /// Data source for authentication
@@ -12,7 +11,7 @@ abstract interface class IAuthDataSource {
   );
 
   /// Log in a user.
-  Future<UserAuthorized> login(
+  Future<String> login(
     String organizationId,
     String email,
     String password,

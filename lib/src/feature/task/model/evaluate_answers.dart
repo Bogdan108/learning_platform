@@ -7,12 +7,15 @@ part 'evaluate_answers.g.dart';
 @freezed
 abstract class EvaluateAnswers with _$EvaluateAnswers {
   const factory EvaluateAnswers({
-    @JsonKey(name: 'tasks_info') required List<EvaluateTask> evaluateTasks,
+    @JsonSerializable(fieldRename: FieldRename.snake)
+    @JsonKey(name: 'tasks_info')
+    required List<EvaluateTask> evaluateTasks,
   }) = _EvaluateAnswers;
 
   factory EvaluateAnswers.empty() => const EvaluateAnswers(
         evaluateTasks: [],
       );
 
-  factory EvaluateAnswers.fromJson(Map<String, Object?> json) => _$EvaluateAnswersFromJson(json);
+  factory EvaluateAnswers.fromJson(Map<String, Object?> json) =>
+      _$EvaluateAnswersFromJson(json);
 }

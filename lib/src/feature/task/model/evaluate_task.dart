@@ -6,6 +6,7 @@ part 'evaluate_task.g.dart';
 
 @freezed
 abstract class EvaluateTask with _$EvaluateTask {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory EvaluateTask({
     required String id,
     @JsonKey(name: 'question_type') required QuestionType questionType,

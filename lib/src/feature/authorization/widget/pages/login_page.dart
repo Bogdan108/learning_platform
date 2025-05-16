@@ -46,18 +46,16 @@ class _LoginPageState extends State<LoginPage> {
           switch (state) {
             case Success(
                 status: AuthenticationStatus.authenticated,
-                data: final data
+                role: final userRole
               ):
               profileBloc.add(ProfileBlocEvent.fetchUserInfo());
-              final userRole = data?.role;
-              if (userRole != null) {
-                if (userRole == UserRole.admin) {
-                  context.goNamed('adminCourses');
-                } else if (userRole == UserRole.student) {
-                  context.goNamed('courses');
-                } else {
-                  context.goNamed('teacherCourses');
-                }
+
+              if (userRole == UserRole.admin) {
+                context.goNamed('adminCourses');
+              } else if (userRole == UserRole.student) {
+                context.goNamed('courses');
+              } else {
+                context.goNamed('teacherCourses');
               }
 
             case Error(error: final error):

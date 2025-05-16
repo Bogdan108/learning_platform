@@ -6,6 +6,7 @@ part 'task_request.g.dart';
 
 @freezed
 abstract class TaskRequest with _$TaskRequest {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory TaskRequest({
     @JsonKey(name: 'question_type') required QuestionType questionType,
     @JsonKey(name: 'answer_type') required AnswerType answerType,
