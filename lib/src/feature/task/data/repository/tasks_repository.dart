@@ -4,7 +4,7 @@ import 'package:learning_platform/src/feature/authorization/data/storage/i_stora
 import 'package:learning_platform/src/feature/authorization/data/storage/token_storage.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
-import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -163,7 +163,7 @@ class TasksRepository implements ITasksRepository {
   }
 
   @override
-  Future<EvaluateAnswers> getStudentEvaluateAnswers(
+  Future<List<EvaluateTask>> getStudentEvaluateAnswers(
     String assignmentId,
   ) =>
       _dataSource.fetchStudentEvaluateAnswers(
@@ -172,7 +172,7 @@ class TasksRepository implements ITasksRepository {
         assignmentId: assignmentId,
       );
   @override
-  Future<EvaluateAnswers> getTeacherEvaluateAnswers(
+  Future<List<EvaluateTask>> getTeacherEvaluateAnswers(
     String userId,
     String assignmentId,
   ) =>

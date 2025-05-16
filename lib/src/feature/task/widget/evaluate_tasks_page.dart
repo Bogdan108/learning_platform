@@ -75,9 +75,9 @@ class _EvaluateTasksPageState extends State<EvaluateTasksPage> {
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Divider(color: Colors.blue, height: 1),
                       ),
-                      itemCount: state.evaluateAnswers.evaluateTasks.length,
+                      itemCount: state.evaluateAnswers.taksInfo.length,
                       itemBuilder: (_, index) {
-                        final task = state.evaluateAnswers.evaluateTasks[index];
+                        final task = state.evaluateAnswers.taksInfo[index];
 
                         return EvaluateTaskTile(
                           number: index + 1,

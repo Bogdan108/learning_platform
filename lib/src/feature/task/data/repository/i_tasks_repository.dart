@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -62,11 +62,11 @@ abstract interface class ITasksRepository {
     String? name,
   });
 
-  Future<EvaluateAnswers> getStudentEvaluateAnswers(
+  Future<List<EvaluateTask>> getStudentEvaluateAnswers(
     String assignmentId,
   );
 
-  Future<EvaluateAnswers> getTeacherEvaluateAnswers(
+  Future<List<EvaluateTask>> getTeacherEvaluateAnswers(
     String userId,
     String assignmentId,
   );

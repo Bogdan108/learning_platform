@@ -5,7 +5,8 @@ import 'package:learning_platform/src/feature/task/bloc/evaluate_tasks_bloc/eval
 import 'package:learning_platform/src/feature/task/data/repository/i_tasks_repository.dart';
 import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
 
-class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> with SetStateMixin {
+class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState>
+    with SetStateMixin {
   final ITasksRepository _tasksRepository;
 
   EvaluateTasksBloc({required ITasksRepository tasksRepository})
@@ -17,8 +18,10 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
         ) {
     on<EvaluateTasksEvent>(
       (event, emit) => switch (event) {
-        EvaluateTasksEvent$TeacherFetchEvaluateTasks() => _onTeacherFetch(event, emit),
-        EvaluateTasksEvent$StudentFetchEvaluateTasks() => _onStudentFetch(event, emit),
+        EvaluateTasksEvent$TeacherFetchEvaluateTasks() =>
+          _onTeacherFetch(event, emit),
+        EvaluateTasksEvent$StudentFetchEvaluateTasks() =>
+          _onStudentFetch(event, emit),
         EvaluateTasksEvent$EvaluateTask() => _onEvaluate(event, emit),
       },
     );
@@ -38,7 +41,11 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
         event.userId,
         event.assignmentId,
       );
-      emit(EvaluateTasksState.idle(evaluateAnswers: list));
+      emit(
+        EvaluateTasksState.idle(
+          evaluateAnswers: EvaluateAnswers(taksInfo: list),
+        ),
+      );
     } catch (err, st) {
       emit(
         EvaluateTasksState.error(
@@ -64,7 +71,11 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
       final list = await _tasksRepository.getStudentEvaluateAnswers(
         event.assignmentId,
       );
-      emit(EvaluateTasksState.idle(evaluateAnswers: list));
+      emit(
+        EvaluateTasksState.idle(
+          evaluateAnswers: EvaluateAnswers(taksInfo: list),
+        ),
+      );
     } catch (err, st) {
       emit(
         EvaluateTasksState.error(
@@ -108,7 +119,9 @@ class EvaluateTasksBloc extends Bloc<EvaluateTasksEvent, EvaluateTasksState> wit
         event.assignmentId,
       );
       emit(
-        EvaluateTasksState.idle(evaluateAnswers: list),
+        EvaluateTasksState.idle(
+          evaluateAnswers: EvaluateAnswers(taksInfo: list),
+        ),
       );
     } catch (err, st) {
       emit(

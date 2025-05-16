@@ -3,7 +3,7 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:learning_platform/src/feature/task/data/data_source/i_tasks_data_source.dart';
-import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -214,21 +214,19 @@ class TasksDataSource implements ITasksDataSource {
       queryParameters: {
         'organization_id': organizationId,
         'token': token,
-        'assignment_id': assignmentId,
         'task_id': taskId,
-        'user_id': userId,
       },
     );
-    return resp.data!;
+    return resp.data ?? Uint8List.fromList([]);
   }
 
   @override
-  Future<EvaluateAnswers> fetchStudentEvaluateAnswers({
+  Future<List<EvaluateTask>> fetchStudentEvaluateAnswers({
     required String organizationId,
     required String token,
     required String assignmentId,
   }) async {
-    final resp = await _dio.get<Map<String, dynamic>>(
+    final resp = await _dio.get(
       '/assignment/student/info',
       queryParameters: {
         'organization_id': organizationId,
@@ -236,17 +234,22 @@ class TasksDataSource implements ITasksDataSource {
         'assignment_id': assignmentId,
       },
     );
-    return EvaluateAnswers.fromJson(resp as Map<String, dynamic>);
+
+    final list = resp.data as List<dynamic>?;
+    return list
+            ?.map((e) => EvaluateTask.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
   }
 
   @override
-  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers({
+  Future<List<EvaluateTask>> fetchTeacherEvaluateAnswers({
     required String organizationId,
     required String token,
     required String userId,
     required String assignmentId,
   }) async {
-    final resp = await _dio.get<Map<String, dynamic>>(
+    final resp = await _dio.get(
       '/assignment/teacher/info',
       queryParameters: {
         'organization_id': organizationId,
@@ -255,6 +258,11 @@ class TasksDataSource implements ITasksDataSource {
         'user_id': userId,
       },
     );
-    return EvaluateAnswers.fromJson(resp as Map<String, dynamic>);
+
+    final list = resp.data as List<dynamic>?;
+    return list
+            ?.map((e) => EvaluateTask.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
   }
 }

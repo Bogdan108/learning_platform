@@ -16,7 +16,7 @@ abstract class EvaluateTask with _$EvaluateTask {
     @JsonKey(name: 'answer_variants') List<String>? answerVariants,
     @JsonKey(name: 'answer_text') String? answerText,
     @JsonKey(name: 'answer_file') String? answerFile,
-    @JsonKey(name: 'evaluate') int? evaluate,
+    int? assessment,
     @JsonKey(name: 'feedback') String? feedback,
   }) = _EvaluateTask;
 

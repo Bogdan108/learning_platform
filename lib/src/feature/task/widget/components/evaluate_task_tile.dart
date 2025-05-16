@@ -255,10 +255,10 @@ class EvaluateTaskTile extends StatelessWidget {
                 ),
               ),
           },
-          if (task.evaluate != null) ...[
+          if (task.assessment != null) ...[
             const SizedBox(height: 10),
             EvaluationWidget(
-              score: task.evaluate!,
+              score: task.assessment!,
               comment: task.feedback,
             ),
           ],

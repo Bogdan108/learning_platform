@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:learning_platform/src/feature/task/model/evaluate_answers.dart';
+import 'package:learning_platform/src/feature/task/model/evaluate_task.dart';
 import 'package:learning_platform/src/feature/task/model/task.dart';
 import 'package:learning_platform/src/feature/task/model/task_request.dart';
 
@@ -80,13 +80,13 @@ abstract class ITasksDataSource {
     required String userId,
   });
 
-  Future<EvaluateAnswers> fetchStudentEvaluateAnswers({
+  Future<List<EvaluateTask>> fetchStudentEvaluateAnswers({
     required String organizationId,
     required String token,
     required String assignmentId,
   });
 
-  Future<EvaluateAnswers> fetchTeacherEvaluateAnswers({
+  Future<List<EvaluateTask>> fetchTeacherEvaluateAnswers({
     required String organizationId,
     required String token,
     required String userId,

@@ -104,10 +104,8 @@ class AssignmentDataSource implements IAssignmentDataSource {
       },
     );
 
-    return response.data
-            ?.map((item) => AssignmentAnswers.fromJson(item))
-            .toList() ??
-        [];
+    final list = response.data as List<dynamic>?;
+    return list?.map((item) => AssignmentAnswers.fromJson(item)).toList() ?? [];
   }
 
   @override
@@ -121,7 +119,8 @@ class AssignmentDataSource implements IAssignmentDataSource {
       },
     );
 
-    return response.data
+    final list = response.data;
+    return list
             ?.map((e) => AssignmentCourses.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [];
