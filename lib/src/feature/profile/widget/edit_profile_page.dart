@@ -5,6 +5,7 @@ import 'package:learning_platform/src/core/widget/custom_text_field.dart';
 import 'package:learning_platform/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_event.dart';
 import 'package:learning_platform/src/feature/profile/model/user.dart';
+import 'package:learning_platform/src/feature/profile/model/user_name.dart';
 
 class EditProfilePage extends StatefulWidget {
   final User user;
@@ -72,7 +73,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 child: CustomElevatedButton(
                   onPressed: () {
                     DependenciesScope.of(context).profileBloc.add(
-                          const ProfileBlocEvent.editUserInfo(),
+                          ProfileBlocEvent.editUserInfo(
+                              fullName: UserName(
+                            firstName: _firstNameController.text,
+                            secondName: _secondNameController.text,
+                            middleName: _middleNameController.text,
+                          )),
                         );
                     context.pop();
                   },
