@@ -10,11 +10,11 @@ abstract class AssignmentAnswers with _$AssignmentAnswers {
   const factory AssignmentAnswers({
     @JsonKey(name: 'assignment_id') required String id,
     @JsonKey(name: 'assignment_name') required String name,
-    required List<StudentAnswer> students,
+    @Default([]) List<StudentAnswer> answers,
   }) = _AssignmentAnswers;
 
   factory AssignmentAnswers.empty() =>
-      AssignmentAnswers(id: '', name: '', students: []);
+      AssignmentAnswers(id: '', name: '', answers: []);
 
   factory AssignmentAnswers.fromJson(Map<String, Object?> json) =>
       _$AssignmentAnswersFromJson(json);

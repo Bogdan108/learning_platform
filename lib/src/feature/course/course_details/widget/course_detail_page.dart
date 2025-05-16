@@ -321,7 +321,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 4),
                                     child: Text(
-                                      '${student.fullName.fullName.secondName} ${student.fullName.fullName.firstName} ${student.fullName.fullName.middleName}',
+                                      '${student.fullName.secondName} ${student.fullName.firstName} ${student.fullName.middleName}',
                                     ),
                                   ),
                               ],

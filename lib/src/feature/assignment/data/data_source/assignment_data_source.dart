@@ -95,7 +95,7 @@ class AssignmentDataSource implements IAssignmentDataSource {
   @override
   Future<List<AssignmentAnswers>> fetchAssignmentAnswers(
       String organizationId, String token, String courseId) async {
-    final response = await _dio.get<List<dynamic>>(
+    final response = await _dio.get(
       '/course/assignments/answers',
       queryParameters: {
         'organization_id': organizationId,
@@ -105,8 +105,7 @@ class AssignmentDataSource implements IAssignmentDataSource {
     );
 
     return response.data
-            ?.map((item) =>
-                AssignmentAnswers.fromJson(item as Map<String, dynamic>))
+            ?.map((item) => AssignmentAnswers.fromJson(item))
             .toList() ??
         [];
   }

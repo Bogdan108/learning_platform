@@ -37,7 +37,7 @@ class CourseDataSource implements ICourseDataSource {
     String additionId,
   ) async {
     await _dio.delete<Map<String, dynamic>>(
-      '/course/teacher/additions/',
+      '/course/teacher/additions',
       queryParameters: {
         'organization_id': organizationId,
         'token': token,

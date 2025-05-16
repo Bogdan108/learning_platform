@@ -141,7 +141,7 @@ class _AnswersList extends StatelessWidget {
               const SizedBox(height: 6),
               const Divider(color: Colors.blue),
               const SizedBox(height: 6),
-              for (final s in answer.students)
+              for (final s in answer.answers)
                 GestureDetector(
                   onTap: () => context.pushNamed(
                     'teacherEvaluateAnswers',
