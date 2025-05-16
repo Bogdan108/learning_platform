@@ -4,12 +4,15 @@ import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_event
 import 'package:learning_platform/src/feature/authorization/bloc/auth_bloc_state.dart';
 import 'package:learning_platform/src/feature/authorization/data/repository/i_auth_repository.dart';
 import 'package:learning_platform/src/feature/authorization/model/auth_status_model.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:learning_platform/src/feature/profile/bloc/profile_bloc_state.dart';
 import 'package:learning_platform/src/feature/profile/data/repository/i_profile_repository.dart';
 
 /// AuthBloc
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
   final IAuthRepository _authRepository;
   final IProfileRepository _profileRepository;
+  final ProfileBloc _profileBloc;
 
   /// Create an [AuthBloc]
   ///
@@ -18,8 +21,10 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
     super.initialState, {
     required IAuthRepository authRepository,
     required IProfileRepository profileRepository,
+    required ProfileBloc profileBloc,
   })  : _authRepository = authRepository,
-        _profileRepository = profileRepository {
+        _profileRepository = profileRepository,
+        _profileBloc = profileBloc {
     // emit new state when the authentication status changes
     authRepository.authStatus
         .map(
@@ -65,6 +70,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
       );
 
       final user = await _profileRepository.getUserInfo();
+      _profileBloc.setState(ProfileBlocState.idle(profileInfo: user));
 
       emit(
         AuthBlocState.success(
@@ -107,6 +113,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> with SetStateMixin {
 
       final user = await _profileRepository.getUserInfo();
 
+      _profileBloc.setState(ProfileBlocState.idle(profileInfo: user));
       emit(
         AuthBlocState.success(
           status: AuthenticationStatus.authenticated,

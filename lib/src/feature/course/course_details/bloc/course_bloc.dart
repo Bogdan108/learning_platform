@@ -55,6 +55,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> with SetStateMixin {
         emit(
           CourseState.idle(additions: additions, students: students),
         );
+        return;
       }
       emit(
         CourseState.idle(

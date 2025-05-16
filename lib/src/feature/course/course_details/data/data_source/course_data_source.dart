@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -104,9 +103,13 @@ class CourseDataSource implements ICourseDataSource {
       },
     );
 
-    log("response ${response.data.toString()}");
+    final rawList = (response.data as List<dynamic>?) ?? [];
 
-    return response.data?.map((e) => Student.fromJson(e)).toList() ?? [];
+    final students = rawList
+        .map((e) => Student.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    return students;
   }
 
   @override

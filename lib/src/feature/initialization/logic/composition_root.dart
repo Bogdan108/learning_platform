@@ -138,13 +138,15 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     final orgIdStorage = OrganizationIdStorage(
       sharedPreferences: sharedPreferences,
     );
-    final authBloc = await AuthBlocFactory(
+
+    final profileBloc = await ProfileBlocFactory(
       dio: dio,
       tokenStorage: tokenStorage,
       orgIdStorage: orgIdStorage,
     ).create();
 
-    final profileBloc = await ProfileBlocFactory(
+    final authBloc = await AuthBlocFactory(
+      profileBloc: profileBloc,
       dio: dio,
       tokenStorage: tokenStorage,
       orgIdStorage: orgIdStorage,
@@ -247,6 +249,7 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
     required this.dio,
     required this.tokenStorage,
     required this.orgIdStorage,
+    required this.profileBloc,
   });
 
   /// Dio instance
@@ -257,6 +260,9 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
 
   /// TokenStorage instance
   final OrganizationIdStorage orgIdStorage;
+
+  /// ProfileBloc instance
+  final ProfileBloc profileBloc;
 
   @override
   Future<AuthBloc> create() async {
@@ -277,6 +283,7 @@ class AuthBlocFactory extends AsyncFactory<AuthBloc> {
     final token = tokenStorage.load();
 
     return AuthBloc(
+      profileBloc: profileBloc,
       AuthBlocState.idle(
         token: token ?? '',
         status: token != null
